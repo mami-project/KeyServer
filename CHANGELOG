@@ -1,0 +1,7 @@
+# KeyServer Change Log
+
+v0.1.3
+-------------------------------------------------------------------------------- 
+Features:
+  - KeyServer accepts multiples connections (system default limited).
+  - KeyServer log to a file.
