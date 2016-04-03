@@ -2,5 +2,4 @@ language: java
 jdk:
   - oraclejdk8
 script:
-  - mvn install -X -f ./KeyServer/pom.xml
-  - mvn install -X -f ./KeyServer_PK_Provider/pom.xml
+  - mvn verify -X -f ./KeyServer/pom.xml
