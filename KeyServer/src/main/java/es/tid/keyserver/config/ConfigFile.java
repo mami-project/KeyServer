@@ -41,14 +41,15 @@ public class ConfigFile implements CheckObject{
     /**
      * Flag for check if the object is correctly initialized.
      */
-    boolean isInitializated = false;
+    private boolean isInitializated = false;
     
     /**
      * Default class constructor.
      * @param fileRoute Contains the name and route to the external 
      * configuration file.
+     * @param requiredFields Fields required inside configuration file.
      */
-    public ConfigFile(String fileRoute){
+    public ConfigFile(String fileRoute, String [] requiredFields){
         File propertiesFile = new File(fileRoute);
         String fileLocation;
         if((propertiesFile.exists() && propertiesFile.canRead())){
@@ -56,15 +57,15 @@ public class ConfigFile implements CheckObject{
         } else {
             logger.warn("Can't access to the specified config file or "
                     + "doesn't exists: {}", fileRoute);
-            System.out.print(" - New config file on default location...");
+            logger.info("New config file on default location...");
             fileLocation = "general.properties";
             newDefaultProperties(fileLocation);
         }
         configFile = new Properties();
-        // Load the config file parammeters.
+        // Load the configuration file parameters.
         try {
             configFile.load(new FileInputStream(fileLocation));
-            this.isInitializated = true;
+            this.isInitializated = checkFieldsPresent(requiredFields);
         } catch (IOException ex) {
             logger.error("Cannot load the configuration file for KeyServer.");
             logger.trace("Exceiption message: {}", ex.toString());
@@ -92,17 +93,22 @@ public class ConfigFile implements CheckObject{
         try {
             FileOutputStream newConfigFile = new FileOutputStream(fileLocation);
             Properties defaultParameters = new Properties();
-            // Default parammeters:
-            defaultParameters.setProperty("serverAddress", "127.0.0.1");
+            // Default parameters:
+            defaultParameters.setProperty("serverAddress", "0.0.0.0");
             defaultParameters.setProperty("serverPort", "443");
-            defaultParameters.setProperty("serverBacklog", "0");
+            defaultParameters.setProperty("serverSSLContext", "TLSv1.2");
             defaultParameters.setProperty("serverKeyFile","HTTPS_keystore.ks");
             defaultParameters.setProperty("serverKeyPass","123456");
+            defaultParameters.setProperty("serverBacklog", "0");
+            defaultParameters.setProperty("serverKeyManagerFactory", "SunX509");
+            defaultParameters.setProperty("serverTrustManagerFactory", "SunX509");
+            defaultParameters.setProperty("serverKeyStore", "JKS");
             defaultParameters.setProperty("dbAddress","127.0.0.1");
             defaultParameters.setProperty("dbPort", "6379");
+            defaultParameters.setProperty("whiteList", "IP_whitelist.txt");
             // Save parameters on file
             defaultParameters.store(newConfigFile, null);
-            // Close config file.
+            // Close configuration file.
             newConfigFile.close();
         } catch (FileNotFoundException ex) {
             logger.error("Cannot create a new config file with default parameters.");
@@ -122,5 +128,29 @@ public class ConfigFile implements CheckObject{
     @Override
     public boolean isCorrectlyInitialized() {
         return isInitializated;
+    }
+    
+    /**
+     * Checks if the required fields inside KeyServer configuration file are present.
+     * @param fields Array with the fields name.
+     * @return True if all is present, false if not.
+     */
+    private boolean checkFieldsPresent(String [] fields){
+        for (String field : fields) {
+            if (!configFile.containsKey(field)) {
+                logger.error("Necessary config field is not present: {}", field);
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Check if the specified label is present inside configuration file.
+     * @param label Label as string.
+     * @return True if exists, false if not.
+     */
+    public boolean containsKey(String label){
+        return configFile.containsKey(label);
     }
 }

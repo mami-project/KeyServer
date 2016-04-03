@@ -23,17 +23,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for RSA PreMaster secret decryption.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  */
 public class Rsa {
-    /**
-     * Logging object.
-     */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Rsa.class);
     /**
      * This static method provides a simple way to decode the PremasterSecret from
      * an input string using a PrivateKey object.

@@ -19,11 +19,12 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import es.tid.keyserver.database.DataBase;
-import es.tid.keyserver.protocol.ProtocolJSON;
+import es.tid.keyserver.protocol.ErrorJSON;
 import es.tid.keyserver.protocol.InputJSON;
 import es.tid.keyserver.protocol.OutputJSON;
 import es.tid.keyserver.httpkeyserver.keyprocess.Ecdhe;
 import es.tid.keyserver.httpkeyserver.keyprocess.Rsa;
+import es.tid.keyserver.httpkeyserver.whitelist.WhiteList;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,9 +34,6 @@ import java.security.PrivateKey;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.concurrent.Executor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -46,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * proxy.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  */
-public class IncomingRequestProcess implements Executor, HttpHandler{
+public class IncomingRequestProcess implements HttpHandler{
     /**
      * Logging object.
      */
@@ -54,24 +52,25 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
     /**
      * Database Object
      */
-    DataBase keyServerDB;
+    private DataBase keyServerDB;
+    /**
+     * IP WhiteList for KeyServer access control.
+     */
+    private WhiteList ipwl;
+    /**
+     * Flag used to storage if the current IP request is authorized (true) or 
+     * not (false).
+     */
+    private boolean ipAuthorized;
     
     /**
      * Default class constructor.
      * @param db Data base connection object.
+     * @param wl White list for IP access control.
      */
-    public IncomingRequestProcess(DataBase db){
+    public IncomingRequestProcess(DataBase db, WhiteList wl){
         keyServerDB = db;
-    }
-
-    /**
-     * Launch the runner for the incoming HTTP request. This method call to the
-     * handle method to process the incoming HTTP proxy request.
-     * @param r Runnable object for the incoming petition.
-     */
-    @Override
-    public void execute(Runnable r) {
-        r.run();
+        ipwl = wl;
     }
 
     /**
@@ -81,7 +80,7 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
      */
     @Override
     public void handle(HttpExchange he) {
-        // JSON incomming data Object.
+        // JSON incoming data Object.
         InputJSON jsonData;
         // Response String object for send to the client.
         String responseString;
@@ -93,7 +92,9 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
             String jsonString = readHttpBodyInputStream(he.getRequestBody());
             // Creating JSON Object for incoming data.
             jsonData = new InputJSON(jsonString);
-            // Process the JSON for the corret type
+            // Check if the current IP is authorized to use KeyServer.
+            ipAuthorized = ipwl.iPAuthorized(he.getRemoteAddress().getAddress());
+            // Process the JSON for the correct type
             responseString = processIncommingJson(jsonData);
             logger.trace("Response String: {}", responseString);
             // Send response to the client
@@ -101,8 +102,16 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
         } else {
             // If not POST request (Nothing to do).
             logger.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
-            he.close();
         }
+        he.close();
+    }
+    
+    /**
+     * Check if the current IP is authorized for use KeyServer.
+     * @return True if is authorized, false if not.
+     */
+    public boolean isIpAuthoriced(){
+        return ipAuthorized;
     }
     
     /**
@@ -113,17 +122,16 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
      */
     private void sendKeyServerResponse(HttpExchange he, String responseString){
         Headers httpResponseHeaders = he.getResponseHeaders();
-        // Preparaing response Header.
+        // Preparing response Header.
         httpResponseHeaders.add("Content-Type", "application/json");  
         try {
             // Send response Header.
             he.sendResponseHeaders(200, responseString.getBytes().length);
-            // Preparing and send responde body.
+            // Preparing and send response body.
             OutputStream responseBody = he.getResponseBody();
             responseBody.write(responseString.getBytes());
         } catch (IOException ex) {
-                System.out.print("Can't send the response to the client...");
-                Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error("Can't send the response to the client...");
         }
     }
     
@@ -142,7 +150,6 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
             bodyStream.close();
         } catch (IOException ex) {
             logger.error("IO exception for incomming HTTP bodyStream: {}",ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
         return jsonString;
     }
@@ -154,11 +161,16 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
      * @return Returns a String with the response to the client.
      */
     private String processIncommingJson(InputJSON jsonObj){
+        // Check if the IP is Authorized to use KeyServer 
+        if(!this.ipAuthorized){
+            logger.error("Not access allowed to the KeyServer from this host.");
+            return new ErrorJSON(ErrorJSON.ERR_REQUEST_DENIED).toString();
+        }
         // Check first if JSON is valid.
         if(jsonObj.checkValidJSON()!=null){ // If not is valid
             // Generate JSON Output error object and return it as string.
             logger.debug("IncommingJSON Processor: Not valid JSON received. Returns error to the HTTP IncommingProcessor thread.");
-            return new ProtocolJSON(jsonObj.checkValidJSON()).toString();
+            return new ErrorJSON(jsonObj.checkValidJSON()).toString();
         }
         logger.trace("IncommingJSON Processor: Input JSON valid.");
         // If JSON is valid, process response.
@@ -172,23 +184,23 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
                 logger.debug("Response from KeyServer for RSA.");
                 responseString = modeRSA(jsonObj.getSpki(), jsonObj.getInput());
                 if(responseString == null){
-                    responseString = ProtocolJSON.ERR_UNSPECIFIED;
+                    responseString = ErrorJSON.ERR_UNSPECIFIED;
                 }
                 break;
             default:
                 // Not valid method.
                 logger.error("HTTP Incomming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
-                responseString = ProtocolJSON.ERR_MALFORMED_REQUEST;
+                responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
         }
-        // Debug loger info:
+        // Debug logger info:
         logger.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
                 jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
-        // Check if responseString is an error and retuns the correct object as JSON string.
-        if(responseString.equalsIgnoreCase(ProtocolJSON.ERR_MALFORMED_REQUEST) || 
-                responseString.equalsIgnoreCase(ProtocolJSON.ERR_NOT_FOUND) ||
-                responseString.equalsIgnoreCase(ProtocolJSON.ERR_REQUEST_DENIED) || 
-                responseString.equalsIgnoreCase(ProtocolJSON.ERR_UNSPECIFIED)){
-            return new ProtocolJSON(responseString).toString();
+        // Check if responseString is an error and returns the correct object as JSON string.
+        if(responseString.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
+                responseString.equalsIgnoreCase(ErrorJSON.ERR_NOT_FOUND) ||
+                responseString.equalsIgnoreCase(ErrorJSON.ERR_REQUEST_DENIED) || 
+                responseString.equalsIgnoreCase(ErrorJSON.ERR_UNSPECIFIED)){
+            return new ErrorJSON(responseString).toString();
         } else {
             return new OutputJSON(responseString).toString();
         }
@@ -202,10 +214,10 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
      * @return String with the data signed and encoded using base64.
      */
     private String modeECDH(String hash, String spki, String input) {
-        // Execute REDIS query trying to found private key for the incomming SKI.
+        // Execute REDIS query trying to found private key for the incoming SKI.
         byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
         if(encodePrivateKey == null){
-            return ProtocolJSON.ERR_NOT_FOUND;
+            return ErrorJSON.ERR_NOT_FOUND;
         }
         // Generate Private Key object.
         PrivateKey privKey = null;
@@ -213,32 +225,26 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
             logger.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeySpecException ex) {
             logger.error("RSA Invalid Key exception: {}",ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
         // Check if privKey is valid.
         if(privKey == null){
-            return ProtocolJSON.ERR_UNSPECIFIED;
+            return ErrorJSON.ERR_UNSPECIFIED;
         }
         try {
             // Sign data
             return Ecdhe.calcOutput(input, privKey, hash);
         } catch (NoSuchAlgorithmException ex) {
             logger.error("ECDH No Such Algorithm Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeySpecException ex) {
             logger.error("ECDH Invalid Key Espec Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeyException ex) {
             logger.error("ECDH Invalid Key Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SignatureException ex) {
             logger.error("ECDH Signature Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return ProtocolJSON.ERR_UNSPECIFIED;
+        return ErrorJSON.ERR_UNSPECIFIED;
     }
 
     /**
@@ -252,7 +258,7 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
         // Execute REDIS query trying to found private key for the incomming SKI.
         byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
         if(encodePrivateKey == null){
-            return ProtocolJSON.ERR_NOT_FOUND;
+            return ErrorJSON.ERR_NOT_FOUND;
         }
         // Generate Private Key object.
         PrivateKey privKey = null;
@@ -260,35 +266,28 @@ public class IncomingRequestProcess implements Executor, HttpHandler{
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
             logger.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeySpecException ex) {
             logger.error("RSA Invalid Key exception: {}",ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
         // Check if privKey is valid.
         if(privKey == null){
-            return ProtocolJSON.ERR_UNSPECIFIED;
+            return ErrorJSON.ERR_UNSPECIFIED;
         }
         // RSA decode and return result
         try {
             return Rsa.calcDecodedOutput(input, privKey);
         } catch (NoSuchAlgorithmException ex) {
             logger.error("RSA No Such Algorithm Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchPaddingException ex) {
             logger.error("RSA No Such Padding Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeyException ex) {
             logger.error("RSA Invalid Key Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalBlockSizeException ex) {
             logger.error("RSA Illegal Blocks Size Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BadPaddingException ex) {
             logger.error("RSA Bad Padding Exception: {}", ex.getMessage());
-            Logger.getLogger(IncomingRequestProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return ProtocolJSON.ERR_UNSPECIFIED;
+        return ErrorJSON.ERR_UNSPECIFIED;
     }
     
     /**

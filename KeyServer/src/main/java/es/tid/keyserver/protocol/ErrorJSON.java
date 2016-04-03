@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Javier Gusano Martínez.
+ * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import org.slf4j.LoggerFactory;
  * Class for JSON Error structure.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  */
-public class ProtocolJSON extends ResponseJSON {
+public class ErrorJSON extends ResponseJSON {
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ProtocolJSON.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ErrorJSON.class);
     /**
      * Protocol error codes definition.
      */
@@ -40,25 +40,25 @@ public class ProtocolJSON extends ResponseJSON {
      * class. If the user specific different error code, the constructor will
      * generate an "unspecified error" JSON object.
      */
-    public ProtocolJSON(String errorCode) {
+    public ErrorJSON(String errorCode) {
         super(ResponseJSON.ERROR, errorCode);
         if(!checkIfValid(errorCode)){
             logger.warn("Not valid Error code for JSON Error.");
             logger.trace("Error User label: {} | JSON: {}",errorCode ,this.toString());
-            this.setOutputData(ERROR, ProtocolJSON.ERR_UNSPECIFIED);
+            this.setOutputData(ERROR, ErrorJSON.ERR_UNSPECIFIED);
         }
     }
     
     /**
      * This method check if the current object is valid or not.
-     * @param errorCode String with Erisson API error names.
+     * @param errorCode String with protocol API error names.
      * @return True if it's valid or false if not.
      */
     private boolean checkIfValid(String errorCode){
-        return errorCode.equalsIgnoreCase(ProtocolJSON.ERR_MALFORMED_REQUEST) || 
-                errorCode.equalsIgnoreCase(ProtocolJSON.ERR_NOT_FOUND) || 
-                errorCode.equalsIgnoreCase(ProtocolJSON.ERR_REQUEST_DENIED) ||
-                errorCode.equalsIgnoreCase(ProtocolJSON.ERR_UNSPECIFIED);
+        return errorCode.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
+                errorCode.equalsIgnoreCase(ErrorJSON.ERR_NOT_FOUND) || 
+                errorCode.equalsIgnoreCase(ErrorJSON.ERR_REQUEST_DENIED) ||
+                errorCode.equalsIgnoreCase(ErrorJSON.ERR_UNSPECIFIED);
     }
     
     /**

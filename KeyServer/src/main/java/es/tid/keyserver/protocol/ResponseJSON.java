@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Javier Gusano Martínez.
+ * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.json.simple.JSONObject;
  * Class for JSON manipulation.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  */
-public class ResponseJSON {
+class ResponseJSON {
     /**
      * Constant fields for the output JSON attributes.
      */
@@ -40,7 +40,7 @@ public class ResponseJSON {
      */
     public ResponseJSON(String type, String data){
         outputData = new JSONObject();
-        this.setOutputData(type, data);
+        setOutputData(type, data);
     }
     
     /**
@@ -48,8 +48,9 @@ public class ResponseJSON {
      * @param label JSON Label value.
      * @param data JSON Data associated to the label. 
      */
-    protected void setOutputData(String label, String data){
-        this.outputData.put(label, data);
+    @SuppressWarnings("unchecked")
+	protected final void setOutputData(String label, String data){
+        outputData.put(label, data);
     }
     
     /**

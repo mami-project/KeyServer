@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Javier Gusano Martínez.
+ * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,6 @@ public class InputJSON {
             inputData = (JSONObject) parser.parse(stringData);
         } catch (ParseException ex) {
             logger.debug("Not valid input JSON: {}.", ex.toString());
-            //Logger.getLogger(InputJSON.class.getName()).log(Level.SEVERE, null, ex);
         }    
     }
     
@@ -153,7 +152,7 @@ public class InputJSON {
         String hash = this.getHash();
         String spki = this.getSpki();
         String input = this.getInput();
-        // Loger trace output
+        // Logger trace output
         logger.trace("Method CheckJSON (fields): method='{}', hash='{}', spki='{}', input='{}'",
                 method, hash, spki, input);
         // Check if the JSON contains all fields "method", "hash", "spki"* and 
@@ -161,7 +160,7 @@ public class InputJSON {
         //  Hash only is defined if the JSON contains ECDHE.
         if((method == null) || (spki == null) || (input == null)){
             logger.debug("Input JSON: Some required fields are not present.");
-            return ProtocolJSON.ERR_MALFORMED_REQUEST;
+            return ErrorJSON.ERR_MALFORMED_REQUEST;
         } else {
             logger.debug("Input JSON: 'Mehtod', 'spky' and 'input' fields are present.");
         }
@@ -174,24 +173,24 @@ public class InputJSON {
             case InputJSON.RSA:
                 if(inputDataB.length<10){ // If it has some bytes (less than 10 for example)
                     logger.debug("Input JSON: RSA length too short ({} bytes).", inputDataB.length);
-                    return ProtocolJSON.ERR_MALFORMED_REQUEST;
+                    return ErrorJSON.ERR_MALFORMED_REQUEST;
                 }
                 break;
             case InputJSON.ECDHE:
                 // Check if HASH field is present (not null) and valid.
                 if (hash == null){
                     logger.debug("Input JSON: Hash field not valid ('{}').", hash);
-                    return ProtocolJSON.ERR_MALFORMED_REQUEST;
+                    return ErrorJSON.ERR_MALFORMED_REQUEST;
                 }
-                // Check JSON infput lenght.
+                // Check JSON input length.
                 if(inputDataB.length!=133){ // 32+32+69 = 133 bytes 
                     logger.debug("Input JSON: ECDH length not valid ({} bytes).", inputDataB.length);
-                    return ProtocolJSON.ERR_MALFORMED_REQUEST;
+                    return ErrorJSON.ERR_MALFORMED_REQUEST;
                 }
                 break;
             default:
                 logger.debug("Input JSON: Not valid 'method' field for this input JSON ('{}').", method);
-                return ProtocolJSON.ERR_MALFORMED_REQUEST;
+                return ErrorJSON.ERR_MALFORMED_REQUEST;
         }
         return null;
     }

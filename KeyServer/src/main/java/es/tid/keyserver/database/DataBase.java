@@ -32,12 +32,12 @@ public class DataBase implements CheckObject{
     /**
      * REDIS Database Connection Object
      */
-    Jedis dataBaseObj;
+    private Jedis dataBaseObj;
     
     /**
      * Flag for check if the object is correctly initialization.
      */
-    boolean isInitializated;
+    private boolean isInitializated;
     
     /**
      * Logging object.
@@ -51,9 +51,10 @@ public class DataBase implements CheckObject{
     public DataBase(ConfigFile parameters){
         JedisPool pool = new JedisPool(parameters.getParameter("dbAddress"), Integer.parseInt(parameters.getParameter("dbPort")));
         try {
-            // Reddis connected.
+            // Redis connected.
             dataBaseObj = pool.getResource();
             isInitializated = true;
+            pool.close();
         } catch (JedisConnectionException e) {
             logger.debug("Database initialization failed.");
             logger.trace("Database exception: {}", e.toString());
