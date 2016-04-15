@@ -65,11 +65,11 @@ public class Ecdhe {
         dsa.update(data);
         // Sign and return data
         byte signedData[] = dsa.sign();
-        // Check if something goes wrong when decrypt.
+        // Check if something goes wrong when decrypts.
         if (signedData == null){
             return null;
         }
-        // Enconde signed data using base64.
+        // Encode signed data using base64.
         return Base64.getEncoder().encodeToString(signedData);
     }
 
