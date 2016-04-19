@@ -1,5 +1,17 @@
 # KeyServer Change Log
 
+v0.3.0
+-------------------------------------------------------------------------------- 
+Features:
+  - Check latest version available for KeyServer on GitHub.
+  - New code project architecture.
+  - Contains more JUnit tests.
+  - Private Key provisioning tool has been integrated inside KeyServer.
+
+Bug fixes:
+  - HTTPS certificate expiration date control.
+
+  
 v0.2.3
 -------------------------------------------------------------------------------- 
 Features:
@@ -8,6 +20,7 @@ Features:
   - Support more cipher suites on https server.
   - KeyServer Configuration more parametric.
   - Include KeyServer Private Key provider tool.
+  
   
 v0.1.3
 -------------------------------------------------------------------------------- 
