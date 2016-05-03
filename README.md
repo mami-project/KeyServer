@@ -1,5 +1,11 @@
 # Open Source KeyServer
 
+Repository branch build status:
+
+| **Master**  | **Develop**   |
+|:---:|:---:|
+| [![Build Status](https://travis-ci.org/mami-project/KeyServer.svg?branch=master)](https://travis-ci.org/mami-project/KeyServer) | [![Build Status](https://travis-ci.org/mami-project/KeyServer.svg?branch=develop)](https://travis-ci.org/mami-project/KeyServer) |
+
 This software is a Key Server that implements the TLS Session Key Interface (SKI) defined in  [draft-cairns-tls-session-key-interface-00](https://tools.ietf.org/html/draft-cairns-tls-session-key-interface-00 "Session Key Interface (SKI) for TLS and DTLS").
 
 The Heartbleed attack illustrated the security problems with storing private keys in the memory of the TLS server. The TLS Session Key Interface (SKI) defined the mentioned document makes it possible to store private keys in a highly trusted key server, physically separated from client facing servers. The TLS server is split into two distinct entities called
