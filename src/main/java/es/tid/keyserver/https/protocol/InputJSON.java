@@ -40,6 +40,15 @@ public class InputJSON {
     public final static String RSA = "RSA";
     
     /**
+     * Definition of PROTOCOL field values.
+     */
+    public final static String TLS_1_0 = "TLS 1.0";
+    public final static String TLS_1_1 = "TLS 1.1";
+    public final static String TLS_1_2 = "TLS 1.2";
+    public final static String DTLS_1_0 = "DTLS 1.0";
+    public final static String DTLS_1_2 = "DTLS 1.2";
+    
+    /**
      * Definition of HASH field right values.
      */
     public final static String SHA1 = "SHA1";
@@ -135,6 +144,40 @@ public class InputJSON {
     }
     
     /**
+     * Get "protocol" field from the input JSON message.
+     * This field is required in SKI request. Specifies the protocol version 
+     * negotiated in the handshake between Client and Edge Server.
+     * @return String value with the specific protocol. If the read field is not
+     *          valid, this method returns 'null' value.
+     */
+    public String getProtocol(){
+        String readedProtocol = null;
+        if(inputData.containsKey("protocol")){
+            switch ((String) inputData.get("protocol")){
+                case InputJSON.TLS_1_0:
+                    readedProtocol = InputJSON.TLS_1_0;
+                    break;
+                case InputJSON.TLS_1_1:
+                    readedProtocol = InputJSON.TLS_1_1;
+                    break;
+                case InputJSON.TLS_1_2:
+                    readedProtocol = InputJSON.TLS_1_2;
+                    break;
+                case InputJSON.DTLS_1_0:
+                    readedProtocol = InputJSON.DTLS_1_0;
+                    break;
+                case InputJSON.DTLS_1_2:
+                    readedProtocol = InputJSON.DTLS_1_2;
+                    break;
+                default:
+                    logger.error("Not valid 'protocol' field {}.", (String) inputData.get("protocol"));
+                    readedProtocol = null;
+            }
+        }
+        return readedProtocol;
+    }
+    
+    /**
      * Get the "data" field from an input JSON message base64 encoded.
      * @return String with the data content.
      */
@@ -148,17 +191,17 @@ public class InputJSON {
      */
     public String checkValidJSON(){
         // Extracting JSON fields
+        String protocol = this.getProtocol();
         String method = this.getMethod();
         String hash = this.getHash();
         String spki = this.getSpki();
         String input = this.getInput();
         // Logger trace output
-        logger.trace("Method CheckJSON (fields): method='{}', hash='{}', spki='{}', input='{}'",
-                method, hash, spki, input);
-        // Check if the JSON contains all fields "method", "hash", "spki"* and 
-        //  "input" fields.
-        //  Hash only is defined if the JSON contains ECDHE.
-        if((method == null) || (spki == null) || (input == null)){
+        logger.trace("Method CheckJSON (fields): protocol='{}', method='{}', hash='{}', spki='{}', input='{}'",
+                protocol, method, hash, spki, input);
+        // Check if the JSON contains all fields "protocol", "method", "hash", 
+        //  "spki" and "input" fields.
+        if((protocol == null) || (method == null) || (spki == null) || (input == null)){
             logger.debug("Input JSON: Some required fields are not present.");
             return ErrorJSON.ERR_MALFORMED_REQUEST;
         } else {
