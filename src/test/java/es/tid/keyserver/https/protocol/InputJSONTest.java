@@ -32,17 +32,19 @@ public class InputJSONTest {
     private final String dataTest_2;
     public InputJSONTest() {
         dataTest_1 = "{ \"method\":\"ECDHE\", "
+                + "\"protocol\":\"DTLS 1.0\", "
                 + "\"spki\":\"405FD8A83BFB64683BAEB51D9F8D99C9D872FA63\", "
                 + "\"hash\":\"SHA-256\", "
                 + "\"input\":\" VW2zg9TGHpvr1wIuMlzX2VmiUlevpDggVD4MTxBy4iPLHzAZ"
                 + "7JlW7DNA/hJPZoSGtfWUgKqBcvI4RfMOEA3hwQMAF0EEJx+gdxklHMZL20TA6"
                 + "NAe+7MsF77txd9rp7E8LkRhOaBiNXYVwNqKFrhFOpfocmlMn4t/yCMukIo0k3"
                 + "wHyZg8gA==\" }";
-        dataTest_2 = "{\n" +
-                "	\"method\":\"RSA\",\n" +
-                "	\"spki\":\"193D57F655228025FCB8140933BE466BAB5D8E88\",\n" +
-                "	\"input\":\"hNYw6/ah/SRXkvJc7WU8TQJd8wH7sUnhJ/4kewnZdGgLINtxEfMk7QeQiFH6Z8LpCgyqYeXoSMHmdAy2MMhseZl34vsFpY2ZZsB8exBzefxS4W55mTaILA6ZWkwVzCKESSRYwf+297XU7OTNxLqB02/DYR9Hr4/vXFfXg38aZQsMpHpDYzRrR9pEX5FNh/MIcBuEJDqi1ldjCREYO5I0LDb6lq9aIFCZKyb6pC6uDeTjgrQaMPWAl1S/jIHGvsRYJBktHAXBFVqWQuDl0WluxyYT++zW2/CuKH8QBDTcm/u9vS5M8RgeWqYrZxNzUwGkdHRuESL/HrdeDZiYtEFH4g==\"\n" +
-                "}";
+        dataTest_2 = "{\n"
+                + "     \"protocol\":\"TLS 1.2\", "
+                + "	\"method\":\"RSA\",\n"
+                + "	\"spki\":\"193D57F655228025FCB8140933BE466BAB5D8E88\",\n"
+                + "	\"input\":\"hNYw6/ah/SRXkvJc7WU8TQJd8wH7sUnhJ/4kewnZdGgLINtxEfMk7QeQiFH6Z8LpCgyqYeXoSMHmdAy2MMhseZl34vsFpY2ZZsB8exBzefxS4W55mTaILA6ZWkwVzCKESSRYwf+297XU7OTNxLqB02/DYR9Hr4/vXFfXg38aZQsMpHpDYzRrR9pEX5FNh/MIcBuEJDqi1ldjCREYO5I0LDb6lq9aIFCZKyb6pC6uDeTjgrQaMPWAl1S/jIHGvsRYJBktHAXBFVqWQuDl0WluxyYT++zW2/CuKH8QBDTcm/u9vS5M8RgeWqYrZxNzUwGkdHRuESL/HrdeDZiYtEFH4g==\"\n"
+                + "}";
     }
     
     @BeforeClass
@@ -113,5 +115,45 @@ public class InputJSONTest {
         String expResult = " VW2zg9TGHpvr1wIuMlzX2VmiUlevpDggVD4MTxBy4iPLHzAZ7JlW7DNA/hJPZoSGtfWUgKqBcvI4RfMOEA3hwQMAF0EEJx+gdxklHMZL20TA6NAe+7MsF77txd9rp7E8LkRhOaBiNXYVwNqKFrhFOpfocmlMn4t/yCMukIo0k3wHyZg8gA==";
         String result = instance.getInput();
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getProtocol method, of class InputJSON.
+     */
+    @Test
+    public void testGetProtocol() {
+        System.out.println("getProtocol");
+        InputJSON instance = new InputJSON(dataTest_1);
+        String expResult = InputJSON.DTLS_1_0;
+        String result = instance.getProtocol();
+        assertEquals(expResult, result);
+        
+        instance = new InputJSON(dataTest_2);
+        expResult = InputJSON.TLS_1_2;
+        result = instance.getProtocol();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkValidJSON method, of class InputJSON.
+     */
+    @Test
+    public void testCheckValidJSON() {
+        System.out.println("checkValidJSON");
+        InputJSON instance = new InputJSON(dataTest_1);
+        assertEquals(null, instance.checkValidJSON());
+        
+        instance = new InputJSON(dataTest_2);
+        assertEquals(null, instance.checkValidJSON());
+        
+        String notValidJSON = "{ \"method\":\"ECDHE\", "
+                + "\"spki\":\"405FD8A83BFB64683BAEB51D9F8D99C9D872FA63\", "
+                + "\"hash\":\"SHA-256\", "
+                + "\"input\":\" VW2zg9TGHpvr1wIuMlzX2VmiUlevpDggVD4MTxBy4iPLHzAZ"
+                + "7JlW7DNA/hJPZoSGtfWUgKqBcvI4RfMOEA3hwQMAF0EEJx+gdxklHMZL20TA6"
+                + "NAe+7MsF77txd9rp7E8LkRhOaBiNXYVwNqKFrhFOpfocmlMn4t/yCMukIo0k3"
+                + "wHyZg8gA==\" }";
+        instance = new InputJSON(notValidJSON);
+        assertEquals(ErrorJSON.ERR_MALFORMED_REQUEST, instance.checkValidJSON());
     }
 }
