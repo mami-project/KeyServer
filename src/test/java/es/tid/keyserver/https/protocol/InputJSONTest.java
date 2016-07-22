@@ -15,10 +15,6 @@
  */
 package es.tid.keyserver.https.protocol;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -45,22 +41,6 @@ public class InputJSONTest {
                 + "	\"spki\":\"193D57F655228025FCB8140933BE466BAB5D8E88\",\n"
                 + "	\"input\":\"hNYw6/ah/SRXkvJc7WU8TQJd8wH7sUnhJ/4kewnZdGgLINtxEfMk7QeQiFH6Z8LpCgyqYeXoSMHmdAy2MMhseZl34vsFpY2ZZsB8exBzefxS4W55mTaILA6ZWkwVzCKESSRYwf+297XU7OTNxLqB02/DYR9Hr4/vXFfXg38aZQsMpHpDYzRrR9pEX5FNh/MIcBuEJDqi1ldjCREYO5I0LDb6lq9aIFCZKyb6pC6uDeTjgrQaMPWAl1S/jIHGvsRYJBktHAXBFVqWQuDl0WluxyYT++zW2/CuKH8QBDTcm/u9vS5M8RgeWqYrZxNzUwGkdHRuESL/HrdeDZiYtEFH4g==\"\n"
                 + "}";
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**

@@ -98,14 +98,6 @@ public class ConfigControllerTest {
         file.delete();
         System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
     }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of isCorrectlyInitialized method, of class ConfigController.

@@ -16,10 +16,6 @@
 package es.tid.keyserver.core.lib;
 
 import junit.framework.Assert;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -37,23 +33,7 @@ public class LastVersionAvailableTest {
     public LastVersionAvailableTest() {
         repoUrl = "https://github.com/mami-project/KeyServer/releases/latest";
     }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
+  
     /**
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.
      */
