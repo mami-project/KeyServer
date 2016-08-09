@@ -47,6 +47,7 @@ public class ConfigFileTest {
             "serverCiphersSuites",
             "dbAddress",
             "dbPort",
+            "dbPassword",
             "whiteList"
         };
         testObj = new ConfigFile(testFileRoute, requiredFields);
@@ -69,6 +70,7 @@ public class ConfigFileTest {
         configFile.setProperty("serverCiphersSuites", "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA");
         configFile.setProperty("dbAddress", "192.168.11.180");
         configFile.setProperty("dbPort", "6379");
+        configFile.setProperty("dbPassword", "foobared");
         configFile.setProperty("whiteList", "IP_whitelist.txt");
         try{
             FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
@@ -249,4 +251,15 @@ public class ConfigFileTest {
         String result = testObj.getWhiteList();
         assertEquals(expResult, result);
     }   
+
+    /**
+     * Test of getDbPassword method, of class ConfigFile.
+     */
+    @Test
+    public void testGetDbPassword() {
+        System.out.println("getDbPassword");
+        String expResult = "foobared";
+        String result = testObj.getDbPassword();
+        assertEquals(expResult, result);
+    }
 }

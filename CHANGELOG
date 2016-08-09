@@ -3,10 +3,11 @@
 v0.3.1
 -------------------------------------------------------------------------------- 
 Features:
-  - 
+  - Impoved Redis connection security.
 
 Bug fixes:
   - SKI protocol draft-cairns-tls-session-key-interface-01 compliance.
+  - Data base connection lost not detected. 
 
 
 v0.3.0

@@ -21,10 +21,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.util.Set;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
@@ -33,6 +35,10 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * @since v0.1.0
  */
 public class DataBase implements CheckObject{
+    /**
+     * REDIS Database Pool Object.
+     */
+    private static JedisPool pool;
     /**
      * REDIS Database Connection Object
      */
@@ -51,15 +57,19 @@ public class DataBase implements CheckObject{
      * Main constructor of the class.
      * @param serverIp Redis server IP.
      * @param port Redis listener port.
-     * @since v0.3.0
+     * @param password Redis password.
+     * @since v0.3.1
      */
-    public DataBase(InetAddress serverIp, int port){
-        JedisPool pool = new JedisPool(serverIp.getHostAddress(), port);
+    public DataBase(InetAddress serverIp, int port, String password){
+        pool = new JedisPool(new GenericObjectPoolConfig(), 
+                serverIp.getHostAddress(), 
+                port, 
+                Protocol.DEFAULT_TIMEOUT, 
+                password);
         try {
             // Redis connected.
             dataBaseObj = pool.getResource();
             isInitializated = true;
-            pool.close();
         } catch (JedisConnectionException ex) {
             isInitializated = false;
             // Error level.
@@ -77,6 +87,8 @@ public class DataBase implements CheckObject{
      */
     public void stop(){
         dataBaseObj.close();
+        pool.close();
+        pool.destroy();
     }
     
     /**
@@ -103,7 +115,12 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public boolean isConnected(){
-        return dataBaseObj.isConnected();
+        try{
+            dataBaseObj.ping();
+            return true;
+        } catch (JedisConnectionException e){
+            return false;
+        }
     }
     
     /**
