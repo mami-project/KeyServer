@@ -67,6 +67,10 @@ public class KsMonitor {
      */
     private boolean dbStatus;
     /**
+     * Flag used to alert only once time about the Data base connection lost.
+     */
+    private boolean dBnotified;
+    /**
      * HTTPS server initialization status flag.
      */
     private boolean httpsServerInit;
@@ -106,9 +110,12 @@ public class KsMonitor {
             public void actionPerformed(ActionEvent ae) {
                 // Redis Data Base status.
                 dbStatus = dataBaseObj.isConnected();
-                if(!dbStatus){
+                if(!dbStatus && !dBnotified){
+                     dBnotified = true;
                     // Error level.
-                    logger.error("Lost connection to Redis Database.");
+                    logger.error("Connection lost with Redis Database. Trying to connect...");
+                } else if(dbStatus && dBnotified){
+                    dBnotified = false;
                 }
             }
         });

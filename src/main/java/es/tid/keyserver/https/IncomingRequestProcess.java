@@ -88,7 +88,7 @@ public class IncomingRequestProcess implements HttpHandler{
         String responseString;
         // Process only POST requests from client.
         String requestMethod = he.getRequestMethod();
-        if(requestMethod.equals("POST")){
+        if("POST".equals(requestMethod)){
             logger.trace("Inside HTTP handle: {} | Type: {}", he.getRemoteAddress(), requestMethod);
             // Reading POST body for get the JSON string.
             String jsonString = readHttpBodyInputStream(he.getRequestBody());

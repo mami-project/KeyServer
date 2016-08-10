@@ -258,6 +258,16 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
+     * This method is used to get Redis Database password.
+     * @return String with the Redis Database Password. If the field is not
+     * present, returns 'null'.
+     * @since v0.3.1
+     */
+    public String getDbPassword(){
+        return this.getParameter("dbPassword");
+    }
+    
+    /**
      * This method is used to get the IP whitelist file name for KeyServer 
      * access control.
      * @return String with the whitelist file name. If the field is not present,
@@ -292,6 +302,7 @@ public class ConfigFile implements CheckObject{
             defaultParameters.setProperty("serverKeyStore", "JKS");
             defaultParameters.setProperty("dbAddress","127.0.0.1");
             defaultParameters.setProperty("dbPort", "6379");
+            defaultParameters.setProperty("dbPassword", "foobared"); // Default password for Redis config file.
             defaultParameters.setProperty("whiteList", "IP_whitelist.txt");
             // Save parameters on file
             defaultParameters.store(newConfigFile, null);

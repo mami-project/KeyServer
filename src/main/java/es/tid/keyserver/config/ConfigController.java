@@ -308,6 +308,23 @@ public class ConfigController implements CheckObject{
     }
     
     /**
+     * This method is used to get Redis Database password.
+     * @return Integer with the Redis Database password. If the field is not present,
+     * returns `null`.
+     * @since v0.3.1
+     */
+    public String getDbPassword(){
+        String password = this.keyserverConfig.getDbPassword();
+        if(password != null){
+            return password;
+        } else {
+            // Error level.
+            logger.error("Not valid password specified for the Redis Database: {}", password);
+            return null;
+        }
+    }
+    
+    /**
      * This method is used to get the IP whitelist file name for KeyServer 
      * access control.
      * @return String with the whitelist file name. If the field is not present,

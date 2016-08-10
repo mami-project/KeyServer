@@ -70,7 +70,9 @@ public class KeyServer {
         
         // Connect to the Data Base.
         logger.info("Connecting to database.");
-        DataBase keyServerDB = new DataBase(softwareConfig.getDbAddress(), softwareConfig.getDbPort());
+        DataBase keyServerDB = new DataBase(softwareConfig.getDbAddress(), 
+                softwareConfig.getDbPort(), 
+                softwareConfig.getDbPassword());
         checkObj(keyServerDB, "Database connection established.",
                 "Can't connect to the database. Please check 'general.properties' file values.");
         
@@ -233,6 +235,7 @@ public class KeyServer {
             // Redis Database
             "dbAddress",
             "dbPort",
+            "dbPassword",
             // Access control
             "whiteList"
         };
