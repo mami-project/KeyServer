@@ -37,7 +37,7 @@ public class Maven implements CheckObject{
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Maven.class);;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Maven.class);
     /**
      * Current object initialization flag
      */
@@ -58,13 +58,13 @@ public class Maven implements CheckObject{
         } catch (IOException ex) {
             initStatus = false;
             // Error level.
-            logger.error("The current config file: " + fileName + " can't be loaded correctly.");
+            LOGGER.error("The current config file: " + fileName + " can't be loaded correctly.");
             // Debug level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
-        logger.debug("Maven config file: " + fileName + " correctly loaded.");
+        LOGGER.debug("Maven config file: " + fileName + " correctly loaded.");
         initStatus = true;
     }
     

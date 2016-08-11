@@ -52,7 +52,7 @@ public class HttpsCertTest {
         System.out.println("certExpirDate");
         Date result = instance.certExpirDate();
         System.out.println("[ TEST ] Certificate expration date: " + result);
-        Assert.assertTrue(result != null);
+        assertTrue(result != null);
     }
 
     /**
@@ -63,7 +63,7 @@ public class HttpsCertTest {
         System.out.println("certRemainDays");
         long result = instance.certRemainDays();
         System.out.println("[ TEST ] Certificate validity remain days: " + result);
-        Assert.assertTrue(true);
+        assertTrue(true);
     }
 
     /**

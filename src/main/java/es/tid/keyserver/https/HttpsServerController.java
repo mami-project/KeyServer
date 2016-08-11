@@ -51,7 +51,7 @@ public class HttpsServerController implements CheckObject{
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HttpsServerController.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsServerController.class);
     /**
      * Server Object.
      */
@@ -118,11 +118,11 @@ public class HttpsServerController implements CheckObject{
                         params.setSSLParameters(defaultSSLParameters);
                     } catch (NoSuchAlgorithmException ex) {
                         // Error level.
-                        logger.error("Problem with SSL context parameters.");
+                        LOGGER.error("Problem with SSL context parameters.");
                         // Trace level.
                         StringWriter errors = new StringWriter();
                         ex.printStackTrace(new PrintWriter(errors));
-                        logger.trace("Exception message: {}", errors.toString());
+                        LOGGER.trace("Exception message: {}", errors.toString());
                     }
                 }  
                 /**
@@ -139,7 +139,7 @@ public class HttpsServerController implements CheckObject{
                         List<String> items = Arrays.asList(cipString.split("\\s*,\\s*"));
                         returnValue = (String[]) items.toArray();
                     }
-                    logger.trace("List {} of ciphers inside KeyServer configuration file: {}", returnValue.length, returnValue);
+                    LOGGER.trace("List {} of ciphers inside KeyServer configuration file: {}", returnValue.length, returnValue);
                     return returnValue;
                 }
             });
@@ -166,39 +166,39 @@ public class HttpsServerController implements CheckObject{
             isInitializated = true;
         } catch (IOException ex) {
             // Error level.
-            logger.error("HTTP incomming requests server cannot be initialized.");
+            LOGGER.error("HTTP incomming requests server cannot be initialized.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace("Exception message: {}", errors.toString());
+            LOGGER.trace("Exception message: {}", errors.toString());
         } catch (NoSuchAlgorithmException ex) {
             // Error level.
-            logger.error("HTTP server requests has produced NoSuchAlgoritmException.");
+            LOGGER.error("HTTP server requests has produced NoSuchAlgoritmException.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace("Exception message: {}", errors.toString());
+            LOGGER.trace("Exception message: {}", errors.toString());
         } catch (KeyStoreException ex) {
             // Error level.
-            logger.error("HTTP server certificate has produced a KeyStoreException.");
+            LOGGER.error("HTTP server certificate has produced a KeyStoreException.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace("Exception message: {}", errors.toString());
+            LOGGER.trace("Exception message: {}", errors.toString());
         } catch (UnrecoverableKeyException ex) {
             // Error level.
-            logger.error("HTTP server certificate has produced a UnrecoverableKeyException.");
+            LOGGER.error("HTTP server certificate has produced a UnrecoverableKeyException.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace("Exception message: {}", errors.toString());
+            LOGGER.trace("Exception message: {}", errors.toString());
         } catch (KeyManagementException ex) {
             // Error level.
-            logger.error("HTTP server certificate has produced a KeyManagementException.");
+            LOGGER.error("HTTP server certificate has produced a KeyManagementException.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace("Exception message: {}", errors.toString());
+            LOGGER.trace("Exception message: {}", errors.toString());
         }
     }
     

@@ -48,15 +48,15 @@ public class IncomingRequestProcess implements HttpHandler{
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IncomingRequestProcess.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(IncomingRequestProcess.class);
     /**
      * Database Object
      */
-    private DataBase keyServerDB;
+    private final DataBase keyServerDB;
     /**
      * IP WhiteList for KeyServer access control.
      */
-    private WhiteList ipwl;
+    private final WhiteList ipwl;
     /**
      * Flag used to storage if the current IP request is authorized (true) or 
      * not (false).
@@ -87,7 +87,7 @@ public class IncomingRequestProcess implements HttpHandler{
         // Process only POST requests from client.
         String requestMethod = he.getRequestMethod();
         if("POST".equals(requestMethod)){
-            logger.trace("Inside HTTP handle: {} | Type: {}", he.getRemoteAddress(), requestMethod);
+            LOGGER.trace("Inside HTTP handle: {} | Type: {}", he.getRemoteAddress(), requestMethod);
             // Reading POST body for get the JSON string.
             String jsonString = readHttpBodyInputStream(he.getRequestBody());
             // Creating JSON Object for incoming data.
@@ -96,12 +96,12 @@ public class IncomingRequestProcess implements HttpHandler{
             ipAuthorized = ipwl.iPAuthorized(he.getRemoteAddress().getAddress());
             // Process the JSON for the correct type
             responseString = processIncommingJson(jsonData);
-            logger.trace("Response String: {}", responseString);
+            LOGGER.trace("Response String: {}", responseString);
             // Send response to the client
             sendKeyServerResponse(he, responseString);
         } else {
             // If not POST request (Nothing to do).
-            logger.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
+            LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
         }
         he.close();
     }
@@ -131,7 +131,7 @@ public class IncomingRequestProcess implements HttpHandler{
             OutputStream responseBody = he.getResponseBody();
             responseBody.write(responseString.getBytes());
         } catch (IOException ex) {
-                logger.error("Can't send the response to the client...");
+                LOGGER.error("Can't send the response to the client...");
         }
     }
     
@@ -149,7 +149,7 @@ public class IncomingRequestProcess implements HttpHandler{
             }
             bodyStream.close();
         } catch (IOException ex) {
-            logger.error("IO exception for incomming HTTP bodyStream: {}",ex.getMessage());
+            LOGGER.error("IO exception for incomming HTTP bodyStream: {}",ex.getMessage());
         }
         return jsonString;
     }
@@ -163,25 +163,25 @@ public class IncomingRequestProcess implements HttpHandler{
     private String processIncommingJson(InputJSON jsonObj){
         // Check if the IP is Authorized to use KeyServer 
         if(!this.ipAuthorized){
-            logger.error("Not access allowed to the KeyServer from this host.");
+            LOGGER.error("Not access allowed to the KeyServer from this host.");
             return new ErrorJSON(ErrorJSON.ERR_REQUEST_DENIED).toString();
         }
         // Check first if JSON is valid.
         if(jsonObj.checkValidJSON()!=null){ // If not is valid
             // Generate JSON Output error object and return it as string.
-            logger.debug("IncommingJSON Processor: Not valid JSON received. Returns error to the HTTP IncommingProcessor thread.");
+            LOGGER.debug("IncommingJSON Processor: Not valid JSON received. Returns error to the HTTP IncommingProcessor thread.");
             return new ErrorJSON(jsonObj.checkValidJSON()).toString();
         }
-        logger.trace("IncommingJSON Processor: Input JSON valid.");
+        LOGGER.trace("IncommingJSON Processor: Input JSON valid.");
         // If JSON is valid, process response.
         String responseString=null;
         switch (jsonObj.getMethod()){
             case InputJSON.ECDHE: // ECDHE Mode
-                logger.debug("Response from KeyServer for ECDH.");
+                LOGGER.debug("Response from KeyServer for ECDH.");
                 responseString = modeECDH(jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
                 break;
             case InputJSON.RSA: // RSA Mode
-                logger.debug("Response from KeyServer for RSA.");
+                LOGGER.debug("Response from KeyServer for RSA.");
                 responseString = modeRSA(jsonObj.getSpki(), jsonObj.getInput());
                 if(responseString == null){
                     responseString = ErrorJSON.ERR_UNSPECIFIED;
@@ -189,12 +189,12 @@ public class IncomingRequestProcess implements HttpHandler{
                 break;
             default:
                 // Not valid method.
-                logger.error("HTTP Incomming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
+                LOGGER.error("HTTP Incomming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
                 responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
                 break;
         }
         // Debug logger info:
-        logger.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
+        LOGGER.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
                 jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
         // Check if responseString is an error and returns the correct object as JSON string.
         if(responseString.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
@@ -225,9 +225,9 @@ public class IncomingRequestProcess implements HttpHandler{
         try {
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
-            logger.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
         } catch (InvalidKeySpecException ex) {
-            logger.error("RSA Invalid Key exception: {}",ex.getMessage());
+            LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
         }
         // Check if privKey is valid.
         if(privKey == null){
@@ -237,13 +237,13 @@ public class IncomingRequestProcess implements HttpHandler{
             // Sign data
             return Ecdhe.calcOutput(input, privKey, hash);
         } catch (NoSuchAlgorithmException ex) {
-            logger.error("ECDH No Such Algorithm Exception: {}", ex.getMessage());
+            LOGGER.error("ECDH No Such Algorithm Exception: {}", ex.getMessage());
         } catch (InvalidKeySpecException ex) {
-            logger.error("ECDH Invalid Key Espec Exception: {}", ex.getMessage());
+            LOGGER.error("ECDH Invalid Key Espec Exception: {}", ex.getMessage());
         } catch (InvalidKeyException ex) {
-            logger.error("ECDH Invalid Key Exception: {}", ex.getMessage());
+            LOGGER.error("ECDH Invalid Key Exception: {}", ex.getMessage());
         } catch (SignatureException ex) {
-            logger.error("ECDH Signature Exception: {}", ex.getMessage());
+            LOGGER.error("ECDH Signature Exception: {}", ex.getMessage());
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }
@@ -266,9 +266,9 @@ public class IncomingRequestProcess implements HttpHandler{
         try {
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
-            logger.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
         } catch (InvalidKeySpecException ex) {
-            logger.error("RSA Invalid Key exception: {}",ex.getMessage());
+            LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
         }
         // Check if privKey is valid.
         if(privKey == null){
@@ -278,15 +278,15 @@ public class IncomingRequestProcess implements HttpHandler{
         try {
             return Rsa.calcDecodedOutput(input, privKey);
         } catch (NoSuchAlgorithmException ex) {
-            logger.error("RSA No Such Algorithm Exception: {}", ex.getMessage());
+            LOGGER.error("RSA No Such Algorithm Exception: {}", ex.getMessage());
         } catch (NoSuchPaddingException ex) {
-            logger.error("RSA No Such Padding Exception: {}", ex.getMessage());
+            LOGGER.error("RSA No Such Padding Exception: {}", ex.getMessage());
         } catch (InvalidKeyException ex) {
-            logger.error("RSA Invalid Key Exception: {}", ex.getMessage());
+            LOGGER.error("RSA Invalid Key Exception: {}", ex.getMessage());
         } catch (IllegalBlockSizeException ex) {
-            logger.error("RSA Illegal Blocks Size Exception: {}", ex.getMessage());
+            LOGGER.error("RSA Illegal Blocks Size Exception: {}", ex.getMessage());
         } catch (BadPaddingException ex) {
-            logger.error("RSA Bad Padding Exception: {}", ex.getMessage());
+            LOGGER.error("RSA Bad Padding Exception: {}", ex.getMessage());
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }

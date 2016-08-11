@@ -29,10 +29,7 @@ public class LastVersionAvailableTest {
      * Test repository URL string.
      */
     private static final String REPOURL = "https://github.com/mami-project/KeyServer/releases/latest";
-    
-    public LastVersionAvailableTest() {
-    }
-  
+      
     /**
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.
      */
