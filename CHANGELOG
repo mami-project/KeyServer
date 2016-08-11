@@ -4,6 +4,7 @@ v0.3.1
 -------------------------------------------------------------------------------- 
 Features:
   - Impoved Redis connection security.
+  - Auto remove a Private Key from Redis database before a specific date.
 
 Bug fixes:
   - SKI protocol draft-cairns-tls-session-key-interface-01 compliance.
