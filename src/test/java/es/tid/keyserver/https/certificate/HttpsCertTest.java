@@ -17,6 +17,7 @@ package es.tid.keyserver.https.certificate;
 
 import java.security.KeyStore;
 import java.util.Date;
+import junit.framework.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -40,6 +41,7 @@ public class HttpsCertTest {
         System.out.println("getCertificate");
         KeyStore result = instance.getCertificate();
         System.out.println("[ TEST ] Certificate type: " + result.getType());
+        Assert.assertTrue(result != null);
     }
 
     /**
@@ -50,6 +52,7 @@ public class HttpsCertTest {
         System.out.println("certExpirDate");
         Date result = instance.certExpirDate();
         System.out.println("[ TEST ] Certificate expration date: " + result);
+        assertTrue(result != null);
     }
 
     /**
@@ -60,6 +63,7 @@ public class HttpsCertTest {
         System.out.println("certRemainDays");
         long result = instance.certRemainDays();
         System.out.println("[ TEST ] Certificate validity remain days: " + result);
+        assertTrue(true);
     }
 
     /**

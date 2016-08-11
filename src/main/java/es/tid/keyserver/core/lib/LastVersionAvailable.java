@@ -38,7 +38,7 @@ public class LastVersionAvailable implements CheckObject{
     /**
      * Logging object.
      */
-    private static org.slf4j.Logger logger;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LastVersionAvailable.class);
     /**
      * Current object initialization flag
      */
@@ -53,17 +53,16 @@ public class LastVersionAvailable implements CheckObject{
      * @param url Contains the string for the URL repository.
      */
     public LastVersionAvailable(String url){
-        logger = LoggerFactory.getLogger(LastVersionAvailable.class);
         try {
             this.url = new URL(url);
         } catch (MalformedURLException ex) {
             initStatus = false;
             // Error level.
-            logger.error("The current URL: " + url + " is not valid.");
+            LOGGER.error("The current URL: " + url + " is not valid.");
             // Debug level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
         this.refreshRepoStatus();
         this.initStatus = true;
@@ -112,11 +111,11 @@ public class LastVersionAvailable implements CheckObject{
             this.lastVersion = versionUrl.substring(versionUrl.lastIndexOf("/")+1);
         } catch (IOException ex) {
             // Error level.
-            logger.error("Can't connect to the current URL: " + url + ".");
+            LOGGER.error("Can't connect to the current URL: " + url + ".");
             // Debug level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
     }
     

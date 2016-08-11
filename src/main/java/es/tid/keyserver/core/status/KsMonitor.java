@@ -33,7 +33,7 @@ public class KsMonitor {
     /**
      * Logging object.
      */
-    private static org.slf4j.Logger logger;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsMonitor.class);
     /**
      * KeyServer startup date.
      */
@@ -89,7 +89,6 @@ public class KsMonitor {
      * @since v0.3.0
      */
     public KsMonitor(DataBase db, boolean httpsServerInit, HttpsCert sCert, String publicUrl, String curVer){
-        logger = LoggerFactory.getLogger(KsMonitor.class);
         // Get de current date when the KeyServer has started.
         startDate = new Date();
         // Set external object to class fields
@@ -113,9 +112,10 @@ public class KsMonitor {
                 if(!dbStatus && !dBnotified){
                      dBnotified = true;
                     // Error level.
-                    logger.error("Connection lost with Redis Database. Trying to connect...");
+                    LOGGER.error("Connection lost with Redis Database. Trying to connect...");
                 } else if(dbStatus && dBnotified){
                     dBnotified = false;
+                    LOGGER.info("Connected to Redis database.");
                 }
             }
         });
@@ -130,7 +130,7 @@ public class KsMonitor {
                 // Check the HTTPs certificate expiration date.
                 if(!certStatus.isValid()){
                     // If the keyserver is not updated.
-                    logger.error("The HTTPs certificate has expired since: {}\n\t"
+                    LOGGER.error("The HTTPs certificate has expired since: {}\n\t"
                             + "All incoming requests to the KeyServer will be rejected.",
                             certStatus.certExpirDate());
                 }
@@ -138,7 +138,7 @@ public class KsMonitor {
                 updates.refreshRepoStatus();
                 if(!updates.isUpdated(curVer)){
                     // If the keyserver is not updated.
-                    logger.warn("There are a new version of KeyServer tool: {} Please update!\n\t"
+                    LOGGER.warn("There are a new version of KeyServer tool: {} Please update!\n\t"
                             + "KeyServer GitHub project URL: {}",
                             updates.getLastVersionAvailable(), repoUrl);
                 }
@@ -147,7 +147,7 @@ public class KsMonitor {
         // Start timers.
         t1.start();
         t2.start();
-        logger.trace("The KeyServer Monitor object has started.");
+        LOGGER.trace("The KeyServer Monitor object has started.");
     }
     
     /**
@@ -159,7 +159,7 @@ public class KsMonitor {
     public void stop(){
         t1.stop();
         t2.stop();
-        logger.trace("The KeyServer Monitor object has been stopped.");
+        LOGGER.trace("The KeyServer Monitor object has been stopped.");
     }
     
     /**

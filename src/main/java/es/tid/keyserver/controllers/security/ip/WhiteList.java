@@ -37,7 +37,7 @@ public class WhiteList {
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IncomingRequestProcess.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(IncomingRequestProcess.class);
     /**
      * Contains the list with the specified IPs.
      */
@@ -62,14 +62,14 @@ public class WhiteList {
                 ipList = loadFromFile(list);
             } else {
                 // Shows error.
-                logger.error("Can't read the file {} with the authorized IP "
+                LOGGER.error("Can't read the file {} with the authorized IP "
                         + "address. No connections allowed to the KeyServer.",
                         iPFileName);
             }
             allowAll = false;
         } else {
             // Create empty list
-            logger.warn("There are no whitelist file. Allowing all IPs.");
+            LOGGER.warn("There are no whitelist file. Allowing all IPs.");
             allowAll = true;
             ipList = new HashSet<>();
         }
@@ -111,7 +111,7 @@ public class WhiteList {
                     if(ip_tmp!=null){
                         tmp.add(ip_tmp);
                     } else {
-                        logger.warn("IP on whitelist not valid '{}' please fix this "
+                        LOGGER.warn("IP on whitelist not valid '{}' please fix this "
                                 + "error. This IP has been omitted.", line);
                     }
                 }
@@ -120,20 +120,20 @@ public class WhiteList {
             is.close();
         } catch (FileNotFoundException ex) {
             // Error level.
-            logger.error("Can't load the KeyServer  IP whitelist file.");
+            LOGGER.error("Can't load the KeyServer  IP whitelist file.");
             // Debug level.
-            logger.debug("IP white list file route: {}", list.getAbsolutePath());
+            LOGGER.debug("IP white list file route: {}", list.getAbsolutePath());
             // Trace level
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         } catch (IOException ex) {
             // Error level.
-            logger.error("IO Exception with the KeyServer IP address white list file: {}", list.getAbsolutePath());
+            LOGGER.error("IO Exception with the KeyServer IP address white list file: {}", list.getAbsolutePath());
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         } 
         return tmp;
     }
@@ -149,7 +149,7 @@ public class WhiteList {
         // Check if the value is not null
         if(tmp == null){
             // Warning level.
-            logger.warn("Null value on IP address from IP White List file.");
+            LOGGER.warn("Null value on IP address from IP White List file.");
             return null;
         }
         // Creating InetAddress object and return it.
@@ -158,11 +158,11 @@ public class WhiteList {
             addr = InetAddress.getByName(tmp);
         } catch (UnknownHostException ex) {
             // Error level.
-            logger.error("Unknown Host Exception with the current address on whitelist file: ", tmp);
+            LOGGER.error("Unknown Host Exception with the current address on whitelist file: ", tmp);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
             return null;
         }
        return addr;

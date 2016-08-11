@@ -25,7 +25,7 @@ public class ErrorJSON extends ResponseJSON {
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ErrorJSON.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ErrorJSON.class);
     /**
      * Ericsson error codes definition.
      */
@@ -43,8 +43,8 @@ public class ErrorJSON extends ResponseJSON {
     public ErrorJSON(String errorCode) {
         super(ResponseJSON.ERROR, errorCode);
         if(!checkIfValid(errorCode)){
-            logger.warn("Not valid Error code for JSON Error.");
-            logger.trace("Error User label: {} | JSON: {}",errorCode ,this.toString());
+            LOGGER.warn("Not valid Error code for JSON Error.");
+            LOGGER.trace("Error User label: {} | JSON: {}",errorCode ,this.toString());
             this.setOutputData(ERROR, ErrorJSON.ERR_UNSPECIFIED);
         }
     }

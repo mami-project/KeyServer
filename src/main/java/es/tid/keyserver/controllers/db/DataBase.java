@@ -67,7 +67,7 @@ public class DataBase implements CheckObject{
     /**
      * Logging object.
      */
-    private static final Logger logger = LoggerFactory.getLogger(DataBase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataBase.class);
     
     /**
      * Main constructor of the class.
@@ -82,17 +82,16 @@ public class DataBase implements CheckObject{
         this.port = port;
         this.password = password;
         // Try to connect to Redis database.
-        JedisConnectionException ex = new JedisConnectionException(""); // This object is used to storage the 
-                                                                        // exception during database connection.
-        isConnected = connectDb(ex);
-        // If the KeyServer can't connect to the Redis database.
-        if(!isConnected){
+        try{
+            isConnected = connectDb();
+        } catch (JedisConnectionException ex){
+            // If the KeyServer can't connect to the Redis database.
             // Error level.
-            logger.error("Database initialization failed.");
+            LOGGER.error("Database initialization failed.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
     }
     
@@ -116,7 +115,7 @@ public class DataBase implements CheckObject{
     public byte[] getPrivateForHash(String certHash){
         if(this.isConnected){
             String response = dataBaseObj.get(certHash);
-            logger.debug("REDIS query: {} | REDIS response: {}", certHash, response);
+            LOGGER.debug("REDIS query: {} | REDIS response: {}", certHash, response);
             if (response!=null){
                 // Decode from base64 to bytes and return array of values.
                 return Base64.getDecoder().decode(response.trim());
@@ -137,8 +136,12 @@ public class DataBase implements CheckObject{
         } catch (JedisConnectionException e){ 
             if(!this.connecting){
                 connecting = true;  // Set the connecting flag True (trying to connect...).
-                isConnected = connectDb(new JedisConnectionException(""));
-                connecting = false; // Set the connecting flat to False (connected).
+                try{
+                    isConnected = connectDb();
+                } catch (JedisConnectionException ex){
+                    isConnected = false;
+                }
+                connecting = false; // Set the connecting flag to False (connected).
             }
             return false;
         }
@@ -237,27 +240,21 @@ public class DataBase implements CheckObject{
     }
 
     /**
-     * This method is used to connect this class with the Redis database.
-     * @param ex This object is used to storage the possible exception object. 
+     * This method is used to connect this class with the Redis database. 
      * This information is used only for log purposes. 
      * @return True if the connection has been established with the Redis 
      * database, false if not. The data description about the connection problem
      * should be storage inside input Exception object.
      * @since v0.3.1
      */
-    private boolean connectDb(JedisConnectionException ex){
+    private boolean connectDb(){
         pool = new JedisPool(new GenericObjectPoolConfig(), 
                 serverIp.getHostAddress(), 
                 port, 
                 Protocol.DEFAULT_TIMEOUT, 
                 password);
-        try {
-            // Redis connected.
-            dataBaseObj = pool.getResource();
-            return true;
-        } catch (JedisConnectionException e) {
-            ex = e; // Save the catched exception object inside input field.
-            return false;
-        }
+        // Redis connected.
+        dataBaseObj = pool.getResource();
+        return true;
     }
 }
