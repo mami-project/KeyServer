@@ -72,8 +72,6 @@ public class IncomingRequestProcess implements HttpHandler{
         keyServerDB = db;
         ipwl = wl;
     }
-    
-
 
     /**
      * This method provides a control function for process the incoming HTTPS
@@ -193,6 +191,7 @@ public class IncomingRequestProcess implements HttpHandler{
                 // Not valid method.
                 logger.error("HTTP Incomming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
                 responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
+                break;
         }
         // Debug logger info:
         logger.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",

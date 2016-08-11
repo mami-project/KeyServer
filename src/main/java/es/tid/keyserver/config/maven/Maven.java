@@ -37,7 +37,7 @@ public class Maven implements CheckObject{
     /**
      * Logging object.
      */
-    private static org.slf4j.Logger logger;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Maven.class);;
     /**
      * Current object initialization flag
      */
@@ -50,7 +50,6 @@ public class Maven implements CheckObject{
      * @since v0.3.0
      */
     public Maven(String fileName){
-        logger = LoggerFactory.getLogger(Maven.class);
         InputStream resourceAsStream = this.getClass().getResourceAsStream(fileName);
         prop = new Properties();
         try {

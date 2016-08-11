@@ -47,7 +47,7 @@ public class HttpsCert implements CheckObject{
     /**
      * Logging object.
      */
-    private static org.slf4j.Logger logger;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsCert.class);
     /**
      * Flag for check if the object is correctly initialized.
      */
@@ -60,7 +60,6 @@ public class HttpsCert implements CheckObject{
      * @since v0.3.0
      */
     public HttpsCert(String fileRoute, String password){
-        logger = LoggerFactory.getLogger(HttpsCert.class);
         try {
             keystore = KeyStore.getInstance(KeyStore.getDefaultType());
             keystore.load(new FileInputStream(fileRoute), password.toCharArray());
@@ -74,35 +73,35 @@ public class HttpsCert implements CheckObject{
         } catch (KeyStoreException ex) {
             initStatus = false;
             // Error level.
-            logger.error("KeyStoreException ocurred when try to load the HTTPs certificate.");
+            LOGGER.error("KeyStoreException ocurred when try to load the HTTPs certificate.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         } catch (IOException ex) {
             initStatus = false;
             // Error level.
-            logger.error("IOException when try to load the HTTPs certificate.");
+            LOGGER.error("IOException when try to load the HTTPs certificate.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         } catch (NoSuchAlgorithmException ex) {
             initStatus = false;
             // Error level.
-            logger.error("NoSuchAlgorithmException ocurred when try to load the HTTPs certificate.");
+            LOGGER.error("NoSuchAlgorithmException ocurred when try to load the HTTPs certificate.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         } catch (CertificateException ex) {
             initStatus = false;
             // Error level.
-            logger.error("There are a problem with the HTTPs server certificate: {}", fileRoute);
+            LOGGER.error("There are a problem with the HTTPs server certificate: {}", fileRoute);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
         initStatus = true;
     }

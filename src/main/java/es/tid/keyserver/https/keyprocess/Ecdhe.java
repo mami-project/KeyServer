@@ -106,6 +106,7 @@ public class Ecdhe {
                 break;    
             default:
                 logger.error("ECDHE: not valid Hash value ({})", hash);
+                break;
         } 
         return dsa;
     }

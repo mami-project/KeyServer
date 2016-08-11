@@ -17,7 +17,7 @@ package es.tid.keyserver.core.lib;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Test class for the 'LastVersionAvailble' KeyServer class.
@@ -28,10 +28,9 @@ public class LastVersionAvailableTest {
     /**
      * Test repository URL string.
      */
-    private String repoUrl;
+    private static final String REPOURL = "https://github.com/mami-project/KeyServer/releases/latest";
     
     public LastVersionAvailableTest() {
-        repoUrl = "https://github.com/mami-project/KeyServer/releases/latest";
     }
   
     /**
@@ -40,7 +39,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testGetLastVersionAvailable() {
         System.out.println("getLastVersionAvailable");
-        LastVersionAvailable instance = new LastVersionAvailable(repoUrl);
+        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         String expResult = "releases";
         String result = instance.getLastVersionAvailable();
         System.out.println("[ TEST ] Last version available: " + result);
@@ -54,9 +53,10 @@ public class LastVersionAvailableTest {
     public void testIsUpdated() {
         System.out.println("isUpdated");
         String appVersion = "v0.1.2";
-        LastVersionAvailable instance = new LastVersionAvailable(repoUrl);
+        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         boolean result = instance.isUpdated(appVersion);
         System.out.println("[ TEST ]: Is the current version up to date? " + result);
+        Assert.assertFalse(result);
     }
 
     /**
@@ -65,7 +65,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testRefreshRepoStatus() {
         System.out.println("refreshRepoStatus");
-        LastVersionAvailable instance = new LastVersionAvailable(repoUrl);
+        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         instance.refreshRepoStatus();
         boolean expResult = true;
         boolean result = instance.isCorrectlyInitialized();
@@ -78,10 +78,9 @@ public class LastVersionAvailableTest {
     @Test
     public void testIsCorrectlyInitialized() {
         System.out.println("isCorrectlyInitialized");
-        LastVersionAvailable instance = new LastVersionAvailable(repoUrl);
+        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         boolean expResult = true;
         boolean result = instance.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
-    
 }

@@ -91,6 +91,7 @@ public class InputJSON {
                 break;
             default:
                 readedMethod = null;
+                break;
         }
         return readedMethod;
     }
@@ -135,6 +136,7 @@ public class InputJSON {
                     default:
                         logger.error("ECDHE not valid 'hash' field {}.", (String) inputData.get("hash"));
                         readedHash = null;
+                        break;
                 }
             } else {
                 readedHash = SHA1;
@@ -172,6 +174,7 @@ public class InputJSON {
                 default:
                     logger.error("Not valid 'protocol' field {}.", (String) inputData.get("protocol"));
                     readedProtocol = null;
+                    break;
             }
         }
         return readedProtocol;
