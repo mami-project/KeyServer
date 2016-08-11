@@ -178,6 +178,22 @@ public class DataBase implements CheckObject{
     }
     
     /**
+     * This method is used for automatic remove provisioned private keys from
+     * Redis database. 
+     * @param certHash SHA1 certificate hash. This field is used as index.
+     * @param date Expiration date for the provided certificate.
+     * @return True if all works correctly. False if not.
+     * @since v0.3.1
+     */
+    public boolean setExpPK(String certHash, long date){
+        if(this.isConnected){
+            dataBaseObj.expireAt(certHash, date);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * This method is used to delete an specified database index register.
      * @param certHash SHA1 hash of the certificate used as database index.
      * @return True if all works correctly. False if the specified register is 
