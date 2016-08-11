@@ -1,4 +1,4 @@
-# Open Source KeyServer
+# Open Source KeyServer [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mami-project/KeyServer&amp;utm_campaign=Badge_Grade)
 
 Repository branch build status:
 
