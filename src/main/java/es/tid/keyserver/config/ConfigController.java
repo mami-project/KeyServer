@@ -34,7 +34,7 @@ public class ConfigController implements CheckObject{
     /**
      * Logging object.
      */
-    private static org.slf4j.Logger logger;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ConfigController.class);
     /**
      * Maven project data object.
      */
@@ -55,7 +55,6 @@ public class ConfigController implements CheckObject{
      * @since v0.3.0
      */
     public ConfigController(String mvnFileRoute, String ksFileRoute, String [] ksRequiredFields) {
-        logger = LoggerFactory.getLogger(ConfigController.class);
         // Instantiation of configuration objects.
         mavenData = new Maven(mvnFileRoute);
         keyserverConfig = new ConfigFile(ksFileRoute, ksRequiredFields); 
@@ -114,11 +113,11 @@ public class ConfigController implements CheckObject{
             return InetAddress.getByName(address);
         } catch (UnknownHostException ex) {
             // Error level.
-            logger.error("Unknown Host Exception with the server IP addres: {}", address);
+            LOGGER.error("Unknown Host Exception with the server IP addres: {}", address);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
             return null;
         }
     }
@@ -135,7 +134,7 @@ public class ConfigController implements CheckObject{
             return Integer.parseInt(port);
         } else {
             // Error level.
-            logger.error("Not valid HTTPS port specified for the KeyServer: {}", port);
+            LOGGER.error("Not valid HTTPS port specified for the KeyServer: {}", port);
             return -1;
         }
     }
@@ -193,7 +192,7 @@ public class ConfigController implements CheckObject{
             return Integer.parseInt(backlog);
         } else {
             // Error level.
-            logger.error("Not valid Backlog parammeter specified on KeyServer config file: {}", backlog);
+            LOGGER.error("Not valid Backlog parammeter specified on KeyServer config file: {}", backlog);
             return -1;
         }
     }
@@ -281,11 +280,11 @@ public class ConfigController implements CheckObject{
             return InetAddress.getByName(address);
         } catch (UnknownHostException ex) {
             // Error level.
-            logger.error("Unnknown Host Exception with Redis Dtabase IP address: {}", address);
+            LOGGER.error("Unnknown Host Exception with Redis Dtabase IP address: {}", address);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
             return null;
         }
     }
@@ -302,8 +301,25 @@ public class ConfigController implements CheckObject{
             return Integer.parseInt(port);
         } else {
             // Error level.
-            logger.error("Not valid port specified for the Redis Database: {}", port);
+            LOGGER.error("Not valid port specified for the Redis Database: {}", port);
             return -1;
+        }
+    }
+    
+    /**
+     * This method is used to get Redis Database password.
+     * @return Integer with the Redis Database password. If the field is not present,
+     * returns `null`.
+     * @since v0.3.1
+     */
+    public String getDbPassword(){
+        String password = this.keyserverConfig.getDbPassword();
+        if(password != null){
+            return password;
+        } else {
+            // Error level.
+            LOGGER.error("Not valid password specified for the Redis Database: {}", password);
+            return null;
         }
     }
     

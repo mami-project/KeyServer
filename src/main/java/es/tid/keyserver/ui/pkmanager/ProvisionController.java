@@ -19,6 +19,8 @@ import es.tid.keyserver.controllers.db.DataBase;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -33,15 +35,15 @@ public class ProvisionController {
     /**
      * Redis Database object.
      */
-    private DataBase dbObj;
+    private final DataBase dbObj;
     /**
      * User input shell scanner object.
      */
-    private Scanner sc;
+    private final Scanner sc;
     /**
      * Logging object.
      */
-    private static Logger logger = LoggerFactory.getLogger(ProvisionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProvisionController.class);
     
     /**
      * Class constructor.
@@ -59,7 +61,6 @@ public class ProvisionController {
      * @since v0.3.0
      */
     public void menuInsertRegisters() {
-        String sha1;
         System.out.print("\n"
                 + "                   - Private Key Provision Manager -\n"
                 + "                   ---------------------------------\n"
@@ -84,24 +85,7 @@ public class ProvisionController {
                 + "*************************************************************************\n"
                 + "\n"
                 + " Write the certificate SHA1 and press ENTER: ");
-        String input = sc.next().trim();
-        if(input.equalsIgnoreCase("Q")){
-            System.out.println("Private Key provision cancelled by the user.");
-            return;
-        }
-        sha1 = input;
-        System.out.println(" Write the certificate file full qualified name:\n ");    
-        input = sc.next().trim();
-        if(input.equalsIgnoreCase("Q")){
-            logger.info("Private Key provision cancelled by the user.");
-            return;
-        }
-        // Certificate provision step to KeyServer database.
-        if(this.insertRegiser(sha1, input)){
-            logger.info("The certificate has been included on database.");
-        } else {
-            logger.error("There is a problem with the provision for the current certificate.");
-        }
+        provisionSteps();
     }
 
     /**
@@ -127,20 +111,19 @@ public class ProvisionController {
                 + " Write the certificate SHA1 and press ENTER: ");
         String input = sc.next().trim();
         if(input.equalsIgnoreCase("Q")){
-            logger.info("Private Key deletion process cancelled by the user.");
+            LOGGER.info("Private Key deletion process cancelled by the user.");
             return;
         }
         // Check if the specified SHA1 is on KeyServer Redis Database.
         if(!this.containsRegiser(input)){
             // Error level.
-            logger.error("The following SHA1 has not found on database:\n\t\t{}\n", input);
-            return;
+            LOGGER.error("The following SHA1 has not found on database:\n\t\t{}\n", input);
         } else {
             // Delete the specified register
             if(this.deleteRegiser(input)){
-                logger.info("The following SHA1 has been deleted from KeyServer database:\n\t\t{}\n", input);
+                LOGGER.info("The following SHA1 has been deleted from KeyServer database:\n\t\t{}\n", input);
             } else {
-                logger.error("Can't delete the following SHA1 from KeyServer database:\n\t\t{}\n", input);
+                LOGGER.error("Can't delete the following SHA1 from KeyServer database:\n\t\t{}\n", input);
             }
         }
     }
@@ -159,7 +142,7 @@ public class ProvisionController {
                 + "\n"
                 + " Description\n"
                 + " ------------------------------------------------------------------------\n"
-                + " Find a private key from KeyServer database. This command use the"
+                + " Find a private key from KeyServer database. This command use the\n"
                 + " certificate SHA1 to locate the register on database.\n"
                 + "\n"
                 + " Note: If you write Q and press ENTER, the private key provision will\n"
@@ -168,14 +151,13 @@ public class ProvisionController {
                 + " Write the certificate SHA1 and press ENTER: ");
         String input = sc.next().trim();
         if(input.equalsIgnoreCase("Q")){
-            logger.info("Private Key deletion process cancelled by the user.");
+            LOGGER.info("Private Key deletion process cancelled by the user.");
             return;
         }
         // Check if the specified SHA1 is on KeyServer Redis Database.
         if(!this.containsRegiser(input)){
             // Error level.
-            logger.info("The following SHA1 has not found on database:\n\t\t{}\n", input);
-            return;
+            LOGGER.info("The following SHA1 has not found on database:\n\t\t{}\n", input);
         } else {
             // Shows the SHA1 and certificate private key.
             String value = this.dbObj.getPrivateKey(input);
@@ -212,11 +194,11 @@ public class ProvisionController {
      * This method provides the main functionality to save a new Private key into 
      * KeyServer database.
      * @param sha1 Hash of the certificate as string.
-     * @param fileName String with the file name with content is the PrivateKey.
+     * @param expDat String with the certificate expiration date.
      * @return True if the register has been saved inside Database.
      * @since v0.3.0
      */
-    private boolean insertRegiser(String sha1, String fileName) {
+    private boolean insertRegiser(String sha1, String fileName, String expDat) {
         // Parsing filename from binary to base64 using Linux Base64 tool.
         String privKeyAsString = "";
         Process p;
@@ -227,17 +209,28 @@ public class ProvisionController {
                     privKeyAsString += (scInputStream.nextLine());
                 }
             }
-            logger.debug("Base64 Private key: " + privKeyAsString);
+            LOGGER.debug("Base64 Private key: " + privKeyAsString);
         } catch (IOException ex) {
             // Error level.
-            logger.error("Database IO error exception during insert register action.");
+            LOGGER.error("Database IO error exception during insert register action.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
         // Save private key into database
-        return dbObj.setPrivateKey(sha1, privKeyAsString);
+        if(expDat == null){
+            return dbObj.setPrivateKey(sha1, privKeyAsString);
+        } else {
+            dbObj.setPrivateKey(sha1, privKeyAsString);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss");
+            try {
+                return dbObj.setExpPK(sha1, dateFormat.parse(expDat).getTime()/1000);
+            } catch (ParseException ex) {
+                LOGGER.error("Parser exception during PK expiration date conversion: {}", expDat);
+                return false;
+            }
+        }
     }
     
     /**
@@ -269,5 +262,79 @@ public class ProvisionController {
     private String[] getDatabaseRegisers() {
         Set<String> list = dbObj.getHashList("*");
         return list.toArray(new String[list.size()]);
+    }
+
+    /**
+     * This method is used to define the steps for Private Key data base 
+     * provisioning.
+     * @since v0.3.1
+     */
+    private void provisionSteps() {
+        String sha1;
+        String pkfile;
+        // Private key fingerprint SHA1.
+        String input = sc.next().trim();
+        if(input.equalsIgnoreCase("Q")){
+            System.out.println("Private Key provision cancelled by the user.");
+            return;
+        }
+        sha1 = input;
+        // Private key file
+        System.out.print(" Write the certificate file full qualified name:\n>> ");    
+        input = sc.next().trim();
+        if(input.equalsIgnoreCase("Q")){
+            LOGGER.info("Private Key provision cancelled by the user.");
+            return;
+        }
+        pkfile = input;
+        // Ask to the user if the current private key should be removed automatically.
+        boolean autoRemoveKey = false;
+        do{
+            System.out.print(" Do you want remove automatically this current private key\n"
+                    + " in a specific date? (y/n):");   
+            input = sc.next().trim();
+            if(input.equalsIgnoreCase("Q")){
+                LOGGER.info("Private Key provision cancelled by the user.");
+                return;
+            } else if("y".equalsIgnoreCase(input)){
+                autoRemoveKey = true;
+            } else if("n".equalsIgnoreCase(input)){
+                autoRemoveKey = false;
+            } else {
+                LOGGER.error("Not valid selection (y/n): {}: ", input);
+            }
+        } while(!("y".equalsIgnoreCase(input) || "n".equalsIgnoreCase(input)));
+        input = null;
+        // Auto remove certificate when exceeds the expiration date.
+        if(autoRemoveKey){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss");
+            boolean validDate;
+            do{
+                System.out.println(" Write the certificate expiration date. If you don't provide\n"
+                        + " the date, the private key will be present inside database\n"
+                        + " ulimited. You must remove it manually.\n");
+                System.out.print(" Write the date using this format (yyyy.MM.dd-HH:mm:ss): ");    
+                input = sc.next().trim();
+                if(input.equalsIgnoreCase("Q")){
+                    LOGGER.info("Private Key provision cancelled by the user.");
+                    return;
+                }
+                try {
+                    if(input!=null){
+                        dateFormat.parse(input);
+                    }
+                    validDate = true;
+                } catch (ParseException ex) {
+                    validDate = false;
+                    LOGGER.error("Not valid date during PK provisioning: {}", input);
+                }
+            } while(!validDate);
+        }
+        // Certificate provision step to KeyServer database.
+        if(insertRegiser(sha1, pkfile, input)){
+            LOGGER.info("The certificate has been included on database: {}", sha1);
+        } else {
+            LOGGER.error("There is a problem with the provision for the current certificate: {}", sha1);
+        }
     }
 }

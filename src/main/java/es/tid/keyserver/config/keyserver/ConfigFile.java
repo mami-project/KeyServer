@@ -35,7 +35,7 @@ public class ConfigFile implements CheckObject{
     /**
      * Logging object.
      */
-    private static org.slf4j.Logger logger;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ConfigFile.class);
     /**
      * Property object with configuration parameters.
      */
@@ -53,15 +53,14 @@ public class ConfigFile implements CheckObject{
      * @since v0.1.0
      */
     public ConfigFile(String fileRoute, String [] requiredFields){
-    	logger = LoggerFactory.getLogger(ConfigFile.class);
         File propertiesFile = new File(fileRoute);
         String fileLocation;
         if((propertiesFile.exists() && propertiesFile.canRead())){
             fileLocation = fileRoute;
         } else {
-            logger.warn("Can't access to the specified config file or "
+            LOGGER.warn("Can't access to the specified config file or "
                     + "doesn't exists: {}", fileRoute);
-            logger.info("New config file on default location...");
+            LOGGER.info("New config file on default location...");
             fileLocation = "general.properties";
             if(!newDefaultProperties(fileLocation)){
                 // If the default properties file can't be created correctly,
@@ -78,11 +77,11 @@ public class ConfigFile implements CheckObject{
         } catch (IOException ex) {
             initStatus = false;
             // Error level.
-            logger.error("Can't load the KeyServer configuration file: {}", fileRoute);
+            LOGGER.error("Can't load the KeyServer configuration file: {}", fileRoute);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
         }
     }
     
@@ -258,6 +257,16 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
+     * This method is used to get Redis Database password.
+     * @return String with the Redis Database Password. If the field is not
+     * present, returns 'null'.
+     * @since v0.3.1
+     */
+    public String getDbPassword(){
+        return this.getParameter("dbPassword");
+    }
+    
+    /**
      * This method is used to get the IP whitelist file name for KeyServer 
      * access control.
      * @return String with the whitelist file name. If the field is not present,
@@ -292,6 +301,7 @@ public class ConfigFile implements CheckObject{
             defaultParameters.setProperty("serverKeyStore", "JKS");
             defaultParameters.setProperty("dbAddress","127.0.0.1");
             defaultParameters.setProperty("dbPort", "6379");
+            defaultParameters.setProperty("dbPassword", "foobared"); // Default password for Redis config file.
             defaultParameters.setProperty("whiteList", "IP_whitelist.txt");
             // Save parameters on file
             defaultParameters.store(newConfigFile, null);
@@ -299,19 +309,19 @@ public class ConfigFile implements CheckObject{
             newConfigFile.close();
         } catch (FileNotFoundException ex) {
             // Error level.
-            logger.error("Can't create a new config file with default parameters. File not found.");
+            LOGGER.error("Can't create a new config file with default parameters. File not found.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
             return false;
         } catch (IOException ex) {
             // Error level.
-            logger.error("Can't create a new config file with default parameters. IO exception.");
+            LOGGER.error("Can't create a new config file with default parameters. IO exception.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            logger.trace(errors.toString());
+            LOGGER.trace(errors.toString());
             return false;
         }
         return true;
@@ -327,7 +337,7 @@ public class ConfigFile implements CheckObject{
         for (String field : fields) {
             if (!configFile.containsKey(field)) {
             	// Error level.
-                logger.error("A neccessary configuration field is not present. Please "
+                LOGGER.error("A neccessary configuration field is not present. Please "
                 		+ "set this field : {}  on KeyServer configuration file.", field);
                 return false;
             }

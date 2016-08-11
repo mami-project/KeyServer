@@ -17,10 +17,7 @@ package es.tid.keyserver.https.certificate;
 
 import java.security.KeyStore;
 import java.util.Date;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import junit.framework.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,22 +32,6 @@ public class HttpsCertTest {
     public HttpsCertTest() {
         instance = new HttpsCert("target/test-classes/certificatetest.ks", "123456");
     }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of getCertificate method, of class HttpsCert.
@@ -60,6 +41,7 @@ public class HttpsCertTest {
         System.out.println("getCertificate");
         KeyStore result = instance.getCertificate();
         System.out.println("[ TEST ] Certificate type: " + result.getType());
+        Assert.assertTrue(result != null);
     }
 
     /**
@@ -70,6 +52,7 @@ public class HttpsCertTest {
         System.out.println("certExpirDate");
         Date result = instance.certExpirDate();
         System.out.println("[ TEST ] Certificate expration date: " + result);
+        assertTrue(result != null);
     }
 
     /**
@@ -80,6 +63,7 @@ public class HttpsCertTest {
         System.out.println("certRemainDays");
         long result = instance.certRemainDays();
         System.out.println("[ TEST ] Certificate validity remain days: " + result);
+        assertTrue(true);
     }
 
     /**

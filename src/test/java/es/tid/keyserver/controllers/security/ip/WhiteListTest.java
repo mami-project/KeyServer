@@ -21,9 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -33,11 +31,7 @@ import static org.junit.Assert.*;
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.3.0
  */
-public class WhiteListTest {
-    
-    public WhiteListTest() {
-    }
-    
+public class WhiteListTest {    
     @BeforeClass
     public static void setUpClass() {
         String testFileRoute = "target/test-classes/whitelisttest.lst";
@@ -63,14 +57,6 @@ public class WhiteListTest {
         File file = new File(testFileRoute);
         file.delete();
         System.out.println("[ INFO ] White lis test file deleted: " + testFileRoute);
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**

@@ -35,22 +35,21 @@ public class KeyServer {
     /**
      * Logging object.
      */
-    private static Logger logger;
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeyServer.class);
     
     /**
      * Main function of the KeyServer program.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        logger = LoggerFactory.getLogger(KeyServer.class);
         // Process input arguments
         String configFile = inputArgs(args);
         if(configFile.isEmpty()){
-            logger.debug("User has not provide an input configuration file name. Using default: 'general.properties'.");
+            LOGGER.debug("User has not provide an input configuration file name. Using default: 'general.properties'.");
             configFile = "general.properties";     // Default configuration file.
         }
         // Load/Create configuration file
-        logger.info("Loading KeyServer parameters...\n\n");
+        LOGGER.info("Loading KeyServer parameters...\n\n");
         String [] configFields = getRequiredFields();
         // KeyServer Configuration Object
         ConfigController softwareConfig = new ConfigController("/application.properties", configFile, configFields);
@@ -58,7 +57,7 @@ public class KeyServer {
         String appName = softwareConfig.getAppName();
         String appVersion = softwareConfig.getVersion();
         // Print KeyServer start box.
-        logger.debug("Starting {} tool {}", appName, appVersion);
+        LOGGER.debug("Starting {} tool {}", appName, appVersion);
         System.out.println("+------------------------------------------------------------------------+");
         System.out.println("|                          " +    appName   + "                          |");
         System.out.println("|                          --------------------                          |");
@@ -69,13 +68,15 @@ public class KeyServer {
                 "Can't load configuration file. Please check if the file exists and can be read.");
         
         // Connect to the Data Base.
-        logger.info("Connecting to database.");
-        DataBase keyServerDB = new DataBase(softwareConfig.getDbAddress(), softwareConfig.getDbPort());
+        LOGGER.info("Connecting to database.");
+        DataBase keyServerDB = new DataBase(softwareConfig.getDbAddress(), 
+                softwareConfig.getDbPort(), 
+                softwareConfig.getDbPassword());
         checkObj(keyServerDB, "Database connection established.",
                 "Can't connect to the database. Please check 'general.properties' file values.");
         
         // HTTPs Server Certificate.
-        logger.info("Loading HTTPs server certificate.");
+        LOGGER.info("Loading HTTPs server certificate.");
         HttpsCert ksCert = new HttpsCert(
                 softwareConfig.getServerKeyFile(), 
                 softwareConfig.getServerKeyPass());
@@ -83,7 +84,7 @@ public class KeyServer {
                 "Can't load the HTTPs server certificate..");
         
         // HTTP Server.
-        logger.info("Starting HTTP server... ");
+        LOGGER.info("Starting HTTP server... ");
         HttpsServerController keyServerHttp = new HttpsServerController(
                 softwareConfig, 
                 keyServerDB, 
@@ -111,11 +112,11 @@ public class KeyServer {
         
         // Closing the application.
         System.out.println("\n+------------------------------------------------------------------------+\n");
-        logger.warn("Clossing KeyServer tool. Please wait...");
+        LOGGER.warn("Clossing KeyServer tool. Please wait...");
         mon.stop();
         keyServerHttp.stop();
         keyServerDB.stop();
-        logger.info("KeyServer tool closed.");
+        LOGGER.info("KeyServer tool closed.");
         System.exit(0);
     }
     
@@ -125,12 +126,12 @@ public class KeyServer {
      * @return Return empty String or the route to the new Configuration file specified by the user.
      */
     static private String inputArgs(String args[]){
-        logger.trace("Command line user input: {}", Arrays.toString(args));
+        LOGGER.trace("Command line user input: {}", Arrays.toString(args));
         if((args.length > 0)&&(args.length <= 2)){
             switch(args[0]){
                 case "-c":  // Specific the new configuration file to be used.
                     if (args.length == 1){
-                        logger.error("You must specific the config file route as input parammeter.");
+                        LOGGER.error("You must specific the config file route as input parammeter.");
                         showHelp();
                     } else {
                         return args[1];
@@ -138,12 +139,12 @@ public class KeyServer {
                     break;
                 case "-h":  // Slow Help output message.
                     showHelp();
-                    logger.debug("Showing command help to the user.");
+                    LOGGER.debug("Showing command help to the user.");
                     System.exit(0);
                     break;
                 default:    // Invalid input parameter.
-                    logger.error("Not valid command line input option: {}", args[0]);
-                    logger.info("Please use one of the following accepted parammeters.");
+                    LOGGER.error("Not valid command line input option: {}", args[0]);
+                    LOGGER.info("Please use one of the following accepted parammeters.");
                     showHelp();
                     System.exit(-1);
                     break;
@@ -156,7 +157,7 @@ public class KeyServer {
      * This method only displays the help with the available input parameters. 
      */
     static private void showHelp(){
-        logger.info("Usage: keyserver.jar [option] <parameter>\n" +
+        LOGGER.info("Usage: keyserver.jar [option] <parameter>\n" +
             "options: Can set only one option or option plus parameter value (if is available).\n" +
             " -c configFile\tUse external config file.\n" +
             " -h\t\tThis help text.\n");
@@ -172,11 +173,11 @@ public class KeyServer {
      */
     static private void checkObj(CheckObject obj, String okMsg, String errMsg){
         if(obj.isCorrectlyInitialized()){
-            logger.info(okMsg);
+            LOGGER.info(okMsg);
         } else {
-            logger.error(errMsg);
+            LOGGER.error(errMsg);
             System.out.println("\n+------------------------------------------------------------------------+\n");
-            logger.warn("KeyServer closed.");
+            LOGGER.warn("KeyServer closed.");
             System.exit(-1);
         }
     }
@@ -233,6 +234,7 @@ public class KeyServer {
             // Redis Database
             "dbAddress",
             "dbPort",
+            "dbPassword",
             // Access control
             "whiteList"
         };

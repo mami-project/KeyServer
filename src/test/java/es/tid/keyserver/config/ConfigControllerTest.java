@@ -21,9 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Properties;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -35,7 +33,7 @@ import static org.junit.Assert.*;
  */
 public class ConfigControllerTest {
     
-    private ConfigController testObj;
+    private final ConfigController testObj;
     
     
     public ConfigControllerTest() {
@@ -53,6 +51,7 @@ public class ConfigControllerTest {
             "serverCiphersSuites",
             "dbAddress",
             "dbPort",
+            "dbPassword",
             "whiteList"
         };
         this.testObj = new ConfigController("/applicationtest.properties", testFileRoute, requiredFields);
@@ -75,6 +74,7 @@ public class ConfigControllerTest {
         configFile.setProperty("serverCiphersSuites", "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA");
         configFile.setProperty("dbAddress", "192.168.11.180");
         configFile.setProperty("dbPort", "6379");
+        configFile.setProperty("dbPassword", "foobared");
         configFile.setProperty("whiteList", "IP_whitelist.txt");
         try{
             FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
@@ -97,14 +97,6 @@ public class ConfigControllerTest {
         File file = new File(testFileRoute);
         file.delete();
         System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -291,6 +283,17 @@ public class ConfigControllerTest {
         System.out.println("getProjectPublicUrl");
         String expResult = "https://github.com/mami-project/KeyServer";
         String result = testObj.getProjectPublicUrl();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getDbPassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbPassword() {
+        System.out.println("getDbPassword");
+        String expResult = "foobared";
+        String result = testObj.getDbPassword();
         assertEquals(expResult, result);
     }
 }

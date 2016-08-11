@@ -32,7 +32,7 @@ public class Rsa {
     /**
      * Logging object.
      */
-    // private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Rsa.class);
+    // private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Rsa.class);
     /**
      * This static method provides a simple way to decode the PremasterSecret from
      * an input string using a PrivateKey object.

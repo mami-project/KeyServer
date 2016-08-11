@@ -47,7 +47,7 @@ public class UserInterfaceController {
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserInterfaceController.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserInterfaceController.class);
     
     /**
      * Class constructor.
@@ -99,7 +99,7 @@ public class UserInterfaceController {
                 break;
             default:
                 // Not valid option.
-                logger.warn("Current user input not valid: {}", option);
+                LOGGER.warn("Current user input not valid: {}", option);
                 break;
         }
     }

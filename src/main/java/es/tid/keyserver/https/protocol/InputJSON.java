@@ -29,7 +29,7 @@ public class InputJSON {
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(InputJSON.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InputJSON.class);
     /**
      * Contains the string for sign JSON incoming SIGN method.
      */
@@ -38,6 +38,15 @@ public class InputJSON {
      * Contains the string for sign JSON incoming DECRYPT method.
      */
     public final static String RSA = "RSA";
+    
+    /**
+     * Definition of PROTOCOL field values.
+     */
+    public final static String TLS_1_0 = "TLS 1.0";
+    public final static String TLS_1_1 = "TLS 1.1";
+    public final static String TLS_1_2 = "TLS 1.2";
+    public final static String DTLS_1_0 = "DTLS 1.0";
+    public final static String DTLS_1_2 = "DTLS 1.2";
     
     /**
      * Definition of HASH field right values.
@@ -63,7 +72,7 @@ public class InputJSON {
             JSONParser parser = new JSONParser();
             inputData = (JSONObject) parser.parse(stringData);
         } catch (ParseException ex) {
-            logger.debug("Not valid input JSON: {}.", ex.toString());
+            LOGGER.debug("Not valid input JSON: {}.", ex.toString());
         }    
     }
     
@@ -82,6 +91,7 @@ public class InputJSON {
                 break;
             default:
                 readedMethod = null;
+                break;
         }
         return readedMethod;
     }
@@ -124,14 +134,50 @@ public class InputJSON {
                         readedHash = InputJSON.SHA_512;
                         break;
                     default:
-                        logger.error("ECDHE not valid 'hash' field {}.", (String) inputData.get("hash"));
+                        LOGGER.error("ECDHE not valid 'hash' field {}.", (String) inputData.get("hash"));
                         readedHash = null;
+                        break;
                 }
             } else {
                 readedHash = SHA1;
             }
         }
         return readedHash;
+    }
+    
+    /**
+     * Get "protocol" field from the input JSON message.
+     * This field is required in SKI request. Specifies the protocol version 
+     * negotiated in the handshake between Client and Edge Server.
+     * @return String value with the specific protocol. If the read field is not
+     *          valid, this method returns 'null' value.
+     */
+    public String getProtocol(){
+        String readedProtocol = null;
+        if(inputData.containsKey("protocol")){
+            switch ((String) inputData.get("protocol")){
+                case InputJSON.TLS_1_0:
+                    readedProtocol = InputJSON.TLS_1_0;
+                    break;
+                case InputJSON.TLS_1_1:
+                    readedProtocol = InputJSON.TLS_1_1;
+                    break;
+                case InputJSON.TLS_1_2:
+                    readedProtocol = InputJSON.TLS_1_2;
+                    break;
+                case InputJSON.DTLS_1_0:
+                    readedProtocol = InputJSON.DTLS_1_0;
+                    break;
+                case InputJSON.DTLS_1_2:
+                    readedProtocol = InputJSON.DTLS_1_2;
+                    break;
+                default:
+                    LOGGER.error("Not valid 'protocol' field {}.", (String) inputData.get("protocol"));
+                    readedProtocol = null;
+                    break;
+            }
+        }
+        return readedProtocol;
     }
     
     /**
@@ -148,48 +194,48 @@ public class InputJSON {
      */
     public String checkValidJSON(){
         // Extracting JSON fields
+        String protocol = this.getProtocol();
         String method = this.getMethod();
         String hash = this.getHash();
         String spki = this.getSpki();
         String input = this.getInput();
         // Logger trace output
-        logger.trace("Method CheckJSON (fields): method='{}', hash='{}', spki='{}', input='{}'",
-                method, hash, spki, input);
-        // Check if the JSON contains all fields "method", "hash", "spki"* and 
-        //  "input" fields.
-        //  Hash only is defined if the JSON contains ECDHE.
-        if((method == null) || (spki == null) || (input == null)){
-            logger.debug("Input JSON: Some required fields are not present.");
+        LOGGER.trace("Method CheckJSON (fields): protocol='{}', method='{}', hash='{}', spki='{}', input='{}'",
+                protocol, method, hash, spki, input);
+        // Check if the JSON contains all fields "protocol", "method", "hash", 
+        //  "spki" and "input" fields.
+        if((protocol == null) || (method == null) || (spki == null) || (input == null)){
+            LOGGER.debug("Input JSON: Some required fields are not present.");
             return ErrorJSON.ERR_MALFORMED_REQUEST;
         } else {
-            logger.debug("Input JSON: 'Mehtod', 'spky' and 'input' fields are present.");
+            LOGGER.debug("Input JSON: 'Mehtod', 'spky' and 'input' fields are present.");
         }
         // Parsing input field from base64 to array of bytes
-        logger.debug("JSON Input data to decode from base64: {}", input);
+        LOGGER.debug("JSON Input data to decode from base64: {}", input);
         byte inputDataB[] = Base64.getDecoder().decode(input.trim());
-        logger.trace("JSON Input Field number of Bytes: {}", inputDataB);
+        LOGGER.trace("JSON Input Field number of Bytes: {}", inputDataB);
         // Check the length of input
         switch(method){
             case InputJSON.RSA:
                 if(inputDataB.length<10){ // If it has some bytes (less than 10 for example)
-                    logger.debug("Input JSON: RSA length too short ({} bytes).", inputDataB.length);
+                    LOGGER.debug("Input JSON: RSA length too short ({} bytes).", inputDataB.length);
                     return ErrorJSON.ERR_MALFORMED_REQUEST;
                 }
                 break;
             case InputJSON.ECDHE:
                 // Check if HASH field is present (not null) and valid.
                 if (hash == null){
-                    logger.debug("Input JSON: Hash field not valid ('{}').", hash);
+                    LOGGER.debug("Input JSON: Hash field not valid ('{}').", hash);
                     return ErrorJSON.ERR_MALFORMED_REQUEST;
                 }
                 // Check JSON input length.
                 if(inputDataB.length!=133){ // 32+32+69 = 133 bytes 
-                    logger.debug("Input JSON: ECDH length not valid ({} bytes).", inputDataB.length);
+                    LOGGER.debug("Input JSON: ECDH length not valid ({} bytes).", inputDataB.length);
                     return ErrorJSON.ERR_MALFORMED_REQUEST;
                 }
                 break;
             default:
-                logger.debug("Input JSON: Not valid 'method' field for this input JSON ('{}').", method);
+                LOGGER.debug("Input JSON: Not valid 'method' field for this input JSON ('{}').", method);
                 return ErrorJSON.ERR_MALFORMED_REQUEST;
         }
         return null;

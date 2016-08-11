@@ -23,7 +23,6 @@ import es.tid.keyserver.core.status.KsMonitor;
  * @since v0.3.0
  */
 public class StatusController {
-    
     /**
      * This method shows a list with supported parameters for KeyServer management.
      * @since v0.3.0

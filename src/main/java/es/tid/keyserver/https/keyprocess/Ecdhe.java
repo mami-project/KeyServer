@@ -34,7 +34,7 @@ public class Ecdhe {
     /**
      * Logging object.
      */
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Ecdhe.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Ecdhe.class);
     /**
      * This method provide a Sign to an incoming string data.
      * @param incomingData Data to sign codified as base64.
@@ -50,7 +50,7 @@ public class Ecdhe {
         // Decode incoming from base64 (base64 decoder).
         byte[] data = Base64.getDecoder().decode(incomingData.trim());
         // Select signature object and create a new with correct hash
-        logger.debug("Key used to sign: {} | Hash: {} | Data Bytes to sign: {}", key.getAlgorithm(), hash, incomingData);
+        LOGGER.debug("Key used to sign: {} | Hash: {} | Data Bytes to sign: {}", key.getAlgorithm(), hash, incomingData);
         Signature dsa = getSignature(hash);
         // Set the private key used to sing data
         dsa.initSign(key);
@@ -59,7 +59,7 @@ public class Ecdhe {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.update(data);
             data = messageDigest.digest();
-            logger.debug("ECDH SHA1: Calculated MD5 for base64 decoded data.");
+            LOGGER.debug("ECDH SHA1: Calculated MD5 for base64 decoded data.");
         }
         // Set the data to sign.
         dsa.update(data);
@@ -105,7 +105,8 @@ public class Ecdhe {
                 dsa = Signature.getInstance("SHA512withRSA");
                 break;    
             default:
-                logger.error("ECDHE: not valid Hash value ({})", hash);
+                LOGGER.error("ECDHE: not valid Hash value ({})", hash);
+                break;
         } 
         return dsa;
     }
