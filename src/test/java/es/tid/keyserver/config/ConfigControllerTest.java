@@ -33,6 +33,9 @@ import static org.junit.Assert.*;
  */
 public class ConfigControllerTest {
     
+    /**
+     * Configuration test object.
+     */
     private final ConfigController testObj;
     
     /**
