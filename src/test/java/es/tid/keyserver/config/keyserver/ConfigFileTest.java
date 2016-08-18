@@ -29,8 +29,14 @@ import static org.junit.Assert.*;
  * @since v0.3.0
  */
 public class ConfigFileTest { 
+	/**
+	 * Configuration file test object.
+	 */
     private final ConfigFile testObj;
     
+    /**
+     * Method with the required fields for the current tests.
+     */
     public ConfigFileTest() {
         String testFileRoute = "target/test-classes/configtest.properties";
         

@@ -118,17 +118,17 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the KeyServer HTTPS SSL Context. 
      * @return String with the KeyServer HTTPS SSL Context. If the field is not 
-     * present, returns 'null'.
+     *     present, returns 'null'.
      * 
-     * <p>This is an example with valid value for this field:
-     * <ul>
-     *  <li>SSLv2</li>
-     *  <li>SSLv3</li>
-     *  <li>TLS</li>
-     *  <li>TLSv1</li>
-     *  <li>TLSv1.1</li>
-     *  <li>TLSv1.2</li>
-     * </ul> 
+     *     <p>This is an example with valid value for this field:
+     *     <ul>
+     *      <li>SSLv2</li>
+     *      <li>SSLv3</li>
+     *      <li>TLS</li>
+     *      <li>TLSv1</li>
+     *      <li>TLSv1.1</li>
+     *      <li>TLSv1.2</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerSSLContext(){

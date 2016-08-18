@@ -26,8 +26,14 @@ import static org.junit.Assert.*;
  * @since v0.3.0
  */
 public class HttpsCertTest {
+	/**
+	 * HTTPs certificate object.
+	 */
     private HttpsCert instance;
     
+    /**
+     * Class constructor object.
+     */
     public HttpsCertTest() {
         instance = new HttpsCert("target/test-classes/certificatetest.ks", "123456");
     }

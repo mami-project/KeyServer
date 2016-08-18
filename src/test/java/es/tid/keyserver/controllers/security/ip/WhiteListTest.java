@@ -31,7 +31,10 @@ import static org.junit.Assert.*;
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.3.0
  */
-public class WhiteListTest {    
+public class WhiteListTest {
+	/**
+     * JUnit test step.
+     */
     @BeforeClass
     public static void setUpClass() {
         String testFileRoute = "target/test-classes/whitelisttest.lst";
@@ -64,8 +67,8 @@ public class WhiteListTest {
 
     /**
      * Test of iPAuthorized method, of class WhiteList.
-     * @throws java.net.UnknownHostException
      * @since v0.3.0
+     * @throws UnknownHostException
      */
     @Test
     public void testIPAuthorized() throws UnknownHostException {

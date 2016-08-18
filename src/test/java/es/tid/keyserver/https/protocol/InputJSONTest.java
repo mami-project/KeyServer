@@ -24,8 +24,17 @@ import static org.junit.Assert.*;
  * @since v0.1.0
  */
 public class InputJSONTest {
+	/**
+	 * Test content data type 1.
+	 */
     private final String dataTest_1;
+    /**
+	 * Test content data type 2.
+	 */
     private final String dataTest_2;
+    /**
+	 * Initialize data test with this constructor for the class tests.
+	 */
     public InputJSONTest() {
         dataTest_1 = "{ \"method\":\"ECDHE\", "
                 + "\"protocol\":\"DTLS 1.0\", "

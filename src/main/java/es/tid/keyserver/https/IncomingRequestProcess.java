@@ -296,7 +296,7 @@ public class IncomingRequestProcess implements HttpHandler{
      * @param encodePrivateKey Array with private key values.
      * @return Private key object.
      * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
+     * @throws InvalidKeySpecException 
      */
     private PrivateKey loadPrivateKey(byte[] encodePrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
