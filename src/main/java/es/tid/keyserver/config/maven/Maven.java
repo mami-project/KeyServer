@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * @since v0.1.2
  */
 public class Maven implements CheckObject{
+	
     /**
      * File to be loaded with Java Application Properties
      */

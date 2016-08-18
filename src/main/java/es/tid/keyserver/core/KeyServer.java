@@ -184,6 +184,7 @@ public class KeyServer {
     
     /**
      * This method control the user input for KeyServer management.
+     * @param sc Scanner object.
      * @param uiController User Interface controller for the KeyServer management.
      * @since v0.3.0
      */

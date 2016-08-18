@@ -293,7 +293,7 @@ public class IncomingRequestProcess implements HttpHandler{
     
     /**
      * Load private key from byte array.
-     * @param Array with private key values.
+     * @param encodePrivateKey Array with private key values.
      * @return Private key object.
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException

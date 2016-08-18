@@ -36,34 +36,42 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * @since v0.1.0
  */
 public class DataBase implements CheckObject{
+	
     /**
      * Redis Database Pool Object.
      */
     private static JedisPool pool;
+    
     /**
      * Redis Database Connection Object
      */
     private Jedis dataBaseObj;
+    
     /**
      * Redis Database address.
      */
     private final InetAddress serverIp;
+    
     /**
      * Redis Database port. 
      */
     private final int port;
+    
     /**
      * Redis Database password.
      */
     private final String password;
+    
     /**
      * Flag used to check if the object is correctly connected to Redis database.
      */
     private boolean isConnected; 
+    
     /**
      * Flag value true while trying to connect to Redis database.
      */
     private boolean connecting;
+    
     /**
      * Logging object.
      */
@@ -107,7 +115,7 @@ public class DataBase implements CheckObject{
     
     /**
      * This class provides a basic mode to get the array of Bytes for the Private
-     * key associated with the input hash certificate value.
+     *     key associated with the input hash certificate value.
      * @param certHash Contains the SHA1 hash of the certificate used to get private key.
      * @return Bytes array associates with the input hash value. Null if hash value is not found.
      * @since v0.1.0
@@ -149,12 +157,12 @@ public class DataBase implements CheckObject{
     
     /**
      * This class provides a basic mode to get an string with the Private
-     * key codified on base64 associated with the input hash (SHA1) certificate 
-     * value.
+     *     key codified on base64 associated with the input hash (SHA1) certificate 
+     *     value.
      * @param certHash Contains the SHA1 hash of the certificate used to get 
-     * private key.
+     *     private key.
      * @return String associates with the input hash value. Null if hash value 
-     * is not found.
+     *     is not found.
      * @since v0.3.0
      */
     public String getPrivateKey(String certHash){
@@ -182,7 +190,7 @@ public class DataBase implements CheckObject{
     
     /**
      * This method is used for automatic remove provisioned private keys from
-     * Redis database. 
+     *     Redis database. 
      * @param certHash SHA1 certificate hash. This field is used as index.
      * @param date Expiration date for the provided certificate.
      * @return True if all works correctly. False if not.
@@ -200,7 +208,7 @@ public class DataBase implements CheckObject{
      * This method is used to delete an specified database index register.
      * @param certHash SHA1 hash of the certificate used as database index.
      * @return True if all works correctly. False if the specified register is 
-     * not found on database.
+     *     not found on database.
      * @since v0.3.0
      */
     public boolean deletePrivateKey(String certHash){

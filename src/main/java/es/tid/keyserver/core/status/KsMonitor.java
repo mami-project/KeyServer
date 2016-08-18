@@ -30,50 +30,62 @@ import org.slf4j.LoggerFactory;
  * @since 0.3.0
  */
 public class KsMonitor {
+	
     /**
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsMonitor.class);
+    
     /**
      * KeyServer startup date.
      */
     private final Date startDate;
+    
     /**
      * Current KeyServer version object.
      */
     private final String curVer;
+    
     /**
      * KeyServer Project GitHub URL
      */
     private final String repoUrl;
+    
     /**
      * REDIS Database Connection Object
      */
     private DataBase dataBaseObj;
+    
     /**
      * Timer for KeyServer status refresh every second.
      */
     private final Timer t1;
+    
     /**
      * Timer for KeyServer certificate and updates status every 12 hours.
      */
     private final Timer t2;
+    
     /**
      * Last KeyServer version available object manager.
      */
     private LastVersionAvailable updates;
+    
     /**
      * Data base flag status. True connected, false if not.
      */
     private boolean dbStatus;
+    
     /**
      * Flag used to alert only once time about the Data base connection lost.
      */
     private boolean dBnotified;
+    
     /**
      * HTTPS server initialization status flag.
      */
     private boolean httpsServerInit;
+    
     /**
      * This is the controller object for the HTTPs certificate.
      */
@@ -152,8 +164,7 @@ public class KsMonitor {
     
     /**
      * This method stops all the timers inside this object.
-     * <p>
-     * Please use this method before close KeyServer.
+     *     <p>Please use this method before close KeyServer.
      * @since v0.3.0
      */
     public void stop(){
@@ -165,7 +176,7 @@ public class KsMonitor {
     /**
      * Returns the status flag for the Redis Database connection.
      * @return True if the KeyServer is connected to the RedisDatabase, false 
-     * otherwise.
+     *     otherwise.
      * @since v0.3.0
      */
     public boolean isRedisConnectionAvailable(){
@@ -174,7 +185,7 @@ public class KsMonitor {
     
     /**
      * This method is used to verify if the HTTPs object has been initialized
-     * correctly.
+     *     correctly.
      * @return True if is correctly initialized, false if not.
      * @since v0.3.0
      */
@@ -193,7 +204,7 @@ public class KsMonitor {
     
     /**
      * This method is used to get the Date object with the HTTPs server 
-     * certificate expiration date.
+     *     certificate expiration date.
      * @return Date object with the certificate expiration date.
      * @since v0.3.0
      */
@@ -203,9 +214,9 @@ public class KsMonitor {
     
     /**
      * This method is used to get the number of days where the current HTTPs 
-     * certificate is valid since today.
+     *     certificate is valid since today.
      * @return Long number with the number of valid days for the current HTTPs 
-     * certificate.
+     *     certificate.
      * @since v0.3.0
      */
     public long getHttpsCertificateRemainDays(){
@@ -215,7 +226,7 @@ public class KsMonitor {
     /**
      * This method is used to get the version of the current KeyServer instance.
      * @return String with the version label for the current instance of the 
-     * KeyServer.
+     *     KeyServer.
      * @since v0.3.0
      */
     public String getCurrentKSVersion(){
@@ -224,7 +235,7 @@ public class KsMonitor {
     
     /**
      * This method is used to get the last version available of the KeyServer on
-     * the public repository.
+     *     the public repository.
      * @return String with the label of the last KeyServer version available.
      * @since v0.3.0
      */
@@ -243,9 +254,9 @@ public class KsMonitor {
     
     /**
      * This method is used to get the Date object when the current instance of
-     * this key server was launch.
+     *     this key server was launch.
      * @return Date object when the current instance of the KeyServer was 
-     * executed.
+     *     executed.
      * @since v0.3.0
      */
     public Date keyServerRunningSince(){

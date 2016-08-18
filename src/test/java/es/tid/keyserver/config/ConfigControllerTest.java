@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,9 @@ public class ConfigControllerTest {
     
     private final ConfigController testObj;
     
-    
+    /**
+     * This class contains the fields necessaries for the tests.
+     */
     public ConfigControllerTest() {
         String testFileRoute = "target/test-classes/configtest.properties";
         String [] requiredFields = {
@@ -57,6 +59,9 @@ public class ConfigControllerTest {
         this.testObj = new ConfigController("/applicationtest.properties", testFileRoute, requiredFields);
     }
     
+    /**
+     * JUnit test step.
+     */
     @BeforeClass
     public static void setUpClass() {
         String testFileRoute = "target/test-classes/configtest.properties";
@@ -90,6 +95,9 @@ public class ConfigControllerTest {
         }
     }
     
+    /**
+     * JUnit test step.
+     */
     @AfterClass
     public static void tearDownClass() {
         // Delete test file.

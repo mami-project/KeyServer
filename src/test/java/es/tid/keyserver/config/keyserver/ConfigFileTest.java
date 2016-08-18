@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +53,9 @@ public class ConfigFileTest {
         testObj = new ConfigFile(testFileRoute, requiredFields);
     }
     
+    /**
+     * JUnit test step.
+     */
     @BeforeClass
     public static void setUpClass() {
         String testFileRoute = "target/test-classes/configtest.properties";
@@ -86,6 +89,9 @@ public class ConfigFileTest {
         }
     }
     
+    /**
+     * JUnit test step.
+     */
     @AfterClass
     public static void tearDownClass() {
         // Delete test file.
