@@ -48,7 +48,7 @@ public class ConfigFile implements CheckObject{
     /**
      * Class constructor.
      * @param fileRoute Contains the name and route to the external 
-     * configuration file.
+     *     configuration file.
      * @param requiredFields Fields required inside configuration file.
      * @since v0.1.0
      */
@@ -98,7 +98,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the listener KeyServer IP address.
      * @return String with the KeyServer IP address. If the field is not present,
-     * returns 'null'.
+     *     returns 'null'.
      * @since v0.3.0
      */
     public String getServerAddress(){
@@ -108,7 +108,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the listener KeyServer port.
      * @return String with the KeyServer port. If the field is not present,
-     * returns 'null'.
+     *     returns 'null'.
      * @since v0.3.0
      */
     public String getServerPort(){
@@ -119,8 +119,7 @@ public class ConfigFile implements CheckObject{
      * This method is used to get the KeyServer HTTPS SSL Context. 
      * @return String with the KeyServer HTTPS SSL Context. If the field is not 
      * present, returns 'null'.
-     * <p>
-     * This is an example with valid value for this field:
+     * <p>This is an example with valid value for this field:
      * <ul>
      *  <li>SSLv2</li>
      *  <li>SSLv3</li>
@@ -138,7 +137,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the certificate for KeyServer HTTPS server.
      * @return String with the certificate name and route (if is available). If 
-     * the field is not present, returns 'null'.
+     *     the field is not present, returns 'null'.
      * @since v0.3.0
      */
     public String getServerKeyFile(){
@@ -148,7 +147,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get password of the KeyServer HTTPS certificate.
      * @return String with the KeyServer HTTPS certificate password. If the 
-     * field is not present, returns 'null'.
+     *     field is not present, returns 'null'.
      * @since v0.3.0
      */
     public String getServerKeyPass(){
@@ -157,9 +156,9 @@ public class ConfigFile implements CheckObject{
     
     /**
      * This method is used to get the Server Backlog value from the 
-     * configuration file.
+     *     configuration file.
      * @return String with the KeyServer Backlog value. If the field is not 
-     * present, it returns 'null'.
+     *     present, it returns 'null'.
      * @since v0.3.0
      */
     public String getServerBacklog(){
@@ -168,15 +167,14 @@ public class ConfigFile implements CheckObject{
 
     /**
      * This method is used to get the KeyServer HTTPS certificate manager 
-     * factory. 
+     *     factory. 
      * @return String with the KeyServer HTTPS certificate manager factory. 
-     * If the field is not present, returns 'null'.
-     * <p>
-     * This is an example with valid values for this field:
-     * <ul>
-     *  <li>PKIX</li>
-     *  <li>SunX509</li>
-     * </ul> 
+     *     If the field is not present, returns 'null'.
+     *     <p>This is an example with valid values for this field:
+     *     <ul>
+     *      <li>PKIX</li>
+     *      <li>SunX509</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerKeyManagerFactory(){
@@ -185,15 +183,14 @@ public class ConfigFile implements CheckObject{
     
     /**
      * This method is used to get the KeyServer HTTPS certificate trust manager 
-     * factory. 
+     *     factory. 
      * @return String with the KeyServer HTTPS certificate trust manager factory. 
-     * If the field is not present, returns 'null'.
-     * <p>
-     * This is an example with valid value for this field:
-     * <ul>
-     *  <li>PKIX (X509 or SunPKIX)</li>
-     *  <li>SunX509</li>
-     * </ul> 
+     *     If the field is not present, returns 'null'.
+     *     <p>This is an example with valid value for this field:
+     *     <ul>
+     *      <li>PKIX (X509 or SunPKIX)</li>
+     *      <li>SunX509</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerTrustManagerFactory(){
@@ -203,14 +200,13 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the KeyServer HTTPS certificate key store. 
      * @return String with the KeyServer HTTPS certificate key store. 
-     * If the field is not present, returns 'null'.
-     * <p>
-     * This is an example with valid value for this field:
-     * <ul>
-     *  <li>jceks</li>
-     *  <li>jks</li>
-     *  <li>pkcs12</li>
-     * </ul> 
+     *     If the field is not present, returns 'null'.
+     *     <p>This is an example with valid value for this field:
+     *     <ul>
+     *      <li>jceks</li>
+     *      <li>jks</li>
+     *      <li>pkcs12</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerKeyStore(){
@@ -220,15 +216,14 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the KeyServer HTTPS cipher suites. 
      * @return String with the KeyServer HTTPS ciphers suites. If the field is 
-     * not present, returns 'null'. The ciphers names are separated with commas.
-     * <p>
-     * This is an example with valid value for this field:
-     * <ul>
-     *  <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
-     *  <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</li>
-     *  <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</li>
-     *  <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
-     * </ul> 
+     *     not present, returns 'null'. The ciphers names are separated with commas.
+     *     <p>This is an example with valid value for this field:
+     *     <ul>
+     *      <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
+     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</li>
+     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</li>
+     *      <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerCiphersSuites(){
@@ -239,7 +234,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get the Redis Database server address.
      * @return String with the Redis Database server address. If the 
-     * field is not present, returns 'null'.
+     *     field is not present, returns 'null'.
      * @since v0.3.0
      */
     public String getDbAddress(){
@@ -249,7 +244,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get Redis Database server port.
      * @return String with the Redis Database Port. If the field is not present,
-     * returns 'null'.
+     *     returns 'null'.
      * @since v0.3.0
      */
     public String getDbPort(){
@@ -259,7 +254,7 @@ public class ConfigFile implements CheckObject{
     /**
      * This method is used to get Redis Database password.
      * @return String with the Redis Database Password. If the field is not
-     * present, returns 'null'.
+     *     present, returns 'null'.
      * @since v0.3.1
      */
     public String getDbPassword(){
@@ -268,9 +263,9 @@ public class ConfigFile implements CheckObject{
     
     /**
      * This method is used to get the IP whitelist file name for KeyServer 
-     * access control.
+     *     access control.
      * @return String with the whitelist file name. If the field is not present,
-     * returns 'null'.
+     *     returns 'null'.
      * @since v0.3.0
      */
     public String getWhiteList(){
@@ -279,9 +274,9 @@ public class ConfigFile implements CheckObject{
     
     /**
      * Method used to create a new configuration file on specific route with 
-     * default parameters.
+     *     default parameters.
      * @param fileLocation Route and name to the new configuration file. By 
-     * default use "general.properties"
+     *     default use "general.properties"
      * @return True if all works correctly, false if something goes wrong.
      * @since v0.1.0
      */
@@ -349,7 +344,7 @@ public class ConfigFile implements CheckObject{
      * This method is used to get a value from a configuration key.
      * @param param Label of the configuration parameter.
      * @return Value associated to the configuration parameter specified as 
-     * input. Null if the label doesn't exists.
+     *     input. Null if the label doesn't exists.
      * @since v0.3.0
      */
     private String getParameter(String param){

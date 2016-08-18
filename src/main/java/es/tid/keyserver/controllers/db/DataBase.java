@@ -217,7 +217,7 @@ public class DataBase implements CheckObject{
     
     /**
      * Get a full list with the Redis database keys whose value is equal to the 
-     * pattern.
+     *     pattern.
      * @param pattern Pattern use to find on database.
      * @return Full list with the results.
      * @since v0.3.0
@@ -226,7 +226,7 @@ public class DataBase implements CheckObject{
         if(this.isConnected){
             return dataBaseObj.keys(pattern);
         }
-        return new HashSet();
+        return new HashSet<String>();
     }
     
     /**
@@ -241,10 +241,10 @@ public class DataBase implements CheckObject{
 
     /**
      * This method is used to connect this class with the Redis database. 
-     * This information is used only for log purposes. 
+     *     This information is used only for log purposes. 
      * @return True if the connection has been established with the Redis 
-     * database, false if not. The data description about the connection problem
-     * should be storage inside input Exception object.
+     *     database, false if not. The data description about the connection problem
+     *     should be storage inside input Exception object.
      * @since v0.3.1
      */
     private boolean connectDb(){
