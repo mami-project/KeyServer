@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * @since v0.1.2
  */
 public class Maven implements CheckObject{
+	
     /**
      * File to be loaded with Java Application Properties
      */
@@ -46,7 +47,7 @@ public class Maven implements CheckObject{
     /**
      * Maven properties class constructor.
      * @param fileName File name to be loaded from inside JAR. This is an 
-     * example: "/application.properties".
+     *     example: "/application.properties".
      * @since v0.3.0
      */
     public Maven(String fileName){
@@ -97,7 +98,7 @@ public class Maven implements CheckObject{
 
     /**
      * This method is used to test if the current object has been correctly 
-     * initialized.
+     *     initialized.
      * @return True if has been initialized correctly, false if not.
      * @since v0.3.0
      */

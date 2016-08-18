@@ -165,8 +165,8 @@ public class KeyServer {
     
     /**
      * This method check if the current object is correctly initialized. If all
-     * works as expected, shows "[OK]" and continue with the execution. If not,
-     * shows "[ERROR]" and close the application.
+     *     works as expected, shows "[OK]" and continue with the execution. If not,
+     *     shows "[ERROR]" and close the application.
      * @param obj Object to check. Must implement "CheckObject" interface.
      * @param okMsg Message to show at INFO level if all works as expected. 
      * @param errMsg String to show if the object is not correctly initialized.
@@ -184,6 +184,7 @@ public class KeyServer {
     
     /**
      * This method control the user input for KeyServer management.
+     * @param sc Scanner object.
      * @param uiController User Interface controller for the KeyServer management.
      * @since v0.3.0
      */
@@ -199,7 +200,7 @@ public class KeyServer {
     
     /**
      * This method is used to represent the application version string correctly
-     * according to the version string length.
+     *     according to the version string length.
      * @param version String with the tool version info.
      * @return String to be printed on screen with correct position for the 
      *         version string.

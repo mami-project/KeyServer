@@ -1,7 +1,7 @@
 /**
  * RSA / ECDH KeyServer processor.
- * <p>
- * Contains all necessary to process RSA or ECDH incoming petitions.
+ * 
+ *     <p>Contains all necessary to process RSA or ECDH incoming petitions.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since 0.1.0
  */

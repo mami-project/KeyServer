@@ -194,6 +194,7 @@ public class ProvisionController {
      * This method provides the main functionality to save a new Private key into 
      * KeyServer database.
      * @param sha1 Hash of the certificate as string.
+     * @param fileName Filename with the private key.
      * @param expDat String with the certificate expiration date.
      * @return True if the register has been saved inside Database.
      * @since v0.3.0

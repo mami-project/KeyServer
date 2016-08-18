@@ -27,18 +27,27 @@ public class ErrorJSON extends ResponseJSON {
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ErrorJSON.class);
     /**
-     * Ericsson error codes definition.
+     * Ericsson error code definition for request denied.
      */
     public static final String ERR_REQUEST_DENIED = "request denied";
+    /**
+     * Ericsson error code definition for SPKI certificate not found.
+     */
     public static final String ERR_NOT_FOUND = "spki not found";
+    /**
+     * Ericsson error code definition for malformed request received.
+     */
     public static final String ERR_MALFORMED_REQUEST = "malformed request";
+    /**
+     * Ericsson error code definition for unspecified error.
+     */
     public static final String ERR_UNSPECIFIED = "unspecified error";
 
     /**
      * Create JSON output error using defined error codes.
      * @param errorCode Error code name. Please use static variables of this
-     * class. If the user specific different error code, the constructor will
-     * generate an "unspecified error" JSON object.
+     *     class. If the user specific different error code, the constructor will
+     *     generate an "unspecified error" JSON object.
      */
     public ErrorJSON(String errorCode) {
         super(ResponseJSON.ERROR, errorCode);

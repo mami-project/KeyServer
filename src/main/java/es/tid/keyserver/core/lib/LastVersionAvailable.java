@@ -31,18 +31,22 @@ import org.slf4j.LoggerFactory;
  * @since v0.3.0
  */
 public class LastVersionAvailable implements CheckObject{
+	
     /**
      * Current application URL repository.
      */
     private URL url;
+    
     /**
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LastVersionAvailable.class);
+    
     /**
      * Current object initialization flag
      */
     private boolean initStatus;
+    
     /**
      * Contains the last version available on repository for the current application.
      */
@@ -70,7 +74,7 @@ public class LastVersionAvailable implements CheckObject{
     
     /**
      * This method returns an string with the last version available on remote
-     * repository for the current software.
+     *     repository for the current software.
      * @return String with the last version available.
      */
     public String getLastVersionAvailable(){
@@ -79,10 +83,10 @@ public class LastVersionAvailable implements CheckObject{
     
     /**
      * Compare the current version available on remote repository with the input
-     * version specified on method parameter.
+     *     version specified on method parameter.
      * @param appVersion Version to be compared with the available on repository.
      * @return True if the specified 'appVersion' is equal to the remote repository,
-     * false if not.
+     *     false if not.
      * @since v0.3.0
      */
     public boolean isUpdated(String appVersion){
@@ -91,9 +95,9 @@ public class LastVersionAvailable implements CheckObject{
 
     /**
      * This method is used to get the last version available for the specified
-     * repository.
-     * <p>
-     * WARNING: This method only works for GitHub repositories.
+     *     repository.
+     * 
+     *     <p>WARNING: This method only works for GitHub repositories.
      * @since v0.3.0
      */
     public final void refreshRepoStatus(){
@@ -121,7 +125,7 @@ public class LastVersionAvailable implements CheckObject{
     
     /**
      * This method is used to test if the current object has been correctly 
-     * initialized.
+     *     initialized.
      * @return True if has been initialized correctly, false if not.
      * @since v0.3.0
      */
