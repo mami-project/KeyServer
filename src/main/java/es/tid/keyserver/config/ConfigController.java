@@ -143,6 +143,7 @@ public class ConfigController implements CheckObject{
      * This method is used to get the KeyServer HTTPS SSL Context. 
      * @return String with the KeyServer HTTPS SSL Context. If the field is not 
      *     present, returns 'null'.
+     * 
      *     <p>This is an example with valid values for this field:
      *     <ul>
      *      <li>SSLv2</li>
@@ -201,6 +202,7 @@ public class ConfigController implements CheckObject{
      *     factory. 
      * @return String with the KeyServer HTTPS certificate manager factory. 
      *     If the field is not present, returns 'null'.
+     * 
      *     <p>This is an example with valid values for this field:
      *     <ul>
      *      <li>PKIX</li>
@@ -217,6 +219,7 @@ public class ConfigController implements CheckObject{
      *     factory. 
      * @return String with the KeyServer HTTPS certificate trust manager factory. 
      *     If the field is not present, returns 'null'.
+     * 
      *     <p>This is an example with valid values for this field:
      *     <ul>
      *      <li>PKIX (X509 or SunPKIX)</li>
@@ -232,6 +235,7 @@ public class ConfigController implements CheckObject{
      * This method is used to get the KeyServer HTTPS certificate key store. 
      * @return String with the KeyServer HTTPS certificate key store. 
      *     If the field is not present, returns 'null'.
+     * 
      *     <p>This is an example with valid values for this field:
      *     <ul>
      *      <li>jceks</li>
@@ -248,6 +252,7 @@ public class ConfigController implements CheckObject{
      * This method is used to get the KeyServer HTTPS cipher suites. 
      * @return String with the KeyServer HTTPS ciphers suites. If the field is 
      *     not present, returns 'null'. The ciphers names are separated with commas.
+     * 
      *     <p>This is an example with valid values for this field:
      *     <ul>
      *      <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
@@ -261,7 +266,6 @@ public class ConfigController implements CheckObject{
     public String getServerCiphersSuites(){
         return this.keyserverConfig.getServerCiphersSuites();
     }
-    
     
     /**
      * This method is used to get the Redis Database server address.

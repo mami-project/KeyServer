@@ -96,6 +96,7 @@ public class LastVersionAvailable implements CheckObject{
     /**
      * This method is used to get the last version available for the specified
      *     repository.
+     * 
      *     <p>WARNING: This method only works for GitHub repositories.
      * @since v0.3.0
      */

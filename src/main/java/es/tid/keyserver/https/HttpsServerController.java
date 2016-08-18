@@ -205,6 +205,7 @@ public class HttpsServerController implements CheckObject{
     /**
      * Stops the HTTPS KeyServer closing the listening socket and disallowing 
      *     any new exchanges from being processed.
+     * 
      *     <p>The value specified as timeout for this method is 5 seconds.
      * @since v0.1.0
      */
