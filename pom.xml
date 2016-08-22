@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.3.1</version>
+    <version>v0.4.0</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>
@@ -152,4 +152,8 @@
         <system>GitHub</system>
         <url>https://github.com/mami-project/KeyServer/issues</url>
     </issueManagement>
+    <ciManagement>
+    	<url>https://travis-ci.org/mami-project/KeyServer</url>
+    	<system>Travis CI</system>
+    </ciManagement>
 </project>
