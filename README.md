@@ -24,7 +24,7 @@ It is aimed at being a functional prototype to test the LURK Architecture and th
 
 ## System requirements
 
-KeyServer has been developed using Java SE 8 and Redis as database to store the private cetificates. 
+KeyServer has been developed using Java SE 8 and Redis as database to store the certificates private keys. 
 
  - Java SE Runtime Environment 8: https://java.com/es/download
  - Redis: http://redis.io/download
@@ -32,8 +32,6 @@ KeyServer has been developed using Java SE 8 and Redis as database to store the 
 
 ## How to install?
 
-The KeyServer is distributed with maven. 
+You can download the latest KeyServer JAR version from [releases](https://github.com/mami-project/KeyServer/releases) section. If you prefer generate your own JAR, remember that this project is distributed with [Apache Maven](https://maven.apache.org/). 
 
- Once the JAR file if generated, you only have to copy it on your desired folder.
-
-Please take attention to the Wiki page (work in progress) about how to configure KeyServer tool and provide all necessary parameters for its correct execution.
+Once the JAR file is downloaded/generated, move it to the desired folder. Configure the KeyServer using the [KeyServer Wiki](https://github.com/mami-project/KeyServer/wiki) steps before first execution. Otherwise, you'll get an error during the execution. 
