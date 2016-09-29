@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.4.0</version>
+    <version>v0.3.1</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>
@@ -13,7 +13,7 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>2.8.1</version>
+            <version>2.9.0</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -30,17 +30,17 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+            <version>1.7.20</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.3</version>
+            <version>1.1.7</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.1.3</version>
+            <version>1.1.7</version>
         </dependency>
     </dependencies>
     
@@ -67,7 +67,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.9</version>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -152,8 +152,4 @@
         <system>GitHub</system>
         <url>https://github.com/mami-project/KeyServer/issues</url>
     </issueManagement>
-    <ciManagement>
-    	<url>https://travis-ci.org/mami-project/KeyServer</url>
-    	<system>Travis CI</system>
-    </ciManagement>
 </project>
