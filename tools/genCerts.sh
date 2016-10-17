@@ -16,6 +16,9 @@ fi
 
 echo "[ INFO ] Creating certs folder..."
 mkdir certs
+if [ -w general.properties ] ; then
+	cp general.properties certs/general.properties
+fi
 cd certs
 echo "[ OK ]"
 
@@ -26,12 +29,17 @@ while [ $COUNTER -lt $NUMCERT ]; do
 	FINGERPRINT="$(openssl x509 -in $COUNTER.cert -fingerprint -noout)"
 	FINGERPRINT="${FINGERPRINT//:}"
 	FINGERPRINT="${FINGERPRINT#*=}"
-	echo Certificate fingerprint: $FINGERPRINT
+	echo [ INFO ] Certificate fingerprint: $FINGERPRINT
 	echo $FINGERPRINT >> FINGERPRINTS.list
 	openssl pkcs8 -topk8 -inform PEM -outform DER -in $COUNTER.key  -nocrypt > $COUNTER.exp.key
-	echo The counter is $COUNTER
+	java -jar ../pk-provider.jar -i $FINGERPRINT $COUNTER.exp.key
+	echo [ INFO ] The counter is $COUNTER
 	let COUNTER=COUNTER+1
 done
+
+if [ -w general.properties ] ; then
+        mv general.properties ../general.properties
+fi
 
 echo "[ OK ]"
 

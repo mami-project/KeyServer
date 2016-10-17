@@ -210,3 +210,5 @@ nb-configuration.xml
 project.properties
 IP_whitelist.txt
 general.properties
+!tools/pk-provider.jar
+tools/certs/
