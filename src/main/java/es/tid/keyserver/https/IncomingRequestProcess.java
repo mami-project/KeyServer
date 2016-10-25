@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class provide a centralized mode to get, process and make response to the
- * proxy.
+ *     proxy.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  */
 public class IncomingRequestProcess implements HttpHandler{
@@ -75,7 +75,7 @@ public class IncomingRequestProcess implements HttpHandler{
 
     /**
      * This method provides a control function for process the incoming HTTPS
-     * request and send to the Proxy the response.
+     *     request and send to the Proxy the response.
      * @param he HTTP exchange object with headers and data from the Proxy.
      */
     @Override
@@ -116,7 +116,7 @@ public class IncomingRequestProcess implements HttpHandler{
     
     /**
      * This method provides the main functionality to send to the client the
-     * request data.
+     *     request data.
      * @param he HTTP exchange object with headers and data from the Proxy.
      * @param responseString String for send to the client.
      */
@@ -137,7 +137,7 @@ public class IncomingRequestProcess implements HttpHandler{
     
     /**
      * This method provide an easy way to extract the body content from HTTP 
-     * package.
+     *     package.
      * @param bodyStream Input Stream of HTTP body.
      * @return String with the body content.
      */
@@ -156,7 +156,7 @@ public class IncomingRequestProcess implements HttpHandler{
     
     /**
      * This function call to the correct method processor for the incoming JSON
-     * petition.
+     *     petition.
      * @param jsonObj JSON Object with the proxy data.
      * @return Returns a String with the response to the client.
      */
@@ -250,7 +250,7 @@ public class IncomingRequestProcess implements HttpHandler{
 
     /**
      * This method provide an easy way to decode a PreMaster secret codified
-     * using RSA.
+     *     using RSA.
      * @param spki SHA1 of the certificate to find the PrivateKey.
      * @param input Codified PremasterSecret with public key on base64.
      * @return PremasterSecret decoded using private key and encoded using base64.
@@ -293,10 +293,10 @@ public class IncomingRequestProcess implements HttpHandler{
     
     /**
      * Load private key from byte array.
-     * @param Array with private key values.
+     * @param encodePrivateKey Array with private key values.
      * @return Private key object.
      * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
+     * @throws InvalidKeySpecException 
      */
     private PrivateKey loadPrivateKey(byte[] encodePrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");

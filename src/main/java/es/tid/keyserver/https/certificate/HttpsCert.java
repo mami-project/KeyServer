@@ -126,7 +126,7 @@ public class HttpsCert implements CheckObject{
     /**
      * Return the number of days until the certificate expiration.
      * @return Number of days from the current day until the certificate 
-     * expiration date.
+     *     expiration date.
      * @since v0.3.0
      */
     public long certRemainDays(){

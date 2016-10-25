@@ -92,10 +92,10 @@ public class HttpsServerController implements CheckObject{
             server.setHttpsConfigurator(new HttpsConfigurator(sslContext){
                 /**
                  * A HttpsServer must have an associated HttpsConfigurator 
-                 * object which is used to establish the SSL configuration for 
-                 * the SSL connections. 
-                 * Applications need to override the configure(HttpsParameters) 
-                 * method in order to change the default configuration. 
+                 *     object which is used to establish the SSL configuration for 
+                 *     the SSL connections. 
+                 *     Applications need to override the configure(HttpsParameters) 
+                 *     method in order to change the default configuration. 
                  * @param params The HttpsParameters to be configured.
                  */
                 @Override
@@ -127,9 +127,9 @@ public class HttpsServerController implements CheckObject{
                 }  
                 /**
                  * This method parse the field string to array of values with 
-                 * the ciphers names. If the configuration label is not present
-                 * inside configuration file. This, will use all available 
-                 * ciphers by default.
+                 *     the ciphers names. If the configuration label is not present
+                 *     inside configuration file. This, will use all available 
+                 *     ciphers by default.
                  * @param parameters Configuration file object.
                  * @return Array of strings with the ciphers name.
                  */
@@ -144,7 +144,7 @@ public class HttpsServerController implements CheckObject{
                 }
             });
             // Setting configuration for the server and accepting only BACKLOG variable
-            //  as maximum input connection (0 = System default).
+            //     as maximum input connection (0 = System default).
             server.bind(address, backlog);
             WhiteList allowedIPs = new WhiteList(parameters.getWhiteList());
             IncomingRequestProcess processor =new IncomingRequestProcess(objDB, allowedIPs);
@@ -204,9 +204,9 @@ public class HttpsServerController implements CheckObject{
     
     /**
      * Stops the HTTPS KeyServer closing the listening socket and disallowing 
-     * any new exchanges from being processed.
-     * <p>
-     * The value specified as timeout for this method is 5 seconds.
+     *     any new exchanges from being processed.
+     * 
+     *     <p>The value specified as timeout for this method is 5 seconds.
      * @since v0.1.0
      */
     public void stop(){
@@ -216,7 +216,7 @@ public class HttpsServerController implements CheckObject{
     /**
      * Object initialization status.
      * @return Returns true if the object is correctly initialized or false if 
-     * not.
+     *     not.
      * @since v0.1.0
      */
     @Override

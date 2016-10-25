@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@ package es.tid.keyserver.https.certificate;
 
 import java.security.KeyStore;
 import java.util.Date;
-import junit.framework.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,8 +26,14 @@ import static org.junit.Assert.*;
  * @since v0.3.0
  */
 public class HttpsCertTest {
+	/**
+	 * HTTPs certificate object.
+	 */
     private HttpsCert instance;
     
+    /**
+     * Class constructor object.
+     */
     public HttpsCertTest() {
         instance = new HttpsCert("target/test-classes/certificatetest.ks", "123456");
     }
@@ -41,7 +46,7 @@ public class HttpsCertTest {
         System.out.println("getCertificate");
         KeyStore result = instance.getCertificate();
         System.out.println("[ TEST ] Certificate type: " + result.getType());
-        Assert.assertTrue(result != null);
+        assertNotNull(result);
     }
 
     /**
@@ -52,7 +57,7 @@ public class HttpsCertTest {
         System.out.println("certExpirDate");
         Date result = instance.certExpirDate();
         System.out.println("[ TEST ] Certificate expration date: " + result);
-        assertTrue(result != null);
+        assertNotNull(result);
     }
 
     /**
@@ -63,7 +68,7 @@ public class HttpsCertTest {
         System.out.println("certRemainDays");
         long result = instance.certRemainDays();
         System.out.println("[ TEST ] Certificate validity remain days: " + result);
-        assertTrue(true);
+        assertNotNull((Long)result);
     }
 
     /**

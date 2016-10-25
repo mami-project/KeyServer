@@ -40,21 +40,45 @@ public class InputJSON {
     public final static String RSA = "RSA";
     
     /**
-     * Definition of PROTOCOL field values.
+     * TLS 1.0 - Definition of PROTOCOL field values.
      */
     public final static String TLS_1_0 = "TLS 1.0";
+    /**
+     * TLS 1.1 - Definition of PROTOCOL field values.
+     */
     public final static String TLS_1_1 = "TLS 1.1";
+    /**
+     * TLS 1.2 - Definition of PROTOCOL field values.
+     */
     public final static String TLS_1_2 = "TLS 1.2";
+    /**
+     * DTLS 1.0 - Definition of PROTOCOL field values.
+     */
     public final static String DTLS_1_0 = "DTLS 1.0";
+    /**
+     * DTLS 1.2 - Definition of PROTOCOL field values.
+     */
     public final static String DTLS_1_2 = "DTLS 1.2";
     
     /**
-     * Definition of HASH field right values.
+     * SHA1 - Definition of HASH field right values.
      */
     public final static String SHA1 = "SHA1";
+    /**
+     * SHA-224 - Definition of HASH field right values.
+     */
     public final static String SHA_224 = "SHA-224";
+    /**
+     * SHA-256 - Definition of HASH field right values.
+     */
     public final static String SHA_256 = "SHA-256";
+    /**
+     * SHA-384 - Definition of HASH field right values.
+     */
     public final static String SHA_384 = "SHA-384";
+    /**
+     * SHA-512 - Definition of HASH field right values.
+     */
     public final static String SHA_512 = "SHA-512";
     
     /**
@@ -106,12 +130,12 @@ public class InputJSON {
     
     /**
      * Get "hash" field from the input JSON message. This field is only present
-     * if the JSON method is ECDHE. If you call this method using "RSA", you'll
-     * receive "null" ignoring JSON hash field if is present.
-     * If an incoming ECDHE JSON doesn't contains the "hash" field, this method
-     * use SHA1 as default.
+     *     if the JSON method is ECDHE. If you call this method using "RSA", you'll
+     *     receive "null" ignoring JSON hash field if is present.
+     *     If an incoming ECDHE JSON doesn't contains the "hash" field, this method
+     *     use SHA1 as default.
      * @return String value with the specific names. If the read field is not
-     *          valid, this method returns null value.
+     *     valid, this method returns null value.
      */
     public String getHash(){
         String readedHash = null;
@@ -147,10 +171,10 @@ public class InputJSON {
     
     /**
      * Get "protocol" field from the input JSON message.
-     * This field is required in SKI request. Specifies the protocol version 
-     * negotiated in the handshake between Client and Edge Server.
+     *     This field is required in SKI request. Specifies the protocol version 
+     *     negotiated in the handshake between Client and Edge Server.
      * @return String value with the specific protocol. If the read field is not
-     *          valid, this method returns 'null' value.
+     *     valid, this method returns 'null' value.
      */
     public String getProtocol(){
         String readedProtocol = null;

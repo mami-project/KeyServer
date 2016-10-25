@@ -75,7 +75,7 @@ public class Ecdhe {
 
     /**
      * This method receive an string with the incoming hash type and returns a
-     * signature object.
+     *     signature object.
      * @param hash String with the HASH tag.
      * @see <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Signature">Java Standard Names: Signature Algorithms</a>
      * @return Signature object or null if the specified signature algorithm is not specified.

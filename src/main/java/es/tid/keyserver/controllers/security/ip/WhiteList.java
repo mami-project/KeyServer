@@ -140,7 +140,7 @@ public class WhiteList {
 
     /**
      * This method returns an InetAddress object from specific String if it's 
-     * valid.
+     *     valid.
      * @param tmp Incoming sting with the IP address.
      * @return The InetAddress object if it's valid. Null if not.
      * @since 0.2.1

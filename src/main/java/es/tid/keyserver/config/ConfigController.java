@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class contains all necessary to extract all KeyServer configuration 
- * elements from properties files.
+ *     elements from properties files.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.3.0
  */
@@ -47,11 +47,11 @@ public class ConfigController implements CheckObject{
     /**
      * Class constructor.
      * @param mvnFileRoute String with the filename with Maven project 
-     * properties.
+     *     properties.
      * @param ksFileRoute String with the filename with the KeyServer 
-     * configuration file.
+     *     configuration file.
      * @param ksRequiredFields String array with the required fields on 
-     * KeyServer configuration file.
+     *     KeyServer configuration file.
      * @since v0.3.0
      */
     public ConfigController(String mvnFileRoute, String ksFileRoute, String [] ksRequiredFields) {
@@ -62,7 +62,7 @@ public class ConfigController implements CheckObject{
     
     /**
      * Method used to check if the configuration file objects are correctly 
-     * initialized.
+     *     initialized.
      * @return True if all objects are correctly initialized. False if not.
      * @since v0.3.0
      */
@@ -104,7 +104,7 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get the listener KeyServer IP address.
      * @return InetAddress object with the KeyServer IP address. If the field is not present,
-     * returns 'null'.
+     *     returns 'null'.
      * @since v0.3.0
      */
     public InetAddress getServerAddress(){
@@ -125,7 +125,7 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get the listener KeyServer port.
      * @return KeyServer port as integer. If the field is not present,
-     * returns -1 value.
+     *     returns -1 value.
      * @since v0.3.0
      */
     public int getServerPort(){
@@ -142,17 +142,17 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get the KeyServer HTTPS SSL Context. 
      * @return String with the KeyServer HTTPS SSL Context. If the field is not 
-     * present, returns 'null'.
-     * <p>
-     * This is an example with valid values for this field:
-     * <ul>
-     *  <li>SSLv2</li>
-     *  <li>SSLv3</li>
-     *  <li>TLS</li>
-     *  <li>TLSv1</li>
-     *  <li>TLSv1.1</li>
-     *  <li>TLSv1.2</li>
-     * </ul> 
+     *     present, returns 'null'.
+     * 
+     *     <p>This is an example with valid values for this field:
+     *     <ul>
+     *      <li>SSLv2</li>
+     *      <li>SSLv3</li>
+     *      <li>TLS</li>
+     *      <li>TLSv1</li>
+     *      <li>TLSv1.1</li>
+     *      <li>TLSv1.2</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerSSLContext(){
@@ -162,7 +162,7 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get the certificate for KeyServer HTTPS server.
      * @return String with the certificate name and route (if is available). If 
-     * the field is not present, returns 'null'.
+     *     the field is not present, returns 'null'.
      * @since v0.3.0
      */
     public String getServerKeyFile(){
@@ -172,7 +172,7 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get password of the KeyServer HTTPS certificate.
      * @return String with the KeyServer HTTPS certificate password. If the 
-     * field is not present, returns 'null'.
+     *     field is not present, returns 'null'.
      * @since v0.3.0
      */
     public String getServerKeyPass(){
@@ -181,9 +181,9 @@ public class ConfigController implements CheckObject{
     
     /**
      * This method is used to get the Server Backlog value from the 
-     * configuration file.
+     *     configuration file.
      * @return Integer with the KeyServer Backlog value. If the field is not 
-     * present, it returns -1 value.
+     *     present, it returns -1 value.
      * @since v0.3.0
      */
     public int getServerBacklog(){
@@ -199,15 +199,15 @@ public class ConfigController implements CheckObject{
 
     /**
      * This method is used to get the KeyServer HTTPS certificate manager 
-     * factory. 
+     *     factory. 
      * @return String with the KeyServer HTTPS certificate manager factory. 
-     * If the field is not present, returns 'null'.
-     * <p>
-     * This is an example with valid values for this field:
-     * <ul>
-     *  <li>PKIX</li>
-     *  <li>SunX509</li>
-     * </ul> 
+     *     If the field is not present, returns 'null'.
+     * 
+     *     <p>This is an example with valid values for this field:
+     *     <ul>
+     *      <li>PKIX</li>
+     *      <li>SunX509</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerKeyManagerFactory(){
@@ -216,15 +216,15 @@ public class ConfigController implements CheckObject{
     
     /**
      * This method is used to get the KeyServer HTTPS certificate trust manager 
-     * factory. 
+     *     factory. 
      * @return String with the KeyServer HTTPS certificate trust manager factory. 
-     * If the field is not present, returns 'null'.
-     * <p>
-     * This is an example with valid values for this field:
-     * <ul>
-     *  <li>PKIX (X509 or SunPKIX)</li>
-     *  <li>SunX509</li>
-     * </ul> 
+     *     If the field is not present, returns 'null'.
+     * 
+     *     <p>This is an example with valid values for this field:
+     *     <ul>
+     *      <li>PKIX (X509 or SunPKIX)</li>
+     *      <li>SunX509</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerTrustManagerFactory(){
@@ -234,14 +234,14 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get the KeyServer HTTPS certificate key store. 
      * @return String with the KeyServer HTTPS certificate key store. 
-     * If the field is not present, returns 'null'.
-     * <p>
-     * This is an example with valid values for this field:
-     * <ul>
-     *  <li>jceks</li>
-     *  <li>jks</li>
-     *  <li>pkcs12</li>
-     * </ul> 
+     *     If the field is not present, returns 'null'.
+     * 
+     *     <p>This is an example with valid values for this field:
+     *     <ul>
+     *      <li>jceks</li>
+     *      <li>jks</li>
+     *      <li>pkcs12</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerKeyStore(){
@@ -251,27 +251,26 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get the KeyServer HTTPS cipher suites. 
      * @return String with the KeyServer HTTPS ciphers suites. If the field is 
-     * not present, returns 'null'. The ciphers names are separated with commas.
-     * <p>
-     * This is an example with valid values for this field:
-     * <ul>
-     *  <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
-     *  <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</li>
-     *  <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</li>
-     *  <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
-     *  <li>...</li>
-     * </ul> 
+     *     not present, returns 'null'. The ciphers names are separated with commas.
+     * 
+     *     <p>This is an example with valid values for this field:
+     *     <ul>
+     *      <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
+     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</li>
+     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</li>
+     *      <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
+     *      <li>...</li>
+     *     </ul> 
      * @since v0.3.0
      */
     public String getServerCiphersSuites(){
         return this.keyserverConfig.getServerCiphersSuites();
     }
     
-    
     /**
      * This method is used to get the Redis Database server address.
      * @return InetAddress object with the Redis Database server address. If the 
-     * field is not present, returns 'null'.
+     *     field is not present, returns 'null'.
      * @since v0.3.0
      */
     public InetAddress getDbAddress(){
@@ -292,7 +291,7 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get Redis Database server port.
      * @return Integer with the Redis Database Port. If the field is not present,
-     * returns -1 value.
+     *     returns -1 value.
      * @since v0.3.0
      */
     public int getDbPort(){
@@ -309,7 +308,7 @@ public class ConfigController implements CheckObject{
     /**
      * This method is used to get Redis Database password.
      * @return Integer with the Redis Database password. If the field is not present,
-     * returns `null`.
+     *     returns `null`.
      * @since v0.3.1
      */
     public String getDbPassword(){
@@ -324,10 +323,10 @@ public class ConfigController implements CheckObject{
     }
     
     /**
-     * This method is used to get the IP whitelist file name for KeyServer 
-     * access control.
-     * @return String with the whitelist file name. If the field is not present,
-     * returns 'null'.
+     * This method is used to get the IP 'white list' file name for KeyServer 
+     *     access control.
+     * @return String with the 'white list' file name. If the field is not present,
+     *     returns 'null'.
      * @since v0.3.0
      */
     public String getWhiteList(){

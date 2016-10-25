@@ -26,22 +26,25 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to manage the interactions between the KeyServer tool and 
- * its administrator user.
+ *     its administrator user.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.3.0
  */
 public class UserInterfaceController {
+	
     /**
      * KeyServer status monitor object.
      */
     private final KsMonitor monObj;
+    
     /**
      * Key Server Private Key management object.
      */
     private ProvisionController pkCtrl;
+    
     /**
      * KeyServer exit flag.
-     * If this flag is set to true, means the KeyServer will be closed.
+     *     If this flag is set to true, means the KeyServer will be closed.
      */
     private boolean exitFlag;
     /**
@@ -106,9 +109,9 @@ public class UserInterfaceController {
     
     /**
      * This method is used to check if the KeyServer close operation has been
-     * requested by the user.
+     *     requested by the user.
      * @return If the KeyServer should be closed, this method returns 'true'. False
-     * if not.
+     *     if not.
      * @since v0.3.0
      */
     public boolean exitFlag(){

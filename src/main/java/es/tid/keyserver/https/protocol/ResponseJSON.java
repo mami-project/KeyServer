@@ -23,9 +23,12 @@ import org.json.simple.JSONObject;
  */
 class ResponseJSON {
     /**
-     * Constant fields for the output JSON attributes.
+     * OUTPUT - Constant fields for the output JSON attributes.
      */
     protected static final String OUTPUT = "output";
+    /**
+     * ERROR - Constant fields for the output JSON attributes.
+     */
     protected static final String ERROR = "error";
     
     /**

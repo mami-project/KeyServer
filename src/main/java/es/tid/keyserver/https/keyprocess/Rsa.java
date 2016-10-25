@@ -39,11 +39,11 @@ public class Rsa {
      * @param data String with base64 encoded PremasterSecret.
      * @param key Private key used for extract the PremasterSecret.
      * @return String with the PremasterSecret decoded. This output is base64 encoded.
-     * @throws java.security.NoSuchAlgorithmException Algorithm not valid.
-     * @throws javax.crypto.NoSuchPaddingException Problem with padding.
-     * @throws java.security.InvalidKeyException Key not valid.
-     * @throws javax.crypto.IllegalBlockSizeException Block size not valid.
-     * @throws javax.crypto.BadPaddingException Bad padding.
+     * @throws NoSuchAlgorithmException Algorithm not valid.
+     * @throws NoSuchPaddingException Problem with padding.
+     * @throws InvalidKeyException Key not valid.
+     * @throws IllegalBlockSizeException Block size not valid.
+     * @throws BadPaddingException Bad padding.
      */
     static public String calcDecodedOutput(String data, PrivateKey key) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
         // Decode incoming "data" from base64 (base64 decoder).

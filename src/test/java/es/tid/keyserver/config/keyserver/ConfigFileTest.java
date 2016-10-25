@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +29,14 @@ import static org.junit.Assert.*;
  * @since v0.3.0
  */
 public class ConfigFileTest { 
+	/**
+	 * Configuration file test object.
+	 */
     private final ConfigFile testObj;
     
+    /**
+     * Method with the required fields for the current tests.
+     */
     public ConfigFileTest() {
         String testFileRoute = "target/test-classes/configtest.properties";
         
@@ -53,6 +59,9 @@ public class ConfigFileTest {
         testObj = new ConfigFile(testFileRoute, requiredFields);
     }
     
+    /**
+     * JUnit test step.
+     */
     @BeforeClass
     public static void setUpClass() {
         String testFileRoute = "target/test-classes/configtest.properties";
@@ -86,6 +95,9 @@ public class ConfigFileTest {
         }
     }
     
+    /**
+     * JUnit test step.
+     */
     @AfterClass
     public static void tearDownClass() {
         // Delete test file.
