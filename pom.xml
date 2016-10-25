@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.3.1</version>
+    <version>v0.3.2</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>

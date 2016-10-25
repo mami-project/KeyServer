@@ -1,12 +1,15 @@
 # KeyServer Change Log
 
-v0.4.0
+v0.3.2
 -------------------------------------------------------------------------------- 
 Features:
-  - 
+  - Code quality meter with Codacy.
+  - Scripts for test certificates.
 
 Bug fixes:
-  - 
+  - Fixed Javadoc warnings.
+  - Updated KeyServer dependencies.
+  - Updated Maven pluginss.
 
 
 v0.3.1
