@@ -267,6 +267,17 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
+     * This method is used to get Redis Database index. This index specified the
+     * database where KeyServer will be use.
+     * @return String with the Redis Database index. If the field is not
+     *     present, returns 'null'.
+     * @since v0.3.3
+     */
+    public String getDbIndex(){
+        return this.getParameter("dbIndex");
+    }
+    
+    /**
      * This method is used to get the IP whitelist file name for KeyServer 
      *     access control.
      * @return String with the whitelist file name. If the field is not present,

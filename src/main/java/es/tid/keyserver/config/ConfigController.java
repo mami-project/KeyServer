@@ -307,7 +307,7 @@ public class ConfigController implements CheckObject{
     
     /**
      * This method is used to get Redis Database password.
-     * @return Integer with the Redis Database password. If the field is not present,
+     * @return String with the Redis Database password. If the field is not present,
      *     returns `null`.
      * @since v0.3.1
      */
@@ -319,6 +319,23 @@ public class ConfigController implements CheckObject{
             // Error level.
             LOGGER.error("Not valid password specified for the Redis Database: {}", password);
             return null;
+        }
+    }
+    
+    /**
+     * This method is used to get Redis Database index.
+     * @return Integer with the Redis Database index. If the field is not present,
+     *     returns `0`.
+     * @since v0.3.3
+     */
+    public int getDbIndex(){
+        String index = this.keyserverConfig.getDbIndex();
+        if(index != null){
+            return Integer.valueOf(index);
+        } else {
+            // Warning level.
+            LOGGER.warn("Redis DB index not present or not valid. Using default index (0).");
+            return 0;
         }
     }
     

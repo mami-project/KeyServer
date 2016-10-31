@@ -71,7 +71,8 @@ public class KeyServer {
         LOGGER.info("Connecting to database.");
         DataBase keyServerDB = new DataBase(softwareConfig.getDbAddress(), 
                 softwareConfig.getDbPort(), 
-                softwareConfig.getDbPassword());
+                softwareConfig.getDbPassword(),
+                softwareConfig.getDbIndex());
         checkObj(keyServerDB, "Database connection established.",
                 "Can't connect to the database. Please check 'general.properties' file values.");
         

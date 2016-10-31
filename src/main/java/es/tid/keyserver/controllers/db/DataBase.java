@@ -82,9 +82,10 @@ public class DataBase implements CheckObject{
      * @param serverIp Redis server IP.
      * @param port Redis listener port.
      * @param password Redis password.
+     * @param dbIndex Redis DB index.
      * @since v0.3.1
      */
-    public DataBase(InetAddress serverIp, int port, String password){
+    public DataBase(InetAddress serverIp, int port, String password, int dbIndex){
         // Store database connection parameters inside class attributes.
         this.serverIp = serverIp;
         this.port = port;
@@ -101,6 +102,7 @@ public class DataBase implements CheckObject{
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace(errors.toString());
         }
+        dataBaseObj.select(dbIndex);
     }
     
     /**
