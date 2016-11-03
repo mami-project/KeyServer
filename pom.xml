@@ -111,7 +111,6 @@
             <name>Apache License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>manual</distribution> 
-            <comments>License pending to be determined.</comments>
         </license>
     </licenses>
     <organization>
@@ -123,6 +122,7 @@
             <id>jgm1986</id>
             <name>Javier Gusano Martinez</name>
             <email>javier.gusano@hpe.com</email>
+            <url>http://jgusmar.blogspot.com</url>
             <organization>Hewlett-Packard Enterprise</organization>
             <organizationUrl>https://www.hpe.com</organizationUrl>
             <timezone>(UTC+01:00) Brussels, Copenhagen, Madrid, Paris</timezone>
@@ -130,6 +130,9 @@
                 <role>architect</role>
                 <role>developer</role>
             </roles>
+            <properties>
+                <picUrl>https://avatars0.githubusercontent.com/u/11734525</picUrl>
+            </properties>
         </developer>
     </developers>
     
@@ -152,4 +155,9 @@
         <system>GitHub</system>
         <url>https://github.com/mami-project/KeyServer/issues</url>
     </issueManagement>
+    <!-- Continuous Integration Management -->
+    <ciManagement>
+        <system>Travis-CI</system>
+        <url>https://travis-ci.org/mami-project/KeyServer</url>
+    </ciManagement>
 </project>
