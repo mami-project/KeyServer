@@ -4,7 +4,7 @@ v0.3.3
 -------------------------------------------------------------------------------- 
 Features:
   - Now can use others Redis DB index.
-  - 
+  - Security log for each incomming request.
 
 Bug fixes:
   - 

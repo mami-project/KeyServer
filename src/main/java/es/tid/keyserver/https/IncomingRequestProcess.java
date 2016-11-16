@@ -46,9 +46,13 @@ import org.slf4j.LoggerFactory;
  */
 public class IncomingRequestProcess implements HttpHandler{
     /**
-     * Logging object.
+     * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(IncomingRequestProcess.class);
+    /**
+     * Security logger object
+     */
+    private static final org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
     /**
      * Database Object
      */
@@ -97,6 +101,8 @@ public class IncomingRequestProcess implements HttpHandler{
             // Process the JSON for the correct type
             responseString = processIncommingJson(jsonData);
             LOGGER.trace("Response String: {}", responseString);
+            // Security log entry
+            SECURITY.info("Remote IP address: {} | Authorized: {} | Certificate Fingerprint: {}", he.getRemoteAddress(), ipAuthorized, jsonData.getSpki());
             // Send response to the client
             sendKeyServerResponse(he, responseString);
         } else {

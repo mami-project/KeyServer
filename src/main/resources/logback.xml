@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" scan="false">
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/current-status.log</file>
+        <file>logs/status/status.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>logs/keyserver.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/status/archived.%d{yyyy-MM-dd}.log</fileNamePattern>
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -19,6 +19,25 @@
         </encoder>
     </appender>
     
+    <appender name="SECURITY-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/security/security.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/security/archived.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{YYYY-MM-dd HH:mm:ss.SSS}\t [ %level ]\t {%thread}\t %logger{10}\t [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Security logger -->
+    <logger name="security" level="INFO" additivity="false">
+        <appender-ref ref="SECURITY-FILE"/>
+    </logger>
+    
+    <!-- General Status logger -->
     <root level="INFO">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
