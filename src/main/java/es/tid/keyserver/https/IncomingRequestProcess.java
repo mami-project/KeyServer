@@ -101,15 +101,15 @@ public class IncomingRequestProcess implements HttpHandler{
             // Process the JSON for the correct type
             responseString = processIncommingJson(jsonData);
             LOGGER.trace("Response String: {}", responseString);
-            // Security log entry
-            SECURITY.info("Remote IP address: {} | Authorized: {} | Certificate Fingerprint: {}", he.getRemoteAddress(), ipAuthorized, jsonData.getSpki());
             // Send response to the client
             sendKeyServerResponse(he, responseString);
+            // Security log entry
+            SECURITY.info("Remote IP address: {} | Authorized: {} | Certificate Fingerprint: {}", he.getRemoteAddress(), ipAuthorized, jsonData.getSpki());
         } else {
             // If not POST request (Nothing to do).
             LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
+            he.close();
         }
-        he.close();
     }
     
     /**
@@ -138,7 +138,7 @@ public class IncomingRequestProcess implements HttpHandler{
             responseBody.write(responseString.getBytes());
         } catch (IOException ex) {
                 LOGGER.error("Can't send the response to the client...");
-        }
+        } 
     }
     
     /**
