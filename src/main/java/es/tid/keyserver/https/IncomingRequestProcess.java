@@ -84,6 +84,7 @@ public class IncomingRequestProcess implements HttpHandler{
      */
     @Override
     public void handle(HttpExchange he) {
+        Thread.currentThread().setName("THHTTPS_" + he.getRemoteAddress());
         // JSON incoming data Object.
         InputJSON jsonData;
         // Response String object for send to the client.
@@ -108,6 +109,7 @@ public class IncomingRequestProcess implements HttpHandler{
         } else {
             // If not POST request (Nothing to do).
             LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
+            SECURITY.warn("Not valid HTTPS request: {} | Remote address: {} | Body content: {}", requestMethod, he.getRemoteAddress());
             he.close();
         }
     }

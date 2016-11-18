@@ -5,9 +5,10 @@ v0.3.3
 Features:
   - Now can use others Redis DB index.
   - Security log for each incomming request.
+  - Configuration parameters for time intervals (DB monitor and KS updates).
 
 Bug fixes:
-  - 
+  - RSA Invalid Key exception.
 
 
 v0.3.2

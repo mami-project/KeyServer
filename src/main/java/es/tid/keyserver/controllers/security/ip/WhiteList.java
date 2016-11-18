@@ -69,7 +69,9 @@ public class WhiteList {
             allowAll = false;
         } else {
             // Create empty list
+            org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
             LOGGER.warn("There are no whitelist file. Allowing all IPs.");
+            SECURITY.warn("There are no whitelist file. Allowing all IPs.");
             allowAll = true;
             ipList = new HashSet<>();
         }
