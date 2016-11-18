@@ -171,7 +171,7 @@ public class IncomingRequestProcess implements HttpHandler{
     private String processIncommingJson(InputJSON jsonObj){
         // Check if the IP is Authorized to use KeyServer 
         if(!this.ipAuthorized){
-            LOGGER.error("Not access allowed to the KeyServer from this host.");
+            SECURITY.error("Access denied from this host.");
             return new ErrorJSON(ErrorJSON.ERR_REQUEST_DENIED).toString();
         }
         // Check first if JSON is valid.
