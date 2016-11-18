@@ -212,3 +212,4 @@ IP_whitelist.txt
 general.properties
 !tools/pk-provider.jar
 tools/certs/
+HTTPS_keystore.ks

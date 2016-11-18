@@ -340,6 +340,28 @@ public class ConfigController implements CheckObject{
     }
     
     /**
+     * This method is used to get the DB time interval when the PING will be 
+     * send. The Redis DB connection status is monitored periodically in a 
+     * parallel thread.
+     * @return Integer with the time in milliseconds.
+     * @since v0.3.3
+     */
+    public int getChkDbInterval(){
+        if(this.keyserverConfig.getChkDbInterval().isEmpty()){
+            return -1;
+        }
+        int time = Integer.valueOf(this.keyserverConfig.getChkDbInterval());
+        if(time >= 100){
+            return time;
+        } else {
+            // Warning level.
+            LOGGER.warn("DB connection check interval value is not valid. "
+                    + "Must be greather than 100ms.");
+            return -1;
+        }
+    }
+    
+    /**
      * This method is used to get the IP 'white list' file name for KeyServer 
      *     access control.
      * @return String with the 'white list' file name. If the field is not present,
@@ -348,5 +370,27 @@ public class ConfigController implements CheckObject{
      */
     public String getWhiteList(){
         return this.keyserverConfig.getWhiteList();
+    }
+    
+    /**
+     * This method is used to set the interval value in milliseconds for check
+     * if there are a new KeyServer version available on GitHub.
+     * This interval is used to verify if the KeyServer HTTPS server certificate
+     * has been expired.
+     * @return Integer with the time in milliseconds.
+     * @since v0.3.3
+     */
+    public int getChkUpdateInterval(){
+        if(this.keyserverConfig.getChkUpdateInterval().isEmpty()){
+            return -1;
+        }
+        int time = Integer.valueOf(this.keyserverConfig.getChkUpdateInterval());
+        if(time >= 60000){
+            return time;
+        } else {
+            // Warning level.
+            LOGGER.warn("DB connection check interval value is not valid.");
+            return -1;
+        }
     }
 }

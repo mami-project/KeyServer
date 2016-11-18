@@ -289,6 +289,29 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
+     * This method is used to get the DB time interval when the PING will be 
+     * send. The Redis DB connection status is monitored periodically in a 
+     * parallel thread.
+     * @return String with the value. If the field is not present, returns 'null'.
+     * @since v0.3.0
+     */
+    public String getChkDbInterval(){
+        return this.getParameter("dbCheckInterval");
+    }
+    
+    /**
+     * This method is used to set the interval value in milliseconds for check
+     * if there are a new KeyServer version available on GitHub.
+     * This interval is used to verify if the KeyServer HTTPS server certificate
+     * has been expired.
+     * @return String with the value. If the field is not present, returns 'null'.
+     * @since v0.3.3
+     */
+    public String getChkUpdateInterval(){
+        return this.getParameter("ksCheckUpdates");
+    }
+    
+    /**
      * Method used to create a new configuration file on specific route with 
      *     default parameters.
      * @param fileLocation Route and name to the new configuration file. By 
