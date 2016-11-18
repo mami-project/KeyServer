@@ -267,6 +267,17 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
+     * This method is used to get Redis Database index. This index specified the
+     * database where KeyServer will be use.
+     * @return String with the Redis Database index. If the field is not
+     *     present, returns 'null'.
+     * @since v0.3.3
+     */
+    public String getDbIndex(){
+        return this.getParameter("dbIndex");
+    }
+    
+    /**
      * This method is used to get the IP whitelist file name for KeyServer 
      *     access control.
      * @return String with the whitelist file name. If the field is not present,
@@ -275,6 +286,29 @@ public class ConfigFile implements CheckObject{
      */
     public String getWhiteList(){
         return this.getParameter("whiteList");
+    }
+    
+    /**
+     * This method is used to get the DB time interval when the PING will be 
+     * send. The Redis DB connection status is monitored periodically in a 
+     * parallel thread.
+     * @return String with the value. If the field is not present, returns 'null'.
+     * @since v0.3.0
+     */
+    public String getChkDbInterval(){
+        return this.getParameter("dbCheckInterval");
+    }
+    
+    /**
+     * This method is used to set the interval value in milliseconds for check
+     * if there are a new KeyServer version available on GitHub.
+     * This interval is used to verify if the KeyServer HTTPS server certificate
+     * has been expired.
+     * @return String with the value. If the field is not present, returns 'null'.
+     * @since v0.3.3
+     */
+    public String getChkUpdateInterval(){
+        return this.getParameter("ksCheckUpdates");
     }
     
     /**

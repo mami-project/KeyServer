@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpsServerController implements CheckObject{
     /**
-     * Logging object.
+     * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsServerController.class);
     /**

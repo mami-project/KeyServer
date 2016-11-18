@@ -42,6 +42,7 @@ public class KeyServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Thread.currentThread().setName("THMain");
         // Process input arguments
         String configFile = inputArgs(args);
         if(configFile.isEmpty()){
@@ -71,7 +72,8 @@ public class KeyServer {
         LOGGER.info("Connecting to database.");
         DataBase keyServerDB = new DataBase(softwareConfig.getDbAddress(), 
                 softwareConfig.getDbPort(), 
-                softwareConfig.getDbPassword());
+                softwareConfig.getDbPassword(),
+                softwareConfig.getDbIndex());
         checkObj(keyServerDB, "Database connection established.",
                 "Can't connect to the database. Please check 'general.properties' file values.");
         
@@ -99,7 +101,10 @@ public class KeyServer {
                 keyServerHttp.isCorrectlyInitialized(), 
                 ksCert, 
                 softwareConfig.getProjectPublicUrl(),
-                softwareConfig.getVersion());
+                softwareConfig.getVersion(),
+                softwareConfig.getChkDbInterval(),
+                softwareConfig.getChkUpdateInterval()
+        );
         
         // Wait until the user write q/Q to close the application.
         Scanner sc = new Scanner(System.in);
@@ -221,6 +226,8 @@ public class KeyServer {
      */
     private static String[] getRequiredFields() {
         String [] fields = {
+            // General Settings
+            "ksCheckUpdates",
             // HTTPs server configuration labels.
             "serverAddress",
             "serverPort",
@@ -236,6 +243,7 @@ public class KeyServer {
             "dbAddress",
             "dbPort",
             "dbPassword",
+            "dbCheckInterval",
             // Access control
             "whiteList"
         };

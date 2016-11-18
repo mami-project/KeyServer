@@ -46,9 +46,13 @@ import org.slf4j.LoggerFactory;
  */
 public class IncomingRequestProcess implements HttpHandler{
     /**
-     * Logging object.
+     * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(IncomingRequestProcess.class);
+    /**
+     * Security logger object
+     */
+    private static final org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
     /**
      * Database Object
      */
@@ -80,6 +84,7 @@ public class IncomingRequestProcess implements HttpHandler{
      */
     @Override
     public void handle(HttpExchange he) {
+        Thread.currentThread().setName("THHTTPS_" + he.getRemoteAddress());
         // JSON incoming data Object.
         InputJSON jsonData;
         // Response String object for send to the client.
@@ -99,11 +104,14 @@ public class IncomingRequestProcess implements HttpHandler{
             LOGGER.trace("Response String: {}", responseString);
             // Send response to the client
             sendKeyServerResponse(he, responseString);
+            // Security log entry
+            SECURITY.info("Remote IP address: {} | Authorized: {} | Certificate Fingerprint: {}", he.getRemoteAddress(), ipAuthorized, jsonData.getSpki());
         } else {
             // If not POST request (Nothing to do).
             LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
+            SECURITY.warn("Not valid HTTPS request: {} | Remote address: {} | Body content: {}", requestMethod, he.getRemoteAddress());
+            he.close();
         }
-        he.close();
     }
     
     /**
@@ -132,7 +140,7 @@ public class IncomingRequestProcess implements HttpHandler{
             responseBody.write(responseString.getBytes());
         } catch (IOException ex) {
                 LOGGER.error("Can't send the response to the client...");
-        }
+        } 
     }
     
     /**

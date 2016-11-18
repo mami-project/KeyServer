@@ -3,3 +3,7 @@ jdk:
   - oraclejdk8
 script:
   - mvn verify -X -f ./pom.xml
+  - mvn package
+  - mvn site
+  - mvn versions:display-dependency-updates
+  - mvn versions:display-plugin-updates

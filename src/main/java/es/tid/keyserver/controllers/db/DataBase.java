@@ -29,6 +29,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 /**
  * Database class manipulation.
@@ -46,6 +47,11 @@ public class DataBase implements CheckObject{
      * Redis Database Connection Object
      */
     private Jedis dataBaseObj;
+    
+    /**
+     * REDIS Database Ping connection monitor object
+     */
+    private Jedis monitorDbObj;
     
     /**
      * Redis Database address.
@@ -82,9 +88,10 @@ public class DataBase implements CheckObject{
      * @param serverIp Redis server IP.
      * @param port Redis listener port.
      * @param password Redis password.
+     * @param dbIndex Redis DB index.
      * @since v0.3.1
      */
-    public DataBase(InetAddress serverIp, int port, String password){
+    public DataBase(InetAddress serverIp, int port, String password, int dbIndex){
         // Store database connection parameters inside class attributes.
         this.serverIp = serverIp;
         this.port = port;
@@ -101,6 +108,7 @@ public class DataBase implements CheckObject{
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace(errors.toString());
         }
+        dataBaseObj.select(dbIndex);
     }
     
     /**
@@ -120,7 +128,7 @@ public class DataBase implements CheckObject{
      * @return Bytes array associates with the input hash value. Null if hash value is not found.
      * @since v0.1.0
      */
-    public byte[] getPrivateForHash(String certHash){
+    public synchronized byte[] getPrivateForHash(String certHash){
         if(this.isConnected){
             String response = dataBaseObj.get(certHash);
             LOGGER.debug("REDIS query: {} | REDIS response: {}", certHash, response);
@@ -139,7 +147,7 @@ public class DataBase implements CheckObject{
      */
     public boolean isConnected(){
         try{
-            dataBaseObj.ping();
+            monitorDbObj.ping();
             return true;
         } catch (JedisConnectionException e){ 
             if(!this.connecting){
@@ -148,11 +156,14 @@ public class DataBase implements CheckObject{
                     isConnected = connectDb();
                 } catch (JedisConnectionException ex){
                     isConnected = false;
-                }
+                } 
                 connecting = false; // Set the connecting flag to False (connected).
-            }
-            return false;
+            } 
+        } catch (JedisDataException e){
+            LOGGER.info("Redis is busy loading the dataset in memory.");
+            connecting = false;
         }
+        return false;
     }
     
     /**
@@ -246,7 +257,7 @@ public class DataBase implements CheckObject{
     public boolean isCorrectlyInitialized(){
         return isConnected;
     }
-
+    
     /**
      * This method is used to connect this class with the Redis database. 
      *     This information is used only for log purposes. 
@@ -263,6 +274,7 @@ public class DataBase implements CheckObject{
                 password);
         // Redis connected.
         dataBaseObj = pool.getResource();
+        monitorDbObj = pool.getResource();
         return true;
     }
 }

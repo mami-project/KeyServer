@@ -98,9 +98,11 @@ public class KsMonitor {
      * @param sCert HTTPs certificate controller object.
      * @param publicUrl KeyServer public repository URL.
      * @param curVer Current KeyServer version.
+     * @param dbTime Time for Redis DB ping.
+     * @param updTime Time for Update check and HTTPS certificate expiration date.
      * @since v0.3.0
      */
-    public KsMonitor(DataBase db, boolean httpsServerInit, HttpsCert sCert, String publicUrl, String curVer){
+    public KsMonitor(DataBase db, boolean httpsServerInit, HttpsCert sCert, String publicUrl, String curVer, int dbTime, int updTime){
         // Get de current date when the KeyServer has started.
         startDate = new Date();
         // Set external object to class fields
@@ -112,13 +114,14 @@ public class KsMonitor {
         // KeyServer updates object controller
         updates =  new LastVersionAvailable(this.repoUrl + "/releases/latest");
         // Timer 1: Checks the object status every second.
-        t1 = new Timer(1000, new ActionListener() {
+        t1 = new Timer(dbTime, new ActionListener() {
             /**
              * Check every second the following objects.
              * @param ae Action event object (not used)
              */
             @Override
             public void actionPerformed(ActionEvent ae) {
+                Thread.currentThread().setName("THDBMon");
                 // Redis Data Base status.
                 dbStatus = dataBaseObj.isConnected();
                 if(!dbStatus && !dBnotified){
@@ -132,13 +135,14 @@ public class KsMonitor {
             }
         });
         // Timer 2: Checks KeyServer updates and certificate status every 12hours.
-        t2 = new Timer(43200000, new ActionListener() {
+        t2 = new Timer(updTime, new ActionListener() {
             /**
              * Check every 12 hours the following objects.
              * @param ae Action event object (not used)
              */
             @Override
             public void actionPerformed(ActionEvent ae) {
+                Thread.currentThread().setName("UpdatesCertExpDate");
                 // Check the HTTPs certificate expiration date.
                 if(!certStatus.isValid()){
                     // If the keyserver is not updated.
