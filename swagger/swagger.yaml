@@ -1,0 +1,87 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: KeyServer SKI.
+  description: |
+    #### KeyServer TLS Session Key Interface (SKI)
+    KeyServer HTTPS communication REST API description: https://tools.ietf.org/html/draft-cairns-tls-session-key-interface-01
+schemes:
+  - https
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: SKI JSON request.
+          required: true
+          schema:
+            $ref: "#/definitions/skirequest"
+      responses:
+        200:
+          description: Request OK.
+          schema:
+            $ref: "#/definitions/skiresponse"  
+        400:
+          description: Malformed request. You have send an invalid SKI json.
+          schema:
+            $ref: "#/definitions/skierror"
+        401:
+          description: Unauthorized. You haven't rights for access to this server.
+          schema:
+            $ref: "#/definitions/skierror"
+        404:
+          description: Certificate Fingerprint (SPKI) not found.
+          schema:
+            $ref: "#/definitions/skierror"
+        500:
+          description: Unspecified error.
+          schema:
+            $ref: "#/definitions/skierror"
+            
+definitions:
+  skirequest:
+    type: object
+    required:
+      - protocol
+      - method
+      - spki
+      - input
+    properties:
+      protocol:
+        type: string
+        description: TLS/SSL protocol. Example "TLS 1.2"
+      method:
+        type: string
+        description: Values "ECDHE" or "RSA".
+      hash:
+        type: string
+        description: ECDHE hash type. Example "SHA-256".
+      spki:
+        type: string
+        description: Certificate fingerprint.
+      input:
+        type: string
+        description: Data to decode or sign.
+  skiresponse:
+    type: object
+    properties:
+      output:
+        type: string
+        description: Signed data or decoded RSA premaster secret.
+  skierror:
+    type: object
+    properties:
+      error:
+        type: string
+        description: Error description..
