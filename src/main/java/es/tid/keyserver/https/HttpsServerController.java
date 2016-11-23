@@ -15,6 +15,7 @@
  */
 package es.tid.keyserver.https;
 
+import org.eclipse.jetty.server.Server;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsParameters;
 import com.sun.net.httpserver.HttpsServer;
@@ -38,8 +39,11 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.TrustManagerFactory;
 import es.tid.keyserver.core.lib.CheckObject;
+import es.tid.keyserver.https.jetty.KsJetty;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -56,6 +60,8 @@ public class HttpsServerController implements CheckObject{
      * Server Object.
      */
     private HttpsServer server;
+    private KsJetty jettyserver;
+    private Thread thjettyserver;
     /**
      * Flag for check if the object is correctly initialized.
      */
@@ -72,6 +78,9 @@ public class HttpsServerController implements CheckObject{
      */
     public HttpsServerController(ConfigController parameters, DataBase objDB, KeyStore ks, String ksPass){
         try {
+            jettyserver = new KsJetty();
+            thjettyserver = new Thread(jettyserver);
+            thjettyserver.start();
             // Getting the Server parameters from configuration Object.
             int port = parameters.getServerPort();
             int backlog = parameters.getServerBacklog();
@@ -199,6 +208,8 @@ public class HttpsServerController implements CheckObject{
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace("Exception message: {}", errors.toString());
+        } catch (Exception ex) {
+            Logger.getLogger(HttpsServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -211,6 +222,12 @@ public class HttpsServerController implements CheckObject{
      */
     public void stop(){
         server.stop(5);
+        jettyserver.stop();
+    }
+    
+    public String getStatus(){
+        return jettyserver.getStatus();
+        
     }
 
     /**

@@ -98,7 +98,7 @@ public class KeyServer {
         // KeyServer Monitor object.
         KsMonitor mon = new KsMonitor(
                 keyServerDB, 
-                keyServerHttp.isCorrectlyInitialized(), 
+                keyServerHttp, 
                 ksCert, 
                 softwareConfig.getProjectPublicUrl(),
                 softwareConfig.getVersion(),

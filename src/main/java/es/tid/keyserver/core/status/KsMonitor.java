@@ -17,6 +17,7 @@ package es.tid.keyserver.core.status;
 
 import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.lib.LastVersionAvailable;
+import es.tid.keyserver.https.HttpsServerController;
 import es.tid.keyserver.https.certificate.HttpsCert;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -84,7 +85,7 @@ public class KsMonitor {
     /**
      * HTTPS server initialization status flag.
      */
-    private boolean httpsServerInit;
+    private HttpsServerController httpsServer;
     
     /**
      * This is the controller object for the HTTPs certificate.
@@ -94,7 +95,7 @@ public class KsMonitor {
     /**
      * Class constructor.
      * @param db Data base controller object.
-     * @param httpsServerInit HTTPs server initialization status flag.
+     * @param httpsServer HTTPs server object.
      * @param sCert HTTPs certificate controller object.
      * @param publicUrl KeyServer public repository URL.
      * @param curVer Current KeyServer version.
@@ -102,14 +103,14 @@ public class KsMonitor {
      * @param updTime Time for Update check and HTTPS certificate expiration date.
      * @since v0.3.0
      */
-    public KsMonitor(DataBase db, boolean httpsServerInit, HttpsCert sCert, String publicUrl, String curVer, int dbTime, int updTime){
+    public KsMonitor(DataBase db, HttpsServerController httpsServer, HttpsCert sCert, String publicUrl, String curVer, int dbTime, int updTime){
         // Get de current date when the KeyServer has started.
         startDate = new Date();
         // Set external object to class fields
         dataBaseObj = db;
         this.curVer = curVer;
         this.repoUrl = publicUrl;
-        this.httpsServerInit = httpsServerInit;
+        this.httpsServer = httpsServer;
         this.certStatus = sCert;
         // KeyServer updates object controller
         updates =  new LastVersionAvailable(this.repoUrl + "/releases/latest");
@@ -191,11 +192,11 @@ public class KsMonitor {
     /**
      * This method is used to verify if the HTTPs object has been initialized
      *     correctly.
-     * @return True if is correctly initialized, false if not.
+     * @return String with the HTTPS server status.
      * @since v0.3.0
      */
-    public boolean isHttpsServerCorrectlyInitialized(){
-        return this.httpsServerInit;
+    public String httpsServerStatus(){
+        return this.httpsServer.getStatus();
     }
     
     /**
