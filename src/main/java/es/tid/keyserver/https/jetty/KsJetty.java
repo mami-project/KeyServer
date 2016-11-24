@@ -15,9 +15,12 @@
  */
 package es.tid.keyserver.https.jetty;
 
+import es.tid.keyserver.config.ConfigController;
+import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.https.KeyServerTestHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -26,7 +29,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.slf4j.LoggerFactory;
 
 /**
  * Jetty Server Class.
@@ -35,61 +37,98 @@ import org.slf4j.LoggerFactory;
  */
 public class KsJetty implements Runnable{
     /**
-     * Logger object.
-     */
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsJetty.class);
-    /**
      * Jetty Server Object.
      */
     private Server server;
-
-    @Override
-    public void run() {
-        System.out.println("Lanzando Jetty");
-
+    /**
+     * Jetty initialization flag
+     */
+    private boolean ready = false;
+    
+    /**
+     * Class constructor.
+     * @param parameters Jetty HTTPS service configuration object.
+     * @param objDB Redis database object.
+     * @since v0.4.0
+     */
+    public KsJetty(ConfigController parameters, DataBase objDB){
         server = new Server();
-        // Access using HTTP (Only for Debug).
-        ServerConnector connector = new ServerConnector(server);
-        connector.setPort(9999);
-        
-        HttpConfiguration https = new HttpConfiguration();
-        https.addCustomizer(new SecureRequestCustomizer());
-        
+        HttpConfiguration https = getHttpStaticConfig();
         SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setKeyStorePath("keystore.jks");
-        sslContextFactory.setKeyStorePassword("123456");
-        sslContextFactory.setKeyManagerPassword("123456");
+        sslContextFactory.setKeyStorePath(parameters.getServerKeyStoreFile());
+        sslContextFactory.setKeyStorePassword(parameters.getServerKeyStorePassword());
+        sslContextFactory.setKeyManagerPassword(parameters.getServerKeyManagerPassword());
 
         ServerConnector sslConnector = new ServerConnector(server,
-                new SslConnectionFactory(sslContextFactory, "http/1.1"),
-                new HttpConnectionFactory(https)
-        );
-        sslConnector.setPort(9998);
-        server.setConnectors(new Connector[] {connector, sslConnector});
+                new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.toString()),
+                new HttpConnectionFactory(https));
+        sslConnector.setPort(parameters.getServerPort());
+        sslConnector.setHost(parameters.getServerAddress().getHostAddress());
+        sslConnector.setIdleTimeout(30000);
+        
+        server.setConnectors(new Connector[] {sslConnector});
         server.setHandler(new KeyServerTestHandler());
-        System.out.println(server.getState());
+    }
+    
+    @Override
+    public synchronized void run() {
         try {
             server.start();
-            System.out.println(server.getState());
-            server.dumpStdErr();
+            //server.dumpStdErr();
+            this.ready = true;
             server.join();
         } catch (Exception ex) {
-            System.out.println("Error al lanzar Jetty");
             // @TODO: Implements logger side.
             Logger.getLogger(KsJetty.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    /**
+     * This method returns the Jetty server object status.
+     * @return String with one of the following values: FAILED, RUNNING, 
+     * STARTED, STARTING, STOPPED, STOPPING.
+     * @since v0.4.0
+     */
     public String getStatus(){
         return server.getState();
     }
     
+    /**
+     * This method stops the Jetty server.
+     * @since v0.4.0
+     */
     public void stop(){
         try {
             server.stop();
+            this.ready = false;
         } catch (Exception ex) {
             // @TODO: Implements logger side.
             Logger.getLogger(KsJetty.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * This method is used as semaphore during Jetty configuration and launch.
+     * @return  True if the Jetty object has been initialized, false if not.
+     * @since v0.4.0
+     */
+    public boolean isReady(){
+        return this.ready;
+    }
+
+    /**
+     * This class returns a HTTP configuration object with specific fields.
+     * @return HttpConfiguration file with the KeyServer parameters.
+     * @since v0.4.0
+     */
+    private HttpConfiguration getHttpStaticConfig(){
+        HttpConfiguration https = new HttpConfiguration();
+        // Set the configuration parammeters.    
+        https.setPersistentConnectionsEnabled(true);
+        https.setIdleTimeout(0);
+        https.addCustomizer(new SecureRequestCustomizer());
+        https.setSendServerVersion(false);
+        https.setSendDateHeader(false);
+        return https;
     }
 }

@@ -66,7 +66,7 @@ public class StatusController {
                 + "  --------\n"
                 + "  - Redis Status:\n"
                 + "  \tConnection active: " + mon.isRedisConnectionAvailable() + "\n"
-                + "  - HTTPs Server Status: " + mon.httpsServerStatus() + "\n"
+                + "  - Jetty HTTPS Server Status: " + mon.httpsServerStatus() + "\n"
                 + "  \tCertificate expiration date: " + mon.getHttpsCertificateExpDate() + "\n"
                 + "  \tCertificate remaining days: " + mon.getHttpsCertificateRemainDays() + "\n"
                 + "\n");

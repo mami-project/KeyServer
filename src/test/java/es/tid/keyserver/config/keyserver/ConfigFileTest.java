@@ -41,19 +41,17 @@ public class ConfigFileTest {
         String testFileRoute = "target/test-classes/configtest.properties";
         
         String [] requiredFields = {
+            "ksCheckUpdates",
             "serverAddress",
             "serverPort",
-            "serverSSLContext",
-            "serverKeyFile",
-            "serverKeyPass",
-            "serverBacklog",
-            "serverKeyManagerFactory",
-            "serverTrustManagerFactory",
-            "serverKeyStore",
-            "serverCiphersSuites",
+            "serverKeyStoreFile",
+            "serverKeyStorePassword",
+            "serverKeyManagerPassword",
             "dbAddress",
             "dbPort",
             "dbPassword",
+            "dbIndex",
+            "dbCheckInterval",
             "whiteList"
         };
         testObj = new ConfigFile(testFileRoute, requiredFields);
@@ -67,19 +65,17 @@ public class ConfigFileTest {
         String testFileRoute = "target/test-classes/configtest.properties";
         Properties configFile = new Properties();
         // Default parammeters:
+        configFile.setProperty("ksCheckUpdates", "3600000");
         configFile.setProperty("serverAddress", "192.168.1.2");
         configFile.setProperty("serverPort", "1443");
-        configFile.setProperty("serverSSLContext", "TLSv1.2");
-        configFile.setProperty("serverKeyFile", "HTTPS_keystore.ks");
-        configFile.setProperty("serverKeyPass", "123456");
-        configFile.setProperty("serverBacklog", "5");
-        configFile.setProperty("serverKeyManagerFactory", "SunX509");
-        configFile.setProperty("serverTrustManagerFactory", "SunX509");
-        configFile.setProperty("serverKeyStore", "JKS");
-        configFile.setProperty("serverCiphersSuites", "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA");
+        configFile.setProperty("serverKeyStoreFile", "HTTPS_keystore.ks");
+        configFile.setProperty("serverKeyStorePassword", "123456");
+        configFile.setProperty("serverKeyManagerPassword", "123456");
         configFile.setProperty("dbAddress", "192.168.11.180");
         configFile.setProperty("dbPort", "6379");
         configFile.setProperty("dbPassword", "foobared");
+        configFile.setProperty("dbIndex", "3");
+        configFile.setProperty("dbCheckInterval", "1000");
         configFile.setProperty("whiteList", "IP_whitelist.txt");
         try{
             FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
@@ -144,6 +140,7 @@ public class ConfigFileTest {
      * Test of getServerSSLContext method, of class ConfigFile.
      */
     @Test
+    @Ignore("Deprecated method")
     public void testGetServerSSLContext() {
         System.out.println("getServerSSLContext");
         String expResult = "TLSv1.2";
@@ -152,24 +149,24 @@ public class ConfigFileTest {
     }
 
     /**
-     * Test of getServerKeyFile method, of class ConfigFile.
+     * Test of getServerKeyStoreFile method, of class ConfigFile.
      */
     @Test
     public void testGetServerKeyFile() {
         System.out.println("getServerKeyFile");
         String expResult = "HTTPS_keystore.ks";
-        String result = testObj.getServerKeyFile();
+        String result = testObj.getServerKeyStoreFile();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of getServerKeyPass method, of class ConfigFile.
+     * Test of getKeyStorePassword method, of class ConfigFile.
      */
     @Test
     public void testGetServerKeyPass() {
         System.out.println("getServerKeyPass");
         String expResult = "123456";
-        String result = testObj.getServerKeyPass();
+        String result = testObj.getKeyStorePassword();
         assertEquals(expResult, result);
     }
 
@@ -177,6 +174,7 @@ public class ConfigFileTest {
      * Test of getServerBacklog method, of class ConfigFile.
      */
     @Test
+    @Ignore("Deprecated method.")
     public void testGetServerBacklog() {
         System.out.println("getServerBacklog");
         String expResult = "5";
@@ -188,6 +186,7 @@ public class ConfigFileTest {
      * Test of getServerKeyManagerFactory method, of class ConfigFile.
      */
     @Test
+    @Ignore("Deprecated method.")
     public void testGetServerKeyManagerFactory() {
         System.out.println("getServerKeyManagerFactory");
         String expResult = "SunX509";
@@ -199,6 +198,7 @@ public class ConfigFileTest {
      * Test of getServerTrustManagerFactory method, of class ConfigFile.
      */
     @Test
+    @Ignore("Deprecated method.")
     public void testGetServerTrustManagerFactory() {
         System.out.println("getServerTrustManagerFactory");
         String expResult = "SunX509";
@@ -210,6 +210,7 @@ public class ConfigFileTest {
      * Test of getServerKeyStore method, of class ConfigFile.
      */
     @Test
+    @Ignore("Deprecated method")
     public void testGetServerKeyStore() {
         System.out.println("getServerKeyStore");
         String expResult = "JKS";
@@ -221,6 +222,7 @@ public class ConfigFileTest {
      * Test of getServerCiphersSuites method, of class ConfigFile.
      */
     @Test
+    @Ignore("Deprecated method.")
     public void testGetServerCiphersSuites() {
         System.out.println("getServerCiphersSuites");
         String expResult = "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, "
@@ -272,6 +274,72 @@ public class ConfigFileTest {
         System.out.println("getDbPassword");
         String expResult = "foobared";
         String result = testObj.getDbPassword();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getServerKeyStoreFile method, of class ConfigFile.
+     */
+    @Test
+    public void testGetServerKeyStoreFile() {
+        System.out.println("getServerKeyStoreFile");
+        String expResult = "HTTPS_keystore.ks";
+        String result = testObj.getServerKeyStoreFile();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getKeyStorePassword method, of class ConfigFile.
+     */
+    @Test
+    public void testGetKeyStorePassword() {
+        System.out.println("getKeyStorePassword");
+        String expResult = "123456";
+        String result = testObj.getKeyStorePassword();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getKeyManagerPassword method, of class ConfigFile.
+     */
+    @Test
+    public void testGetKeyManagerPassword() {
+        System.out.println("getKeyManagerPassword");
+        String expResult = "123456";
+        String result = testObj.getKeyManagerPassword();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getDbIndex method, of class ConfigFile.
+     */
+    @Test
+    public void testGetDbIndex() {
+        System.out.println("getDbIndex");
+        String expResult = "3";
+        String result = testObj.getDbIndex();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getChkDbInterval method, of class ConfigFile.
+     */
+    @Test
+    public void testGetChkDbInterval() {
+        System.out.println("getChkDbInterval");
+        String expResult = "1000";
+        String result = testObj.getChkDbInterval();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getChkUpdateInterval method, of class ConfigFile.
+     */
+    @Test
+    public void testGetChkUpdateInterval() {
+        System.out.println("getChkUpdateInterval");
+        String expResult = "3600000";
+        String result = testObj.getChkUpdateInterval();
         assertEquals(expResult, result);
     }
 }

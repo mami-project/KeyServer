@@ -154,6 +154,7 @@ public class ConfigController implements CheckObject{
      *      <li>TLSv1.2</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerSSLContext(){
         return this.keyserverConfig.getServerSSLContext();
@@ -165,18 +166,30 @@ public class ConfigController implements CheckObject{
      *     the field is not present, returns 'null'.
      * @since v0.3.0
      */
-    public String getServerKeyFile(){
-        return this.keyserverConfig.getServerKeyFile();
+    public String getServerKeyStoreFile(){
+        return this.keyserverConfig.getServerKeyStoreFile();
     }
     
     /**
-     * This method is used to get password of the KeyServer HTTPS certificate.
+     * This method is used to get password of the KeyServer HTTPS certificate 
+     * key store.
      * @return String with the KeyServer HTTPS certificate password. If the 
      *     field is not present, returns 'null'.
      * @since v0.3.0
      */
-    public String getServerKeyPass(){
-        return this.keyserverConfig.getServerKeyPass();
+    public String getServerKeyStorePassword(){
+        return this.keyserverConfig.getKeyStorePassword();
+    }
+    
+    /**
+     * This method is used to get password of the KeyServer HTTPS certificate 
+     * manager.
+     * @return String with the KeyServer HTTPS certificate password. If the 
+     *     field is not present, returns 'null'.
+     * @since v0.4.0
+     */
+    public String getServerKeyManagerPassword(){
+        return this.keyserverConfig.getKeyManagerPassword();
     }
     
     /**
@@ -185,6 +198,7 @@ public class ConfigController implements CheckObject{
      * @return Integer with the KeyServer Backlog value. If the field is not 
      *     present, it returns -1 value.
      * @since v0.3.0
+     * @deprecated 
      */
     public int getServerBacklog(){
         String backlog = this.keyserverConfig.getServerBacklog();
@@ -209,6 +223,7 @@ public class ConfigController implements CheckObject{
      *      <li>SunX509</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerKeyManagerFactory(){
         return this.keyserverConfig.getServerKeyManagerFactory();
@@ -226,6 +241,7 @@ public class ConfigController implements CheckObject{
      *      <li>SunX509</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerTrustManagerFactory(){
         return this.keyserverConfig.getServerTrustManagerFactory();
@@ -243,6 +259,7 @@ public class ConfigController implements CheckObject{
      *      <li>pkcs12</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerKeyStore(){
         return this.keyserverConfig.getServerKeyStore();
@@ -262,6 +279,7 @@ public class ConfigController implements CheckObject{
      *      <li>...</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerCiphersSuites(){
         return this.keyserverConfig.getServerCiphersSuites();

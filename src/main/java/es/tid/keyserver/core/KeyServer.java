@@ -80,8 +80,8 @@ public class KeyServer {
         // HTTPs Server Certificate.
         LOGGER.info("Loading HTTPs server certificate.");
         HttpsCert ksCert = new HttpsCert(
-                softwareConfig.getServerKeyFile(), 
-                softwareConfig.getServerKeyPass());
+                softwareConfig.getServerKeyStoreFile(), 
+                softwareConfig.getServerKeyStorePassword());
         checkObj(ksCert,"HTTPs server certificate correctly loaded.", 
                 "Can't load the HTTPs server certificate..");
         
@@ -89,9 +89,8 @@ public class KeyServer {
         LOGGER.info("Starting HTTP server... ");
         HttpsServerController keyServerHttp = new HttpsServerController(
                 softwareConfig, 
-                keyServerDB, 
-                ksCert.getCertificate(), 
-                softwareConfig.getServerKeyPass());
+                keyServerDB);
+        keyServerHttp.start();
         checkObj(keyServerHttp,"KeyServer now is ready...", 
                 "Can't create HTTP server.");
         
@@ -232,13 +231,14 @@ public class KeyServer {
             "serverAddress",
             "serverPort",
             // SSL Parameters 
-            "serverSSLContext",
-            "serverKeyFile",
-            "serverKeyPass",
-            "serverBacklog",
-            "serverKeyManagerFactory",
-            "serverTrustManagerFactory",
-            "serverKeyStore",
+            // "serverSSLContext", // deprecated
+            "serverKeyStoreFile",
+            "serverKeyStorePassword",
+            "serverKeyManagerPassword",
+            // "serverBacklog", // deprecated
+            // "serverKeyManagerFactory", // deprecated
+            // "serverTrustManagerFactory",
+            // "serverKeyStore", // deprecated
             // Redis Database
             "dbAddress",
             "dbPort",

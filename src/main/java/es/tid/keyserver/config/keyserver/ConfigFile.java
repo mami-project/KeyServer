@@ -130,6 +130,7 @@ public class ConfigFile implements CheckObject{
      *      <li>TLSv1.2</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerSSLContext(){
         return this.getParameter("serverSSLContext");
@@ -141,18 +142,30 @@ public class ConfigFile implements CheckObject{
      *     the field is not present, returns 'null'.
      * @since v0.3.0
      */
-    public String getServerKeyFile(){
-        return this.getParameter("serverKeyFile");
+    public String getServerKeyStoreFile(){
+        return this.getParameter("serverKeyStoreFile");
     }
     
     /**
-     * This method is used to get password of the KeyServer HTTPS certificate.
+     * This method is used to get password of the KeyServer HTTPS certificate 
+     * key store.
      * @return String with the KeyServer HTTPS certificate password. If the 
      *     field is not present, returns 'null'.
      * @since v0.3.0
      */
-    public String getServerKeyPass(){
-        return this.getParameter("serverKeyPass");
+    public String getKeyStorePassword(){
+        return this.getParameter("serverKeyStorePassword");
+    }
+    
+    /**
+     * This method is used to get password of the KeyServer HTTPS certificate 
+     * key manager.
+     * @return String with the KeyServer HTTPS certificate password. If the 
+     *     field is not present, returns 'null'.
+     * @since v0.4.0
+     */
+    public String getKeyManagerPassword(){
+        return this.getParameter("serverKeyManagerPassword");
     }
     
     /**
@@ -161,6 +174,7 @@ public class ConfigFile implements CheckObject{
      * @return String with the KeyServer Backlog value. If the field is not 
      *     present, it returns 'null'.
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerBacklog(){
         return this.getParameter("serverBacklog");
@@ -178,6 +192,7 @@ public class ConfigFile implements CheckObject{
      *      <li>SunX509</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerKeyManagerFactory(){
         return this.getParameter("serverKeyManagerFactory");
@@ -195,6 +210,7 @@ public class ConfigFile implements CheckObject{
      *      <li>SunX509</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerTrustManagerFactory(){
         return this.getParameter("serverTrustManagerFactory");
@@ -212,6 +228,7 @@ public class ConfigFile implements CheckObject{
      *      <li>pkcs12</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerKeyStore(){
         return this.getParameter("serverKeyStore");
@@ -230,6 +247,7 @@ public class ConfigFile implements CheckObject{
      *      <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
      *     </ul> 
      * @since v0.3.0
+     * @deprecated 
      */
     public String getServerCiphersSuites(){
         return this.getParameter("serverCiphersSuites");
@@ -326,13 +344,14 @@ public class ConfigFile implements CheckObject{
             // Default parameters:
             defaultParameters.setProperty("serverAddress", "0.0.0.0");
             defaultParameters.setProperty("serverPort", "443");
-            defaultParameters.setProperty("serverSSLContext", "TLSv1.2");
-            defaultParameters.setProperty("serverKeyFile","HTTPS_keystore.ks");
-            defaultParameters.setProperty("serverKeyPass","123456");
-            defaultParameters.setProperty("serverBacklog", "0");
-            defaultParameters.setProperty("serverKeyManagerFactory", "SunX509");
-            defaultParameters.setProperty("serverTrustManagerFactory", "SunX509");
-            defaultParameters.setProperty("serverKeyStore", "JKS");
+            //defaultParameters.setProperty("serverSSLContext", "TLSv1.2");
+            defaultParameters.setProperty("serverKeyStoreFile","ksserverkey.jks");
+            defaultParameters.setProperty("serverKeyStorePassword","123456");
+            defaultParameters.setProperty("serverKeyManagerPassword","123456");
+            //defaultParameters.setProperty("serverBacklog", "0");
+            //defaultParameters.setProperty("serverKeyManagerFactory", "SunX509");
+            //defaultParameters.setProperty("serverTrustManagerFactory", "SunX509");
+            //defaultParameters.setProperty("serverKeyStore", "JKS");
             defaultParameters.setProperty("dbAddress","127.0.0.1");
             defaultParameters.setProperty("dbPort", "6379");
             defaultParameters.setProperty("dbPassword", "foobared"); // Default password for Redis config file.
