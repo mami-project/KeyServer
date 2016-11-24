@@ -21,12 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Properties;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.Ignore;
 
 /**
@@ -107,14 +105,6 @@ public class ConfigControllerTest {
         File file = new File(testFileRoute);
         file.delete();
         System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     /**

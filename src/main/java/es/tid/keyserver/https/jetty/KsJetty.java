@@ -86,7 +86,7 @@ public class KsJetty implements Runnable{
     /**
      * This method returns the Jetty server object status.
      * @return String with one of the following values: FAILED, RUNNING, 
-     * STARTED, STARTING, STOPPED, STOPPING.
+     *     STARTED, STARTING, STOPPED, STOPPING.
      * @since v0.4.0
      */
     public String getStatus(){
