@@ -72,7 +72,7 @@ public class ConfigControllerTest {
         configFile.setProperty("ksCheckUpdates", "3600000");
         configFile.setProperty("serverAddress", "192.168.1.2");
         configFile.setProperty("serverPort", "1443");
-        configFile.setProperty("serverKeyStoreFile", "HTTPS_keystore.ks");
+        configFile.setProperty("serverKeyStoreFile", "ksserverkey.jks");
         configFile.setProperty("serverKeyStorePassword", "123456");
         configFile.setProperty("serverKeyManagerPassword", "123456");
         configFile.setProperty("dbAddress", "192.168.11.180");
@@ -180,7 +180,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetServerKeyStoreFile() {
         System.out.println("getServerKeyStoreFile");
-        String expResult = "HTTPS_keystore.ks";
+        String expResult = "ksserverkey.jks";
         String result = this.testObj.getServerKeyStoreFile();
         assertEquals(expResult, result);
     }

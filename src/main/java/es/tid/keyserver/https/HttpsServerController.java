@@ -76,6 +76,11 @@ public class HttpsServerController implements CheckObject{
         jettyserver.stop();
     }
     
+    /**
+     * This method is used to monitor the Jetty server status.
+     * @return String with one of the following values: FAILED, RUNNING, 
+     *     STARTED, STARTING, STOPPED, STOPPING.
+     */
     public String getStatus(){
         return jettyserver.getStatus();
     }

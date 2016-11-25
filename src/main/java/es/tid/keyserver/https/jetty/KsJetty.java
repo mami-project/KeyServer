@@ -17,7 +17,6 @@ package es.tid.keyserver.https.jetty;
 
 import es.tid.keyserver.config.ConfigController;
 import es.tid.keyserver.controllers.db.DataBase;
-import es.tid.keyserver.https.KeyServerTestHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.http.HttpVersion;
@@ -53,23 +52,30 @@ public class KsJetty implements Runnable{
      */
     public KsJetty(ConfigController parameters, DataBase objDB){
         server = new Server();
+        //@todo: blacklist and whitelist handler. Ref:
+        // http://download.eclipse.org/jetty/stable-9/apidocs/org/eclipse/jetty/server/handler/IPAccessHandler.html
         HttpConfiguration https = getHttpStaticConfig();
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(parameters.getServerKeyStoreFile());
         sslContextFactory.setKeyStorePassword(parameters.getServerKeyStorePassword());
         sslContextFactory.setKeyManagerPassword(parameters.getServerKeyManagerPassword());
-
+        // Set the SSL configuration fields.
         ServerConnector sslConnector = new ServerConnector(server,
                 new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.toString()),
                 new HttpConnectionFactory(https));
+        // Server listener address and port.
         sslConnector.setPort(parameters.getServerPort());
         sslConnector.setHost(parameters.getServerAddress().getHostAddress());
         sslConnector.setIdleTimeout(30000);
-        
         server.setConnectors(new Connector[] {sslConnector});
-        server.setHandler(new KeyServerTestHandler());
+        // Jetty incomming requests handler.
+        server.setHandler(new KeyServerJettyHandler(objDB));
     }
     
+    /**
+     * Run method for Thread execution.
+     * @since v0.4.0
+     */
     @Override
     public synchronized void run() {
         try {

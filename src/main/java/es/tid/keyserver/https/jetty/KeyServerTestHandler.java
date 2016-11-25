@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.tid.keyserver.https;
+package es.tid.keyserver.https.jetty;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -26,9 +26,10 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
  * Test Class for generate a Jetty test response with a message..
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.4.0
+ * @deprecated 
  */
-public class KeyServerTestHandler extends AbstractHandler
-{
+public class KeyServerTestHandler extends AbstractHandler{
+    
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         response.setContentType("text/html;charset=utf-8");
