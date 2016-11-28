@@ -212,4 +212,4 @@ IP_whitelist.txt
 general.properties
 !tools/pk-provider.jar
 tools/certs/
-ksserverkey.jks
+/ksserverkey.jks
