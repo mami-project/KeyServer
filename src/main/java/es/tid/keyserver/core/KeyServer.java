@@ -46,8 +46,8 @@ public class KeyServer {
         // Process input arguments
         String configFile = inputArgs(args);
         if(configFile.isEmpty()){
-            LOGGER.debug("User has not provide an input configuration file name. Using default: 'general.properties'.");
-            configFile = "general.properties";     // Default configuration file.
+            LOGGER.debug("User has not provide an input configuration file name. Using default: 'config/config.properties'.");
+            configFile = "config/config.properties";     // Default configuration file.
         }
         // Load/Create configuration file
         LOGGER.info("Loading KeyServer parameters...\n\n");
@@ -235,8 +235,7 @@ public class KeyServer {
             "serverKeyStoreFile",
             "serverKeyStorePassword",
             "serverKeyManagerPassword",
-            // "serverBacklog", // deprecated
-            // "serverKeyManagerFactory", // deprecated
+            "serverIdleTimeout",
             // "serverTrustManagerFactory",
             // "serverKeyStore", // deprecated
             // Redis Database
@@ -244,8 +243,6 @@ public class KeyServer {
             "dbPort",
             "dbPassword",
             "dbCheckInterval",
-            // Access control
-            "whiteList"
         };
         return fields;
     }

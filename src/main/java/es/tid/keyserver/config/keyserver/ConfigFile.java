@@ -114,27 +114,6 @@ public class ConfigFile implements CheckObject{
     public String getServerPort(){
         return this.getParameter("serverPort");
     }
-
-    /**
-     * This method is used to get the KeyServer HTTPS SSL Context. 
-     * @return String with the KeyServer HTTPS SSL Context. If the field is not 
-     *     present, returns 'null'.
-     * 
-     *     <p>This is an example with valid value for this field:
-     *     <ul>
-     *      <li>SSLv2</li>
-     *      <li>SSLv3</li>
-     *      <li>TLS</li>
-     *      <li>TLSv1</li>
-     *      <li>TLSv1.1</li>
-     *      <li>TLSv1.2</li>
-     *     </ul> 
-     * @since v0.3.0
-     * @deprecated 
-     */
-    public String getServerSSLContext(){
-        return this.getParameter("serverSSLContext");
-    }
     
     /**
      * This method is used to get the certificate for KeyServer HTTPS server.
@@ -167,92 +146,6 @@ public class ConfigFile implements CheckObject{
     public String getKeyManagerPassword(){
         return this.getParameter("serverKeyManagerPassword");
     }
-    
-    /**
-     * This method is used to get the Server Backlog value from the 
-     *     configuration file.
-     * @return String with the KeyServer Backlog value. If the field is not 
-     *     present, it returns 'null'.
-     * @since v0.3.0
-     * @deprecated 
-     */
-    public String getServerBacklog(){
-        return this.getParameter("serverBacklog");
-    }
-
-    /**
-     * This method is used to get the KeyServer HTTPS certificate manager 
-     *     factory. 
-     * @return String with the KeyServer HTTPS certificate manager factory. 
-     *     If the field is not present, returns 'null'.
-     * 
-     *     <p>This is an example with valid values for this field:
-     *     <ul>
-     *      <li>PKIX</li>
-     *      <li>SunX509</li>
-     *     </ul> 
-     * @since v0.3.0
-     * @deprecated 
-     */
-    public String getServerKeyManagerFactory(){
-        return this.getParameter("serverKeyManagerFactory");
-    }
-    
-    /**
-     * This method is used to get the KeyServer HTTPS certificate trust manager 
-     *     factory. 
-     * @return String with the KeyServer HTTPS certificate trust manager factory. 
-     *     If the field is not present, returns 'null'.
-     * 
-     *     <p>This is an example with valid value for this field:
-     *     <ul>
-     *      <li>PKIX (X509 or SunPKIX)</li>
-     *      <li>SunX509</li>
-     *     </ul> 
-     * @since v0.3.0
-     * @deprecated 
-     */
-    public String getServerTrustManagerFactory(){
-        return this.getParameter("serverTrustManagerFactory");
-    }
-    
-    /**
-     * This method is used to get the KeyServer HTTPS certificate key store. 
-     * @return String with the KeyServer HTTPS certificate key store. 
-     *     If the field is not present, returns 'null'.
-     * 
-     *     <p>This is an example with valid value for this field:
-     *     <ul>
-     *      <li>jceks</li>
-     *      <li>jks</li>
-     *      <li>pkcs12</li>
-     *     </ul> 
-     * @since v0.3.0
-     * @deprecated 
-     */
-    public String getServerKeyStore(){
-        return this.getParameter("serverKeyStore");
-    }
-    
-    /**
-     * This method is used to get the KeyServer HTTPS cipher suites. 
-     * @return String with the KeyServer HTTPS ciphers suites. If the field is 
-     *     not present, returns 'null'. The ciphers names are separated with commas.
-     * 
-     *     <p>This is an example with valid value for this field:
-     *     <ul>
-     *      <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
-     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</li>
-     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</li>
-     *      <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
-     *     </ul> 
-     * @since v0.3.0
-     * @deprecated 
-     */
-    public String getServerCiphersSuites(){
-        return this.getParameter("serverCiphersSuites");
-    }
-    
     
     /**
      * This method is used to get the Redis Database server address.
@@ -330,6 +223,26 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
+     * The time in milliseconds that the connection can be idle before it is 
+     * closed.
+     * @return String with the value. If the field is not present, returns 'null'.
+     * @since v0.4.0
+     */
+    public String getServerIdleTimeout() {
+        return this.getParameter("serverIdleTimeout");
+    }
+    
+    /**
+     * Jetty server authorized access IP address list.
+     * @return String with the IPs authorized. If the field is not present, 
+     *     all hosts will be authorized.
+     * @since v0.4.0
+     */
+    public String getServerIpWhiteList() {
+        return this.getParameter("serverIpWhiteList");
+    }
+    
+    /**
      * Method used to create a new configuration file on specific route with 
      *     default parameters.
      * @param fileLocation Route and name to the new configuration file. By 
@@ -337,25 +250,28 @@ public class ConfigFile implements CheckObject{
      * @return True if all works correctly, false if something goes wrong.
      * @since v0.1.0
      */
-    private boolean newDefaultProperties(String fileLocation) {   
+    private boolean newDefaultProperties(String fileLocation) {
         try {
             FileOutputStream newConfigFile = new FileOutputStream(fileLocation);
             Properties defaultParameters = new Properties();
+            // Check updates interval:
+            defaultParameters.setProperty("ksCheckUpdates", "3600000");
             // Default parameters:
             defaultParameters.setProperty("serverAddress", "0.0.0.0");
-            defaultParameters.setProperty("serverPort", "443");
+            defaultParameters.setProperty("serverPort", "1443");
             //defaultParameters.setProperty("serverSSLContext", "TLSv1.2");
-            defaultParameters.setProperty("serverKeyStoreFile","ksserverkey.jks");
+            defaultParameters.setProperty("serverKeyStoreFile","config/ksserverkey.jks");
             defaultParameters.setProperty("serverKeyStorePassword","123456");
             defaultParameters.setProperty("serverKeyManagerPassword","123456");
-            //defaultParameters.setProperty("serverBacklog", "0");
+            defaultParameters.setProperty("serverIdleTimeout", "30000");
             //defaultParameters.setProperty("serverKeyManagerFactory", "SunX509");
             //defaultParameters.setProperty("serverTrustManagerFactory", "SunX509");
             //defaultParameters.setProperty("serverKeyStore", "JKS");
             defaultParameters.setProperty("dbAddress","127.0.0.1");
             defaultParameters.setProperty("dbPort", "6379");
             defaultParameters.setProperty("dbPassword", "foobared"); // Default password for Redis config file.
-            defaultParameters.setProperty("whiteList", "IP_whitelist.txt");
+            defaultParameters.setProperty("dbCheckInterval", "1000");
+            //defaultParameters.setProperty("whiteList", "IP_whitelist.txt");
             // Save parameters on file
             defaultParameters.store(newConfigFile, null);
             // Close configuration file.

@@ -78,7 +78,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
      */
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-        Thread.currentThread().setName("THHTTPS_" + request.getRemoteAddr());
+        Thread.currentThread().setName("THHTTPS_" + request.getRemoteAddr()+ ":" + request.getRemotePort());
         // JSON incoming data Object.
         InputJSON jsonData;
         if("POST".equals(request.getMethod())){

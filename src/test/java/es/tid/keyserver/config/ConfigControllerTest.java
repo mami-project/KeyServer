@@ -21,10 +21,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Properties;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Ignore;
 
 /**
@@ -51,6 +53,7 @@ public class ConfigControllerTest {
             "serverKeyStoreFile",
             "serverKeyStorePassword",
             "serverKeyManagerPassword",
+            "serverIdleTimeout",
             "dbAddress",
             "dbPort",
             "dbPassword",
@@ -75,6 +78,7 @@ public class ConfigControllerTest {
         configFile.setProperty("serverKeyStoreFile", "ksserverkey.jks");
         configFile.setProperty("serverKeyStorePassword", "123456");
         configFile.setProperty("serverKeyManagerPassword", "123456");
+        configFile.setProperty("serverIdleTimeout","30000");
         configFile.setProperty("dbAddress", "192.168.11.180");
         configFile.setProperty("dbPort", "6379");
         configFile.setProperty("dbPassword", "foobared");
@@ -105,6 +109,14 @@ public class ConfigControllerTest {
         File file = new File(testFileRoute);
         file.delete();
         System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
     /**
@@ -163,18 +175,6 @@ public class ConfigControllerTest {
     }
 
     /**
-     * Test of getServerSSLContext method, of class ConfigController.
-     */
-    @Test
-    @Ignore("Deprecated method")
-    public void testGetServerSSLContext() {
-        System.out.println("getServerSSLContext");
-        String expResult = "TLSv1.2";
-        String result = this.testObj.getServerSSLContext();
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of getServerKeyStoreFile method, of class ConfigController.
      */
     @Test
@@ -193,66 +193,6 @@ public class ConfigControllerTest {
         System.out.println("getServerKeyPass");
         String expResult = "123456";
         String result = this.testObj.getServerKeyStorePassword();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerBacklog method, of class ConfigController.
-     */
-    @Test
-    @Ignore("Deprecated method")
-    public void testGetServerBacklog() {
-        System.out.println("getServerBacklog");
-        int expResult = 5;
-        int result = this.testObj.getServerBacklog();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerKeyManagerFactory method, of class ConfigController.
-     */
-    @Test
-    @Ignore("Deprecated method")
-    public void testGetServerKeyManagerFactory() {
-        System.out.println("getServerKeyManagerFactory");
-        String expResult = "SunX509";
-        String result = this.testObj.getServerKeyManagerFactory();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerTrustManagerFactory method, of class ConfigController.
-     */
-    @Test
-    @Ignore("Deprecated method")
-    public void testGetServerTrustManagerFactory() {
-        System.out.println("getServerTrustManagerFactory");
-        String expResult = "SunX509";
-        String result = this.testObj.getServerTrustManagerFactory();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerKeyStore method, of class ConfigController.
-     */
-    @Test
-    @Ignore("Deprecated method")
-    public void testGetServerKeyStore() {
-        System.out.println("getServerKeyStore");
-        String expResult = "JKS";
-        String result = this.testObj.getServerKeyStore();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerCiphersSuites method, of class ConfigController.
-     */
-    @Test
-    @Ignore("Deprecated method")
-    public void testGetServerCiphersSuites() {
-        System.out.println("getServerCiphersSuites");
-        String expResult = "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA";
-        String result = this.testObj.getServerCiphersSuites();
         assertEquals(expResult, result);
     }
 
@@ -353,5 +293,27 @@ public class ConfigControllerTest {
         int expResult = 3600000;
         int result = testObj.getChkUpdateInterval();
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getIdleTimeout method, of class ConfigController.
+     */
+    @Test
+    public void testGetIdleTimeout() {
+        System.out.println("getIdleTimeout");
+        long expResult = 30000L;
+        long result = testObj.getIdleTimeout();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getServerIpWhiteList method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerIpWhiteList() {
+        System.out.println("getServerIpWhiteList");
+        String[] expResult = null;
+        String[] result = this.testObj.getServerIpWhiteList();
+        assertArrayEquals(expResult, result);
     }
 }
