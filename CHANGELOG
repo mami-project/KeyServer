@@ -13,7 +13,7 @@ v0.3.3
 -------------------------------------------------------------------------------- 
 Features:
   - Now can use others Redis DB index.
-  - Security log for each incomming request.
+  - Security log for each incoming request.
   - Configuration parameters for time intervals (DB monitor and KS updates).
 
 Bug fixes:
@@ -29,13 +29,13 @@ Features:
 Bug fixes:
   - Fixed Javadoc warnings.
   - Updated KeyServer dependencies.
-  - Updated Maven pluginss.
+  - Updated Maven plugins.
 
 
 v0.3.1
 -------------------------------------------------------------------------------- 
 Features:
-  - Impoved Redis connection security.
+  - Improved Redis connection security.
   - Auto remove a Private Key from Redis database before a specific date.
 
 Bug fixes:

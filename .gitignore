@@ -148,6 +148,9 @@ fabric.properties
 ### Intellij Patch ###
 *.iml
 
+# Others 
+.idea/encodings.xml
+
 
 ### Java ###
 *.class
@@ -215,5 +218,3 @@ tools/certs/
 # Others #
 *.~vsdx
 nb-configuration.xml
-
-
