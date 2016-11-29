@@ -160,7 +160,7 @@ public class DataBase implements CheckObject{
                 connecting = false; // Set the connecting flag to False (connected).
             } 
         } catch (JedisDataException e){
-            LOGGER.info("Redis is busy loading the dataset in memory.");
+            LOGGER.info("Redis is busy loading the data set in memory.");
             connecting = false;
         }
         return false;

@@ -71,7 +71,7 @@ public class KsJetty implements Runnable{
         sslConnector.setHost(parameters.getServerAddress().getHostAddress());
         sslConnector.setIdleTimeout(parameters.getIdleTimeout());
         server.setConnectors(new Connector[] {sslConnector});
-        // Jetty incomming requests handler.
+        // Jetty incoming requests handler.
         KeyServerJettyHandler ksHandler = new KeyServerJettyHandler(objDB);
         // Security Whitelist filter
         if(parameters.getServerIpWhiteList() == null){
@@ -102,7 +102,7 @@ public class KsJetty implements Runnable{
             this.ready = true;
             server.join();
         } catch (Exception ex) {
-            LOGGER.error("Jetty bad inititialization error: {}", ex.getMessage());
+            LOGGER.error("Jetty bad initialization error: {}", ex.getMessage());
         }
     }
     
@@ -145,7 +145,7 @@ public class KsJetty implements Runnable{
      */
     private HttpConfiguration getHttpStaticConfig(){
         HttpConfiguration https = new HttpConfiguration();
-        // Set the configuration parammeters.    
+        // Set the configuration parameters.
         https.setPersistentConnectionsEnabled(true);
         https.setIdleTimeout(0);
         https.addCustomizer(new SecureRequestCustomizer());

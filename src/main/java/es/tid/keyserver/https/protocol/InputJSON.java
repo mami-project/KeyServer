@@ -226,8 +226,7 @@ public class InputJSON {
         // Logger trace output
         LOGGER.trace("Method CheckJSON (fields): protocol='{}', method='{}', hash='{}', spki='{}', input='{}'",
                 protocol, method, hash, spki, input);
-        // Check if the JSON contains all fields "protocol", "method", "hash", 
-        //  "spki" and "input" fields.
+        // Check if the JSON contains all fields "protocol", "method", "hash", "spki" and "input" fields.
         if((protocol == null) || (method == null) || (spki == null) || (input == null)){
             LOGGER.debug("Input JSON: Some required fields are not present.");
             return ErrorJSON.ERR_MALFORMED_REQUEST;

@@ -135,7 +135,7 @@ public class KeyServer {
             switch(args[0]){
                 case "-c":  // Specific the new configuration file to be used.
                     if (args.length == 1){
-                        LOGGER.error("You must specific the config file route as input parammeter.");
+                        LOGGER.error("You must specific the config file route as input parameter.");
                         showHelp();
                     } else {
                         return args[1];
@@ -148,7 +148,7 @@ public class KeyServer {
                     break;
                 default:    // Invalid input parameter.
                     LOGGER.error("Not valid command line input option: {}", args[0]);
-                    LOGGER.info("Please use one of the following accepted parammeters.");
+                    LOGGER.info("Please use one of the following accepted parameters.");
                     showHelp();
                     System.exit(-1);
                     break;

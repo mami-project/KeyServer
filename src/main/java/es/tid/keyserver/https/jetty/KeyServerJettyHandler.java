@@ -145,12 +145,12 @@ public class KeyServerJettyHandler extends AbstractHandler{
         // Check if JSON is valid.
         if(jsonObj.checkValidJSON()!=null){ // If not is valid
             // Generate JSON Output error object and return it as string.
-            LOGGER.debug("IncommingJSON Processor: Not valid JSON received. Returns error to the HTTP IncommingProcessor thread.");
+            LOGGER.debug("IncomingJSON Processor: Not valid JSON received. Returns error to the HTTP IncomingProcessor thread.");
             return new ErrorJSON(jsonObj.checkValidJSON()).toString();
         }
-        LOGGER.trace("IncommingJSON Processor: Input JSON valid.");
+        LOGGER.trace("IncomingJSON Processor: Input JSON valid.");
         // If JSON is valid, process response.
-        String responseString=null;
+        String responseString;
         switch (jsonObj.getMethod()){
             case InputJSON.ECDHE: // ECDHE Mode
                 LOGGER.debug("Response from KeyServer for ECDH.");
@@ -165,12 +165,12 @@ public class KeyServerJettyHandler extends AbstractHandler{
                 break;
             default:
                 // Not valid method.
-                LOGGER.error("HTTP Incomming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
+                LOGGER.error("HTTP Incoming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
                 responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
                 break;
         }
         // Debug logger info:
-        LOGGER.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
+        LOGGER.debug("HTTP Incoming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
         jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
         // Check if responseString is an error and returns the correct object as JSON string.
         if(responseString.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
@@ -262,7 +262,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * @return PremasterSecret decoded using private key and encoded using base64.
      */
     private String modeRSA(String spki, String input) {
-        // Execute REDIS query trying to found private key for the incomming SKI.
+        // Execute REDIS query trying to found private key for the incoming SKI.
         byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
         if(encodePrivateKey == null){
             return ErrorJSON.ERR_NOT_FOUND;

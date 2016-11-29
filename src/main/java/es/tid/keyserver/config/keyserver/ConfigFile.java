@@ -259,19 +259,14 @@ public class ConfigFile implements CheckObject{
             // Default parameters:
             defaultParameters.setProperty("serverAddress", "0.0.0.0");
             defaultParameters.setProperty("serverPort", "1443");
-            //defaultParameters.setProperty("serverSSLContext", "TLSv1.2");
             defaultParameters.setProperty("serverKeyStoreFile","config/ksserverkey.jks");
             defaultParameters.setProperty("serverKeyStorePassword","123456");
             defaultParameters.setProperty("serverKeyManagerPassword","123456");
             defaultParameters.setProperty("serverIdleTimeout", "30000");
-            //defaultParameters.setProperty("serverKeyManagerFactory", "SunX509");
-            //defaultParameters.setProperty("serverTrustManagerFactory", "SunX509");
-            //defaultParameters.setProperty("serverKeyStore", "JKS");
             defaultParameters.setProperty("dbAddress","127.0.0.1");
             defaultParameters.setProperty("dbPort", "6379");
             defaultParameters.setProperty("dbPassword", "foobared"); // Default password for Redis config file.
             defaultParameters.setProperty("dbCheckInterval", "1000");
-            //defaultParameters.setProperty("whiteList", "IP_whitelist.txt");
             // Save parameters on file
             defaultParameters.store(newConfigFile, null);
             // Close configuration file.
@@ -306,7 +301,7 @@ public class ConfigFile implements CheckObject{
         for (String field : fields) {
             if (!configFile.containsKey(field)) {
             	// Error level.
-                LOGGER.error("A neccessary configuration field is not present. Please "
+                LOGGER.error("A necessary configuration field is not present. Please "
                 		+ "set this field : {}  on KeyServer configuration file.", field);
                 return false;
             }
