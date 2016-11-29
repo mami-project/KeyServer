@@ -231,13 +231,10 @@ public class KeyServer {
             "serverAddress",
             "serverPort",
             // SSL Parameters 
-            // "serverSSLContext", // deprecated
             "serverKeyStoreFile",
             "serverKeyStorePassword",
             "serverKeyManagerPassword",
             "serverIdleTimeout",
-            // "serverTrustManagerFactory",
-            // "serverKeyStore", // deprecated
             // Redis Database
             "dbAddress",
             "dbPort",

@@ -16,12 +16,7 @@
 package es.tid.keyserver.https.jetty;
 
 import es.tid.keyserver.config.ConfigController;
-import es.tid.keyserver.config.keyserver.ConfigFile;
 import es.tid.keyserver.controllers.db.DataBase;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
@@ -31,7 +26,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.IPAccessHandler;
-import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.LoggerFactory;
@@ -50,7 +44,10 @@ public class KsJetty implements Runnable{
      * Jetty initialization flag
      */
     private boolean ready = false;
-    
+    /**
+     * Logger object.
+     */
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsJetty.class);
     /**
      * Class constructor.
      * @param parameters Jetty HTTPS service configuration object.
@@ -102,12 +99,10 @@ public class KsJetty implements Runnable{
     public synchronized void run() {
         try {
             server.start();
-            //server.dumpStdErr();
             this.ready = true;
             server.join();
         } catch (Exception ex) {
-            // @TODO: Implements logger side.
-            Logger.getLogger(KsJetty.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Jetty bad inititialization error: {}", ex.getMessage());
         }
     }
     
@@ -127,11 +122,10 @@ public class KsJetty implements Runnable{
      */
     public void stop(){
         try {
-            server.stop();
             this.ready = false;
+            server.stop();
         } catch (Exception ex) {
-            // @TODO: Implements logger side.
-            Logger.getLogger(KsJetty.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Jetty bad stop error: {}", ex.getMessage());
         }
     }
     

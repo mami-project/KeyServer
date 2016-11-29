@@ -23,6 +23,8 @@ import es.tid.keyserver.https.protocol.InputJSON;
 import es.tid.keyserver.https.protocol.OutputJSON;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -88,8 +90,6 @@ public class KeyServerJettyHandler extends AbstractHandler{
             LOGGER.trace("POST data received: {}", jsonString);
             // Creating JSON Object for incoming data.
             jsonData = new InputJSON(jsonString);
-            // Check if the current IP is authorized to use KeyServer.
-            //ipAuthorized = ipwl.iPAuthorized(he.getRemoteAddress().getAddress());
             // Process the JSON for the correct type
             String responseString = processIncommingJson(jsonData);
             LOGGER.trace("Response String: {}", responseString);
@@ -122,8 +122,10 @@ public class KeyServerJettyHandler extends AbstractHandler{
     /**
      * This method provides the main functionality to send to the client the
      *     request data.
-     * @param he HTTP exchange object with headers and data from the Proxy.
-     * @param responseString String for send to the client.
+     * @param baseRequest HTTP exchange object with headers and data from the Proxy.
+     * @param response String for send to the client.
+     * @param responseString String with the response body.
+     * @throws IOException Exception if can't write the response.
      * @since v0.4.0
      */
     private void sendKeyServerResponse(Request baseRequest, HttpServletResponse response, String responseString) throws IOException{
@@ -140,12 +142,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * @return Returns a String with the response to the client.
      */
     private String processIncommingJson(InputJSON jsonObj){
-        // @TODO: Check if the IP is Authorized to use KeyServer 
-        //if(!this.ipAuthorized){
-        //    SECURITY.error("Access denied from this host.");
-        //    return new ErrorJSON(ErrorJSON.ERR_REQUEST_DENIED).toString();
-        //}
-        // Check first if JSON is valid.
+        // Check if JSON is valid.
         if(jsonObj.checkValidJSON()!=null){ // If not is valid
             // Generate JSON Output error object and return it as string.
             LOGGER.debug("IncommingJSON Processor: Not valid JSON received. Returns error to the HTTP IncommingProcessor thread.");
@@ -174,7 +171,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
         }
         // Debug logger info:
         LOGGER.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
-                jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
+        jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
         // Check if responseString is an error and returns the correct object as JSON string.
         if(responseString.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
                 responseString.equalsIgnoreCase(ErrorJSON.ERR_NOT_FOUND) ||
@@ -204,9 +201,19 @@ public class KeyServerJettyHandler extends AbstractHandler{
         try {
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeySpecException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         // Check if privKey is valid.
         if(privKey == null){
@@ -216,13 +223,33 @@ public class KeyServerJettyHandler extends AbstractHandler{
             // Sign data
             return Ecdhe.calcOutput(input, privKey, hash);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("ECDH No Such Algorithm Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeySpecException ex) {
+            // Error level
             LOGGER.error("ECDH Invalid Key Espec Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeyException ex) {
+            // Error level.
             LOGGER.error("ECDH Invalid Key Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (SignatureException ex) {
+            // Error level.
             LOGGER.error("ECDH Signature Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }
@@ -245,9 +272,19 @@ public class KeyServerJettyHandler extends AbstractHandler{
         try {
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeySpecException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         // Check if privKey is valid.
         if(privKey == null){
@@ -257,15 +294,40 @@ public class KeyServerJettyHandler extends AbstractHandler{
         try {
             return Rsa.calcDecodedOutput(input, privKey);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("RSA No Such Algorithm Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (NoSuchPaddingException ex) {
+            // Error level.
             LOGGER.error("RSA No Such Padding Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeyException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Key Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (IllegalBlockSizeException ex) {
+            // Error level.
             LOGGER.error("RSA Illegal Blocks Size Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (BadPaddingException ex) {
+            // Error level.
             LOGGER.error("RSA Bad Padding Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }

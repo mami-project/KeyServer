@@ -19,8 +19,9 @@ import es.tid.keyserver.config.ConfigController;
 import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.https.jetty.KsJetty;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for HTTP Server.
@@ -36,7 +37,10 @@ public class HttpsServerController implements CheckObject{
      * Flag for check if the object is correctly initialized.
      */
     private boolean isInitializated = false;
-    
+    /**
+     * Logger object.
+     */
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsServerController.class);
     /**
      * Main constructor for the HTTPS Server class.
      * @param parameters Object with program parameters.
@@ -59,8 +63,12 @@ public class HttpsServerController implements CheckObject{
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                //@TODO: Set the Log entry register here.
-                Logger.getLogger(HttpsServerController.class.getName()).log(Level.SEVERE, null, ex);
+                // Error level.
+                LOGGER.error("Jetty inititialization pause error: {}", ex.getMessage());
+                // Debug level.
+                StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                LOGGER.debug(errors.toString());
             }
         }
         this.isInitializated = true;

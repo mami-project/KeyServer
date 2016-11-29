@@ -228,7 +228,12 @@ public class ProvisionController {
             try {
                 return dbObj.setExpPK(sha1, dateFormat.parse(expDat).getTime()/1000);
             } catch (ParseException ex) {
+                // Error level.
                 LOGGER.error("Parser exception during PK expiration date conversion: {}", expDat);
+                // Debug level.
+                StringWriter errors = new StringWriter();
+                ex.printStackTrace(new PrintWriter(errors));
+                LOGGER.debug(errors.toString());
                 return false;
             }
         }
