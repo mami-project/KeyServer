@@ -25,7 +25,7 @@ import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
-import org.eclipse.jetty.server.handler.IPAccessHandler;
+import org.eclipse.jetty.server.handler.InetAccessHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.LoggerFactory;
@@ -73,21 +73,26 @@ public class KsJetty implements Runnable{
         server.setConnectors(new Connector[] {sslConnector});
         // Jetty incoming requests handler.
         KeyServerJettyHandler ksHandler = new KeyServerJettyHandler(objDB);
+        // Error Handler
+        KsJettyErrors ksErrors = new KsJettyErrors();
+        ksErrors.setServer(server);
+        server.addBean(ksErrors);
         // Security Whitelist filter
-        if(parameters.getServerIpWhiteList() == null){
-            IPAccessHandler accessHandler = new IPAccessHandler();
-            String [] list = parameters.getServerIpWhiteList();
-            accessHandler.setWhite(list);
-            accessHandler.setHandler(ksHandler);
-            server.setHandler(accessHandler);
+        if(parameters.getServerIpWhiteList() != null){
+            InetAccessHandler accessControl = new InetAccessHandler();
+            for (String tmp :parameters.getServerIpWhiteList()) {
+                accessControl.include(tmp);
+            }
+            accessControl.setHandler(ksHandler);
+            server.setHandler(accessControl);
+        } else {
+            server.setHandler(ksHandler);
             org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
             org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsJetty.class);
             String msg = "There is no whitelist field defined inside config file."
                     + "\n\t\tAllowing KeyServer access to all IPs!";
             SECURITY.warn(msg);
             LOGGER.warn(msg);
-        } else {
-            server.setHandler(ksHandler);
         }
     }
     

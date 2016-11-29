@@ -42,7 +42,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.slf4j.LoggerFactory;
 
 /**
- * Test Class for generate a Jetty test response with a message..
+ * Class for custom management of Jetty server requests.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.4.0
  */
@@ -83,7 +83,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
         Thread.currentThread().setName("THHTTPS_" + request.getRemoteAddr()+ ":" + request.getRemotePort());
         // JSON incoming data Object.
         InputJSON jsonData;
-        if("POST".equals(request.getMethod())){
+        if("/".equalsIgnoreCase(target) && "POST".equals(request.getMethod())){
             LOGGER.trace("Inside HTTP handle: {} | Type: {}", request.getRemoteAddr(), request.getMethod());
             // Reading POST body for get the JSON string.
             String jsonString = readHttpBody(request);
@@ -96,11 +96,19 @@ public class KeyServerJettyHandler extends AbstractHandler{
             // Send response to the client
             sendKeyServerResponse(baseRequest, response, responseString);
             // Security log entry
-            SECURITY.info("Remote IP address: {} | Authorized: {} | Certificate Fingerprint: {}", request.getRemoteAddr(), request.getMethod(), jsonData.getSpki());
+            SECURITY.info("Remote IP address: {} | Authorized: {} | Target: {} | Certificate Fingerprint: {}", 
+                    request.getRemoteAddr(), 
+                    request.getMethod(), 
+                    target, 
+                    jsonData.getSpki());
         } else {
             // If not POST request (Nothing to do).
             LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}", request.getMethod(), request.getRemoteAddr());
-            SECURITY.warn("Not valid HTTPS request: {} | Remote address: {} | Body content: {}", request.getMethod(), request.getRemoteAddr(), readHttpBody(request));
+            SECURITY.warn("Not valid HTTPS request: {} | Remote address: {} | Target: {} | Body content: {}", 
+                    request.getMethod(), 
+                    request.getRemoteAddr(), 
+                    target, 
+                    readHttpBody(request));
         }
     }
     
@@ -337,7 +345,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * @param encodePrivateKey Array with private key values.
      * @return Private key object.
      * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException 
+     * @throws InvalidKeySpecException
      */
     private PrivateKey loadPrivateKey(byte[] encodePrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
