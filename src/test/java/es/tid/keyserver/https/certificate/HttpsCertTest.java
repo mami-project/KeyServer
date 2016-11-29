@@ -35,7 +35,7 @@ public class HttpsCertTest {
      * Class constructor object.
      */
     public HttpsCertTest() {
-        instance = new HttpsCert("target/test-classes/certificatetest.ks", "123456");
+        instance = new HttpsCert("target/test-classes/ksserverkey.jks", "123456");
     }
 
     /**
@@ -68,7 +68,7 @@ public class HttpsCertTest {
         System.out.println("certRemainDays");
         long result = instance.certRemainDays();
         System.out.println("[ TEST ] Certificate validity remain days: " + result);
-        assertNotNull((Long)result);
+        assertNotNull(result);
     }
 
     /**
@@ -77,7 +77,7 @@ public class HttpsCertTest {
     @Test
     public void testIsCorrectlyInitialized() {
         System.out.println("isCorrectlyInitialized");
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
@@ -88,7 +88,7 @@ public class HttpsCertTest {
     @Test
     public void testIsValid() {
         System.out.println("isValid");
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.isValid();
         assertEquals(expResult, result);
     }

@@ -26,5 +26,5 @@ public interface CheckObject {
      * @return Object initialization flag status.
      * @since v0.1.0
      */
-    public boolean isCorrectlyInitialized();
+    boolean isCorrectlyInitialized();
 }

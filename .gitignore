@@ -148,6 +148,9 @@ fabric.properties
 ### Intellij Patch ###
 *.iml
 
+# Others 
+.idea/encodings.xml
+
 
 ### Java ###
 *.class
@@ -204,12 +207,14 @@ buildNumber.properties
 ### Custom KeyServer Repository ###
 # KeyServer Logs #
 logs/
+
+# KeyServer Config Files #
+config/
+
+# KeyServer Tools #
+!tools/pk-provider.jar
+tools/certs/
+
 # Others #
 *.~vsdx
 nb-configuration.xml
-project.properties
-IP_whitelist.txt
-general.properties
-!tools/pk-provider.jar
-tools/certs/
-HTTPS_keystore.ks

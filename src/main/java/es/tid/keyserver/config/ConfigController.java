@@ -138,26 +138,6 @@ public class ConfigController implements CheckObject{
             return -1;
         }
     }
-
-    /**
-     * This method is used to get the KeyServer HTTPS SSL Context. 
-     * @return String with the KeyServer HTTPS SSL Context. If the field is not 
-     *     present, returns 'null'.
-     * 
-     *     <p>This is an example with valid values for this field:
-     *     <ul>
-     *      <li>SSLv2</li>
-     *      <li>SSLv3</li>
-     *      <li>TLS</li>
-     *      <li>TLSv1</li>
-     *      <li>TLSv1.1</li>
-     *      <li>TLSv1.2</li>
-     *     </ul> 
-     * @since v0.3.0
-     */
-    public String getServerSSLContext(){
-        return this.keyserverConfig.getServerSSLContext();
-    }
     
     /**
      * This method is used to get the certificate for KeyServer HTTPS server.
@@ -165,106 +145,72 @@ public class ConfigController implements CheckObject{
      *     the field is not present, returns 'null'.
      * @since v0.3.0
      */
-    public String getServerKeyFile(){
-        return this.keyserverConfig.getServerKeyFile();
+    public String getServerKeyStoreFile(){
+        return this.keyserverConfig.getServerKeyStoreFile();
     }
     
     /**
-     * This method is used to get password of the KeyServer HTTPS certificate.
+     * This method is used to get password of the KeyServer HTTPS certificate 
+     * key store.
      * @return String with the KeyServer HTTPS certificate password. If the 
      *     field is not present, returns 'null'.
      * @since v0.3.0
      */
-    public String getServerKeyPass(){
-        return this.keyserverConfig.getServerKeyPass();
+    public String getServerKeyStorePassword(){
+        return this.keyserverConfig.getKeyStorePassword();
     }
     
     /**
-     * This method is used to get the Server Backlog value from the 
-     *     configuration file.
-     * @return Integer with the KeyServer Backlog value. If the field is not 
-     *     present, it returns -1 value.
-     * @since v0.3.0
+     * This method is used to get password of the KeyServer HTTPS certificate 
+     * manager.
+     * @return String with the KeyServer HTTPS certificate password. If the 
+     *     field is not present, returns 'null'.
+     * @since v0.4.0
      */
-    public int getServerBacklog(){
-        String backlog = this.keyserverConfig.getServerBacklog();
-        if(backlog != null){
-            return Integer.parseInt(backlog);
+    public String getServerKeyManagerPassword(){
+        return this.keyserverConfig.getKeyManagerPassword();
+    }
+    
+    /**
+     * The time in milliseconds that the connection can be idle before it is 
+     * closed.
+     * @return The value in milliseconds or -1 if the value is not valid.
+     */
+    public long getIdleTimeout() {
+        if(this.keyserverConfig.getServerIdleTimeout().isEmpty()){
+            return -1;
+        }
+        int time = Integer.valueOf(this.keyserverConfig.getServerIdleTimeout());
+        if(time > 0){
+            return time;
         } else {
-            // Error level.
-            LOGGER.error("Not valid Backlog parammeter specified on KeyServer config file: {}", backlog);
+            // Warning level.
+            LOGGER.warn("Jetty connection Idle Timeout value is not valid.");
             return -1;
         }
     }
 
     /**
-     * This method is used to get the KeyServer HTTPS certificate manager 
-     *     factory. 
-     * @return String with the KeyServer HTTPS certificate manager factory. 
-     *     If the field is not present, returns 'null'.
-     * 
-     *     <p>This is an example with valid values for this field:
-     *     <ul>
-     *      <li>PKIX</li>
-     *      <li>SunX509</li>
-     *     </ul> 
-     * @since v0.3.0
+     * This method returns an array with the authorized IPs for access to the
+     *     KeyServer.
+     * @return Array of strings with the IP authorized. If the field is not 
+     *     present, returns 'null'.
+     * @since v0.4.0
      */
-    public String getServerKeyManagerFactory(){
-        return this.keyserverConfig.getServerKeyManagerFactory();
-    }
-    
-    /**
-     * This method is used to get the KeyServer HTTPS certificate trust manager 
-     *     factory. 
-     * @return String with the KeyServer HTTPS certificate trust manager factory. 
-     *     If the field is not present, returns 'null'.
-     * 
-     *     <p>This is an example with valid values for this field:
-     *     <ul>
-     *      <li>PKIX (X509 or SunPKIX)</li>
-     *      <li>SunX509</li>
-     *     </ul> 
-     * @since v0.3.0
-     */
-    public String getServerTrustManagerFactory(){
-        return this.keyserverConfig.getServerTrustManagerFactory();
-    }
-    
-    /**
-     * This method is used to get the KeyServer HTTPS certificate key store. 
-     * @return String with the KeyServer HTTPS certificate key store. 
-     *     If the field is not present, returns 'null'.
-     * 
-     *     <p>This is an example with valid values for this field:
-     *     <ul>
-     *      <li>jceks</li>
-     *      <li>jks</li>
-     *      <li>pkcs12</li>
-     *     </ul> 
-     * @since v0.3.0
-     */
-    public String getServerKeyStore(){
-        return this.keyserverConfig.getServerKeyStore();
-    }
-    
-    /**
-     * This method is used to get the KeyServer HTTPS cipher suites. 
-     * @return String with the KeyServer HTTPS ciphers suites. If the field is 
-     *     not present, returns 'null'. The ciphers names are separated with commas.
-     * 
-     *     <p>This is an example with valid values for this field:
-     *     <ul>
-     *      <li>TLS_DHE_DSS_WITH_AES_128_GCM_SHA256</li>
-     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</li>
-     *      <li>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</li>
-     *      <li>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</li>
-     *      <li>...</li>
-     *     </ul> 
-     * @since v0.3.0
-     */
-    public String getServerCiphersSuites(){
-        return this.keyserverConfig.getServerCiphersSuites();
+    public String[] getServerIpWhiteList() {
+        if(this.keyserverConfig.getServerIpWhiteList()==null){
+            // Not defined.
+            return null;
+        }
+        String tmp = this.keyserverConfig.getServerIpWhiteList();
+        if (tmp.contains("&")){
+            // Contains multiples IPs.
+            return tmp.split("&");
+        } else {
+            // Only contains a IP.
+            String [] value = {tmp};
+            return value;
+        }
     }
     
     /**

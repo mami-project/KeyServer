@@ -1,5 +1,5 @@
 /**
- * Copyright 2016.
+ * Copyright 2016 Telefonica.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.tid.keyserver.https;
+package es.tid.keyserver.https.jetty;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import es.tid.keyserver.controllers.db.DataBase;
+import es.tid.keyserver.https.keyprocess.Ecdhe;
+import es.tid.keyserver.https.keyprocess.Rsa;
 import es.tid.keyserver.https.protocol.ErrorJSON;
 import es.tid.keyserver.https.protocol.InputJSON;
 import es.tid.keyserver.https.protocol.OutputJSON;
-import es.tid.keyserver.https.keyprocess.Ecdhe;
-import es.tid.keyserver.https.keyprocess.Rsa;
-import es.tid.keyserver.controllers.security.ip.WhiteList;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -37,129 +34,114 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class provide a centralized mode to get, process and make response to the
- *     proxy.
+ * Class for custom management of Jetty server requests.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @since v0.4.0
  */
-public class IncomingRequestProcess implements HttpHandler{
+public class KeyServerJettyHandler extends AbstractHandler{
     /**
      * Logger object.
      */
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(IncomingRequestProcess.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KeyServerJettyHandler.class);
     /**
      * Security logger object
      */
     private static final org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
     /**
-     * Database Object
+     * Redis database object.
      */
-    private final DataBase keyServerDB;
+    private DataBase keyServerDB;
     /**
-     * IP WhiteList for KeyServer access control.
+     * Jetty handler class constructor.
+     * @param objDB Redis database object.
+     * @since v0.4.0
      */
-    private final WhiteList ipwl;
-    /**
-     * Flag used to storage if the current IP request is authorized (true) or 
-     * not (false).
-     */
-    private boolean ipAuthorized;
+    public KeyServerJettyHandler(DataBase objDB){
+        this.keyServerDB = objDB;
+    }
     
     /**
-     * Default class constructor.
-     * @param db Data base connection object.
-     * @param wl White list for IP access control.
-     */
-    public IncomingRequestProcess(DataBase db, WhiteList wl){
-        keyServerDB = db;
-        ipwl = wl;
-    }
-
-    /**
-     * This method provides a control function for process the incoming HTTPS
-     *     request and send to the Proxy the response.
-     * @param he HTTP exchange object with headers and data from the Proxy.
+     * Handler process method.
+     * @param target Target for the request (this is the main directory)
+     * @param baseRequest This is the base request.
+     * @param request Request from the client.
+     * @param response Response to the client.
+     * @throws IOException Exception if something goes wrong during communication.
+     * @throws ServletException  Problem with the servlet.
+     * @since v0.4.0
      */
     @Override
-    public void handle(HttpExchange he) {
-        Thread.currentThread().setName("THHTTPS_" + he.getRemoteAddress());
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        Thread.currentThread().setName("THHTTPS_" + request.getRemoteAddr()+ ":" + request.getRemotePort());
         // JSON incoming data Object.
         InputJSON jsonData;
-        // Response String object for send to the client.
-        String responseString;
-        // Process only POST requests from client.
-        String requestMethod = he.getRequestMethod();
-        if("POST".equals(requestMethod)){
-            LOGGER.trace("Inside HTTP handle: {} | Type: {}", he.getRemoteAddress(), requestMethod);
+        if("/".equalsIgnoreCase(target) && "POST".equals(request.getMethod())){
+            LOGGER.trace("Inside HTTP handle: {} | Type: {}", request.getRemoteAddr(), request.getMethod());
             // Reading POST body for get the JSON string.
-            String jsonString = readHttpBodyInputStream(he.getRequestBody());
+            String jsonString = readHttpBody(request);
+            LOGGER.trace("POST data received: {}", jsonString);
             // Creating JSON Object for incoming data.
             jsonData = new InputJSON(jsonString);
-            // Check if the current IP is authorized to use KeyServer.
-            ipAuthorized = ipwl.iPAuthorized(he.getRemoteAddress().getAddress());
             // Process the JSON for the correct type
-            responseString = processIncommingJson(jsonData);
+            String responseString = processIncommingJson(jsonData);
             LOGGER.trace("Response String: {}", responseString);
             // Send response to the client
-            sendKeyServerResponse(he, responseString);
+            sendKeyServerResponse(baseRequest, response, responseString);
             // Security log entry
-            SECURITY.info("Remote IP address: {} | Authorized: {} | Certificate Fingerprint: {}", he.getRemoteAddress(), ipAuthorized, jsonData.getSpki());
+            SECURITY.info("Remote IP address: {} | Authorized: {} | Target: {} | Certificate Fingerprint: {}", 
+                    request.getRemoteAddr(), 
+                    request.getMethod(), 
+                    target, 
+                    jsonData.getSpki());
         } else {
             // If not POST request (Nothing to do).
-            LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}",requestMethod, he.getRemoteAddress().getHostString());
-            SECURITY.warn("Not valid HTTPS request: {} | Remote address: {} | Body content: {}", requestMethod, he.getRemoteAddress());
-            he.close();
+            LOGGER.trace("HTTP IncomingRequest not valid: {} from IP: {}", request.getMethod(), request.getRemoteAddr());
+            SECURITY.warn("Not valid HTTPS request: {} | Remote address: {} | Target: {} | Body content: {}", 
+                    request.getMethod(), 
+                    request.getRemoteAddr(), 
+                    target, 
+                    readHttpBody(request));
         }
     }
     
     /**
-     * Check if the current IP is authorized for use KeyServer.
-     * @return True if is authorized, false if not.
+     * This method reads the HTTP request body data.
+     * @param request Jetty HTTP request object.
+     * @return String with the data content.
+     * @throws IOException Exception if can't read.
      */
-    public boolean isIpAuthoriced(){
-        return ipAuthorized;
+    private String readHttpBody(HttpServletRequest request) throws IOException{
+        BufferedReader reader = request.getReader();
+        String data = "";
+        String line;
+        while ((line = reader.readLine()) != null){
+            data+=(line);
+        }
+        return data;
     }
-    
     /**
      * This method provides the main functionality to send to the client the
      *     request data.
-     * @param he HTTP exchange object with headers and data from the Proxy.
-     * @param responseString String for send to the client.
+     * @param baseRequest HTTP exchange object with headers and data from the Proxy.
+     * @param response String for send to the client.
+     * @param responseString String with the response body.
+     * @throws IOException Exception if can't write the response.
+     * @since v0.4.0
      */
-    private void sendKeyServerResponse(HttpExchange he, String responseString){
-        Headers httpResponseHeaders = he.getResponseHeaders();
-        // Preparing response Header.
-        httpResponseHeaders.add("Content-Type", "application/json");  
-        try {
-            // Send response Header.
-            he.sendResponseHeaders(200, responseString.getBytes().length);
-            // Preparing and send response body.
-            OutputStream responseBody = he.getResponseBody();
-            responseBody.write(responseString.getBytes());
-        } catch (IOException ex) {
-                LOGGER.error("Can't send the response to the client...");
-        } 
-    }
-    
-    /**
-     * This method provide an easy way to extract the body content from HTTP 
-     *     package.
-     * @param bodyStream Input Stream of HTTP body.
-     * @return String with the body content.
-     */
-    private String readHttpBodyInputStream(InputStream bodyStream){
-        String jsonString = "";
-        try {
-            while(bodyStream.available()>0){
-                jsonString += (char)bodyStream.read();
-            }
-            bodyStream.close();
-        } catch (IOException ex) {
-            LOGGER.error("IO exception for incomming HTTP bodyStream: {}",ex.getMessage());
-        }
-        return jsonString;
+    private void sendKeyServerResponse(Request baseRequest, HttpServletResponse response, String responseString) throws IOException{
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
+        response.getWriter().println(responseString);
     }
     
     /**
@@ -169,20 +151,15 @@ public class IncomingRequestProcess implements HttpHandler{
      * @return Returns a String with the response to the client.
      */
     private String processIncommingJson(InputJSON jsonObj){
-        // Check if the IP is Authorized to use KeyServer 
-        if(!this.ipAuthorized){
-            SECURITY.error("Access denied from this host.");
-            return new ErrorJSON(ErrorJSON.ERR_REQUEST_DENIED).toString();
-        }
-        // Check first if JSON is valid.
+        // Check if JSON is valid.
         if(jsonObj.checkValidJSON()!=null){ // If not is valid
             // Generate JSON Output error object and return it as string.
-            LOGGER.debug("IncommingJSON Processor: Not valid JSON received. Returns error to the HTTP IncommingProcessor thread.");
+            LOGGER.debug("IncomingJSON Processor: Not valid JSON received. Returns error to the HTTP IncomingProcessor thread.");
             return new ErrorJSON(jsonObj.checkValidJSON()).toString();
         }
-        LOGGER.trace("IncommingJSON Processor: Input JSON valid.");
+        LOGGER.trace("IncomingJSON Processor: Input JSON valid.");
         // If JSON is valid, process response.
-        String responseString=null;
+        String responseString;
         switch (jsonObj.getMethod()){
             case InputJSON.ECDHE: // ECDHE Mode
                 LOGGER.debug("Response from KeyServer for ECDH.");
@@ -197,13 +174,13 @@ public class IncomingRequestProcess implements HttpHandler{
                 break;
             default:
                 // Not valid method.
-                LOGGER.error("HTTP Incomming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
+                LOGGER.error("HTTP Incoming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
                 responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
                 break;
         }
         // Debug logger info:
-        LOGGER.debug("HTTP Incomming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
-                jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
+        LOGGER.debug("HTTP Incoming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
+        jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
         // Check if responseString is an error and returns the correct object as JSON string.
         if(responseString.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
                 responseString.equalsIgnoreCase(ErrorJSON.ERR_NOT_FOUND) ||
@@ -233,9 +210,19 @@ public class IncomingRequestProcess implements HttpHandler{
         try {
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeySpecException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         // Check if privKey is valid.
         if(privKey == null){
@@ -245,13 +232,33 @@ public class IncomingRequestProcess implements HttpHandler{
             // Sign data
             return Ecdhe.calcOutput(input, privKey, hash);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("ECDH No Such Algorithm Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeySpecException ex) {
+            // Error level
             LOGGER.error("ECDH Invalid Key Espec Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeyException ex) {
+            // Error level.
             LOGGER.error("ECDH Invalid Key Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (SignatureException ex) {
+            // Error level.
             LOGGER.error("ECDH Signature Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }
@@ -264,7 +271,7 @@ public class IncomingRequestProcess implements HttpHandler{
      * @return PremasterSecret decoded using private key and encoded using base64.
      */
     private String modeRSA(String spki, String input) {
-        // Execute REDIS query trying to found private key for the incomming SKI.
+        // Execute REDIS query trying to found private key for the incoming SKI.
         byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
         if(encodePrivateKey == null){
             return ErrorJSON.ERR_NOT_FOUND;
@@ -274,9 +281,19 @@ public class IncomingRequestProcess implements HttpHandler{
         try {
             privKey = loadPrivateKey(encodePrivateKey);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeySpecException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         // Check if privKey is valid.
         if(privKey == null){
@@ -286,15 +303,40 @@ public class IncomingRequestProcess implements HttpHandler{
         try {
             return Rsa.calcDecodedOutput(input, privKey);
         } catch (NoSuchAlgorithmException ex) {
+            // Error level.
             LOGGER.error("RSA No Such Algorithm Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (NoSuchPaddingException ex) {
+            // Error level.
             LOGGER.error("RSA No Such Padding Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (InvalidKeyException ex) {
+            // Error level.
             LOGGER.error("RSA Invalid Key Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (IllegalBlockSizeException ex) {
+            // Error level.
             LOGGER.error("RSA Illegal Blocks Size Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         } catch (BadPaddingException ex) {
+            // Error level.
             LOGGER.error("RSA Bad Padding Exception: {}", ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }
@@ -304,12 +346,12 @@ public class IncomingRequestProcess implements HttpHandler{
      * @param encodePrivateKey Array with private key values.
      * @return Private key object.
      * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException 
+     * @throws InvalidKeySpecException
      */
     private PrivateKey loadPrivateKey(byte[] encodePrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec privatekeySpec = new PKCS8EncodedKeySpec(encodePrivateKey);
-        PrivateKey prikey = (PrivateKey) keyFactory.generatePrivate(privatekeySpec);
+        PrivateKey prikey = keyFactory.generatePrivate(privatekeySpec);
         return prikey;
     }
 }

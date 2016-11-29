@@ -73,7 +73,7 @@ public class HttpsCert implements CheckObject{
         } catch (KeyStoreException ex) {
             initStatus = false;
             // Error level.
-            LOGGER.error("KeyStoreException ocurred when try to load the HTTPs certificate.");
+            LOGGER.error("KeyStoreException occurred when try to load the HTTPs certificate.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -89,7 +89,7 @@ public class HttpsCert implements CheckObject{
         } catch (NoSuchAlgorithmException ex) {
             initStatus = false;
             // Error level.
-            LOGGER.error("NoSuchAlgorithmException ocurred when try to load the HTTPs certificate.");
+            LOGGER.error("NoSuchAlgorithmException occurred when try to load the HTTPs certificate.");
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));

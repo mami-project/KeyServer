@@ -30,10 +30,6 @@ import javax.crypto.NoSuchPaddingException;
  */
 public class Rsa {
     /**
-     * Logging object.
-     */
-    // private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Rsa.class);
-    /**
      * This static method provides a simple way to decode the PremasterSecret from
      * an input string using a PrivateKey object.
      * @param data String with base64 encoded PremasterSecret.

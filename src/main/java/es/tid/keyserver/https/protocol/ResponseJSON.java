@@ -51,8 +51,7 @@ class ResponseJSON {
      * @param label JSON Label value.
      * @param data JSON Data associated to the label. 
      */
-    @SuppressWarnings("unchecked")
-	protected final void setOutputData(String label, String data){
+    protected final void setOutputData(String label, String data){
         outputData.put(label, data);
     }
     
