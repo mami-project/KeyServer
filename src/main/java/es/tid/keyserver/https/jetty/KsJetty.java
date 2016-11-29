@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016 Telefonica.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +56,7 @@ public class KsJetty implements Runnable{
      */
     public KsJetty(ConfigController parameters, DataBase objDB){
         server = new Server(new QueuedThreadPool(128, 8));
+        // User custom configuration fields
         HttpConfiguration https = getHttpStaticConfig();
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(parameters.getServerKeyStoreFile());
@@ -81,7 +82,7 @@ public class KsJetty implements Runnable{
         if(parameters.getServerIpWhiteList() != null){
             InetAccessHandler accessControl = new InetAccessHandler();
             for (String tmp :parameters.getServerIpWhiteList()) {
-                accessControl.include(tmp);
+                accessControl.include(tmp.trim());
             }
             accessControl.setHandler(ksHandler);
             server.setHandler(accessControl);

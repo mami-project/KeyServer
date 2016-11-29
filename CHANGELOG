@@ -1,13 +1,16 @@
 # KeyServer Change Log
 
-v0.3.4
+v0.4.0
 -------------------------------------------------------------------------------- 
 Features:
-  - 
+  - Improved HTTPs service and security using Jetty.
+  - New KeyServer folder structure.
+  - Improved logs and security register.
 
 Bug fixes:
-  - 
-
+  - Solved #13 out of memory error.
+  - Solved cURL problem #14 with GnuTLS/3.x.x
+  
 
 v0.3.3
 -------------------------------------------------------------------------------- 

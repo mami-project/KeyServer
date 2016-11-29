@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016 Telefonica.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -137,7 +137,8 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * @since v0.4.0
      */
     private void sendKeyServerResponse(Request baseRequest, HttpServletResponse response, String responseString) throws IOException{
-        response.setContentType("application/json;charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
         response.getWriter().println(responseString);
@@ -350,7 +351,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
     private PrivateKey loadPrivateKey(byte[] encodePrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec privatekeySpec = new PKCS8EncodedKeySpec(encodePrivateKey);
-        PrivateKey prikey = (PrivateKey) keyFactory.generatePrivate(privatekeySpec);
+        PrivateKey prikey = keyFactory.generatePrivate(privatekeySpec);
         return prikey;
     }
 }
