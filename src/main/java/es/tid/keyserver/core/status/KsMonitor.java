@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import javax.swing.Timer;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -267,5 +268,14 @@ public class KsMonitor {
      */
     public Date keyServerRunningSince(){
         return this.startDate;
+    }
+    
+    /**
+     * This method returns a Jetty statistics object.
+     * @return Statistic Jetty object.
+     * @since v0.4.0
+     */
+    public StatisticsHandler getStatistics(){
+        return this.httpsServer.getStatistics();
     }
 }

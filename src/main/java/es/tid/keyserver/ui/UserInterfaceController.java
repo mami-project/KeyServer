@@ -19,9 +19,7 @@ import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.status.KsMonitor;
 import es.tid.keyserver.ui.controls.StatusController;
 import es.tid.keyserver.ui.pkmanager.ProvisionController;
-
 import java.util.Scanner;
-
 import org.slf4j.LoggerFactory;
 
 /**
@@ -99,6 +97,10 @@ public class UserInterfaceController {
             case "Q":
                 // Close KeyServer
                 this.exitFlag = true;
+                break;
+            case "S":
+                // Shows KeyServer status and details.
+                StatusController.showKsStats(this.monObj.getStatistics());
                 break;
             default:
                 // Not valid option.

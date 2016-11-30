@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Telefonica.
+ * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,12 @@ import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnectionStatistics;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.InetAccessHandler;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -40,6 +41,10 @@ public class KsJetty implements Runnable{
      * Jetty Server Object.
      */
     private Server server;
+    /**
+     * Statistics object.
+     */
+    private StatisticsHandler stats;
     /**
      * Jetty initialization flag
      */
@@ -55,7 +60,7 @@ public class KsJetty implements Runnable{
      * @since v0.4.0
      */
     public KsJetty(ConfigController parameters, DataBase objDB){
-        server = new Server(new QueuedThreadPool(128, 8));
+        server = new Server();
         // User custom configuration fields
         HttpConfiguration https = getHttpStaticConfig();
         SslContextFactory sslContextFactory = new SslContextFactory();
@@ -95,6 +100,11 @@ public class KsJetty implements Runnable{
             SECURITY.warn(msg);
             LOGGER.warn(msg);
         }
+        // Statistics handler
+        stats = new StatisticsHandler();
+        stats.setHandler(server.getHandler());
+        server.setHandler(stats);
+        ServerConnectionStatistics.addToAllConnectors(server);
     }
     
     /**
@@ -142,6 +152,15 @@ public class KsJetty implements Runnable{
      */
     public boolean isReady(){
         return this.ready;
+    }
+
+    /**
+     * This method returns a Jetty statistics object.
+     * @return Statistic Jetty object.
+     * @since v0.4.0
+     */
+    public StatisticsHandler getStatistics(){
+        return this.stats;
     }
 
     /**

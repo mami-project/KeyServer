@@ -21,6 +21,7 @@ import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.https.jetty.KsJetty;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -93,6 +94,15 @@ public class HttpsServerController implements CheckObject{
         return jettyserver.getStatus();
     }
 
+    /**
+     * This method returns a Jetty statistics object.
+     * @return Statistic Jetty object.
+     * @since v0.4.0
+     */
+    public StatisticsHandler getStatistics(){
+        return this.jettyserver.getStatistics();
+    }
+    
     /**
      * Object initialization status.
      * @return Returns true if the object is correctly initialized or false if 
