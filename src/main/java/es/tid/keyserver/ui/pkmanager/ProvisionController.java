@@ -318,7 +318,7 @@ public class ProvisionController {
             do{
                 System.out.println(" Write the certificate expiration date. If you don't provide\n"
                         + " the date, the private key will be present inside database\n"
-                        + " ulimited. You must remove it manually.\n");
+                        + " unlimited. You must remove it manually.\n");
                 System.out.print(" Write the date using this format (yyyy.MM.dd-HH:mm:ss): ");    
                 input = sc.next().trim();
                 if(input.equalsIgnoreCase("Q")){
