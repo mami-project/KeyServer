@@ -345,8 +345,8 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * Load private key from byte array.
      * @param encodePrivateKey Array with private key values.
      * @return Private key object.
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
+     * @throws NoSuchAlgorithmException Algorithm not valid.
+     * @throws InvalidKeySpecException Key specification not valid.
      */
     private PrivateKey loadPrivateKey(byte[] encodePrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
