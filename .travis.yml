@@ -4,6 +4,7 @@ jdk:
 script:
   - mvn verify -X -f ./pom.xml
   - mvn package
+  - mvn javadoc:javadoc
   - mvn site
   - mvn versions:display-dependency-updates
   - mvn versions:display-plugin-updates

@@ -46,8 +46,8 @@ public class KeyServer {
         // Process input arguments
         String configFile = inputArgs(args);
         if(configFile.isEmpty()){
-            LOGGER.debug("User has not provide an input configuration file name. Using default: 'general.properties'.");
-            configFile = "general.properties";     // Default configuration file.
+            LOGGER.debug("User has not provide an input configuration file name. Using default: 'config/config.properties'.");
+            configFile = "config/config.properties";     // Default configuration file.
         }
         // Load/Create configuration file
         LOGGER.info("Loading KeyServer parameters...\n\n");
@@ -80,8 +80,8 @@ public class KeyServer {
         // HTTPs Server Certificate.
         LOGGER.info("Loading HTTPs server certificate.");
         HttpsCert ksCert = new HttpsCert(
-                softwareConfig.getServerKeyFile(), 
-                softwareConfig.getServerKeyPass());
+                softwareConfig.getServerKeyStoreFile(), 
+                softwareConfig.getServerKeyStorePassword());
         checkObj(ksCert,"HTTPs server certificate correctly loaded.", 
                 "Can't load the HTTPs server certificate..");
         
@@ -89,16 +89,15 @@ public class KeyServer {
         LOGGER.info("Starting HTTP server... ");
         HttpsServerController keyServerHttp = new HttpsServerController(
                 softwareConfig, 
-                keyServerDB, 
-                ksCert.getCertificate(), 
-                softwareConfig.getServerKeyPass());
+                keyServerDB);
+        keyServerHttp.start();
         checkObj(keyServerHttp,"KeyServer now is ready...", 
                 "Can't create HTTP server.");
         
         // KeyServer Monitor object.
         KsMonitor mon = new KsMonitor(
                 keyServerDB, 
-                keyServerHttp.isCorrectlyInitialized(), 
+                keyServerHttp, 
                 ksCert, 
                 softwareConfig.getProjectPublicUrl(),
                 softwareConfig.getVersion(),
@@ -136,7 +135,7 @@ public class KeyServer {
             switch(args[0]){
                 case "-c":  // Specific the new configuration file to be used.
                     if (args.length == 1){
-                        LOGGER.error("You must specific the config file route as input parammeter.");
+                        LOGGER.error("You must specific the config file route as input parameter.");
                         showHelp();
                     } else {
                         return args[1];
@@ -149,7 +148,7 @@ public class KeyServer {
                     break;
                 default:    // Invalid input parameter.
                     LOGGER.error("Not valid command line input option: {}", args[0]);
-                    LOGGER.info("Please use one of the following accepted parammeters.");
+                    LOGGER.info("Please use one of the following accepted parameters.");
                     showHelp();
                     System.exit(-1);
                     break;
@@ -232,20 +231,15 @@ public class KeyServer {
             "serverAddress",
             "serverPort",
             // SSL Parameters 
-            "serverSSLContext",
-            "serverKeyFile",
-            "serverKeyPass",
-            "serverBacklog",
-            "serverKeyManagerFactory",
-            "serverTrustManagerFactory",
-            "serverKeyStore",
+            "serverKeyStoreFile",
+            "serverKeyStorePassword",
+            "serverKeyManagerPassword",
+            "serverIdleTimeout",
             // Redis Database
             "dbAddress",
             "dbPort",
             "dbPassword",
             "dbCheckInterval",
-            // Access control
-            "whiteList"
         };
         return fields;
     }

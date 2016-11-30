@@ -1,10 +1,25 @@
 # KeyServer Change Log
 
+v0.4.0
+-------------------------------------------------------------------------------- 
+Features:
+  - Improved HTTPs service and security using Jetty.
+  - New KeyServer folder structure.
+  - Improved logs and security register.
+  - Swagger API file for client code generation.
+  - OpenSource KeyServer Client tool.
+  - New menu option for Jetty server statistics.
+
+Bug fixes:
+  - Solved #13 out of memory error.
+  - Solved cURL problem #14 with GnuTLS/3.x.x
+  
+
 v0.3.3
 -------------------------------------------------------------------------------- 
 Features:
   - Now can use others Redis DB index.
-  - Security log for each incomming request.
+  - Security log for each incoming request.
   - Configuration parameters for time intervals (DB monitor and KS updates).
 
 Bug fixes:
@@ -20,13 +35,13 @@ Features:
 Bug fixes:
   - Fixed Javadoc warnings.
   - Updated KeyServer dependencies.
-  - Updated Maven pluginss.
+  - Updated Maven plugins.
 
 
 v0.3.1
 -------------------------------------------------------------------------------- 
 Features:
-  - Impoved Redis connection security.
+  - Improved Redis connection security.
   - Auto remove a Private Key from Redis database before a specific date.
 
 Bug fixes:

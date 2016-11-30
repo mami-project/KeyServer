@@ -16,6 +16,7 @@
 package es.tid.keyserver.ui.controls;
 
 import es.tid.keyserver.core.status.KsMonitor;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 
 /**
  * This class contains the statics method for KeyServer status user interface.
@@ -35,6 +36,7 @@ public class StatusController {
                 + " ------   ---------------------------------------------------------------\n"
                 + "    H      Shows help menu options.\n"
                 + "    I      Shows KeyServer status and details.\n"
+                + "    S      Jetty HTTPs connection statistics.\n"
                 + "\n"
                 + "    P      Provision: Insert a new private key inside KeyServer database.\n"
                 + "    D      Delete: Remove a private key from the KeyServer database.\n"
@@ -66,10 +68,38 @@ public class StatusController {
                 + "  --------\n"
                 + "  - Redis Status:\n"
                 + "  \tConnection active: " + mon.isRedisConnectionAvailable() + "\n"
-                + "  - HTTPs Server Status:\n"
-                + "  \tCorrectly initialized: " + mon.isHttpsServerCorrectlyInitialized() + "\n"
+                + "  - Jetty HTTPS Server Status: " + mon.httpsServerStatus() + "\n"
                 + "  \tCertificate expiration date: " + mon.getHttpsCertificateExpDate() + "\n"
                 + "  \tCertificate remaining days: " + mon.getHttpsCertificateRemainDays() + "\n"
                 + "\n");
+    }
+
+    /**
+     * This method shows a formated message with Jetty statistics elements.
+     * @param statistics Jetty statistics object.
+     * @since v0.4.0
+     */
+    public static void showKsStats(StatisticsHandler statistics) {
+        System.out.println("\n"
+                + "                         - Connection Status -\n"
+                + "                         ---------------------\n"
+                + "  Dispatches" + "\n"
+                + "  ----------" + "\n"
+                + "   - Total dispatched: " + statistics.getDispatched() +"\n"
+                + "   - Active connections: " + statistics.getDispatchedActive() +"\n"
+                + "   - Active requests: " + statistics.getRequestsActive() +"\n"
+                + "   - Max active dispatched: " + statistics.getDispatchedActiveMax() +"\n"
+                + "   - Dispatched Time (Max / Mean): " + statistics.getDispatchedTimeMax() + "ms / "+ statistics.getDispatchedTimeMean() +"ms\n"
+                + "   - Total requests expired: " + statistics.getExpires() +"\n"
+                + "   - Dispatched time (Max / Mean): " + statistics.getRequestTimeMax() + "ms / "+ statistics.getRequestTimeMean() +"ms\n"
+                + "   - Total request handler: " + statistics.getRequests() +"\n"
+                + "   - Total active requests max: " + statistics.getRequestsActiveMax() +"\n\n"
+                + "  Responses" + "\n"
+                + "  ---------" + "\n"
+                + "   - 1xx responses:\t" + statistics.getResponses1xx() + "\n"
+                + "   - 2xx responses:\t" + statistics.getResponses2xx() + "\n"
+                + "   - 3xx responses:\t" + statistics.getResponses3xx() + "\n"
+                + "   - 4xx responses:\t" + statistics.getResponses4xx() + "\n"
+                + "   - 5xx responses:\t" + statistics.getResponses5xx() + "\n");
     }
 }

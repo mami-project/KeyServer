@@ -44,19 +44,18 @@ public class ConfigControllerTest {
     public ConfigControllerTest() {
         String testFileRoute = "target/test-classes/configtest.properties";
         String [] requiredFields = {
+            "ksCheckUpdates",
             "serverAddress",
             "serverPort",
-            "serverSSLContext",
-            "serverKeyFile",
-            "serverKeyPass",
-            "serverBacklog",
-            "serverKeyManagerFactory",
-            "serverTrustManagerFactory",
-            "serverKeyStore",
-            "serverCiphersSuites",
+            "serverKeyStoreFile",
+            "serverKeyStorePassword",
+            "serverKeyManagerPassword",
+            "serverIdleTimeout",
             "dbAddress",
             "dbPort",
             "dbPassword",
+            "dbIndex",
+            "dbCheckInterval",
             "whiteList"
         };
         this.testObj = new ConfigController("/applicationtest.properties", testFileRoute, requiredFields);
@@ -70,19 +69,18 @@ public class ConfigControllerTest {
         String testFileRoute = "target/test-classes/configtest.properties";
         Properties configFile = new Properties();
         // Default parammeters:
+        configFile.setProperty("ksCheckUpdates", "3600000");
         configFile.setProperty("serverAddress", "192.168.1.2");
         configFile.setProperty("serverPort", "1443");
-        configFile.setProperty("serverSSLContext", "TLSv1.2");
-        configFile.setProperty("serverKeyFile", "HTTPS_keystore.ks");
-        configFile.setProperty("serverKeyPass", "123456");
-        configFile.setProperty("serverBacklog", "5");
-        configFile.setProperty("serverKeyManagerFactory", "SunX509");
-        configFile.setProperty("serverTrustManagerFactory", "SunX509");
-        configFile.setProperty("serverKeyStore", "JKS");
-        configFile.setProperty("serverCiphersSuites", "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA");
+        configFile.setProperty("serverKeyStoreFile", "ksserverkey.jks");
+        configFile.setProperty("serverKeyStorePassword", "123456");
+        configFile.setProperty("serverKeyManagerPassword", "123456");
+        configFile.setProperty("serverIdleTimeout","30000");
         configFile.setProperty("dbAddress", "192.168.11.180");
         configFile.setProperty("dbPort", "6379");
         configFile.setProperty("dbPassword", "foobared");
+        configFile.setProperty("dbIndex", "3");
+        configFile.setProperty("dbCheckInterval", "1000");
         configFile.setProperty("whiteList", "IP_whitelist.txt");
         try{
             FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
@@ -166,90 +164,24 @@ public class ConfigControllerTest {
     }
 
     /**
-     * Test of getServerSSLContext method, of class ConfigController.
+     * Test of getServerKeyStoreFile method, of class ConfigController.
      */
     @Test
-    public void testGetServerSSLContext() {
-        System.out.println("getServerSSLContext");
-        String expResult = "TLSv1.2";
-        String result = this.testObj.getServerSSLContext();
+    public void testGetServerKeyStoreFile() {
+        System.out.println("getServerKeyStoreFile");
+        String expResult = "ksserverkey.jks";
+        String result = this.testObj.getServerKeyStoreFile();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of getServerKeyFile method, of class ConfigController.
+     * Test of getServerKeyStorePassword method, of class ConfigController.
      */
     @Test
-    public void testGetServerKeyFile() {
-        System.out.println("getServerKeyFile");
-        String expResult = "HTTPS_keystore.ks";
-        String result = this.testObj.getServerKeyFile();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerKeyPass method, of class ConfigController.
-     */
-    @Test
-    public void testGetServerKeyPass() {
+    public void testGetServerKeyStorePassword() {
         System.out.println("getServerKeyPass");
         String expResult = "123456";
-        String result = this.testObj.getServerKeyPass();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerBacklog method, of class ConfigController.
-     */
-    @Test
-    public void testGetServerBacklog() {
-        System.out.println("getServerBacklog");
-        int expResult = 5;
-        int result = this.testObj.getServerBacklog();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerKeyManagerFactory method, of class ConfigController.
-     */
-    @Test
-    public void testGetServerKeyManagerFactory() {
-        System.out.println("getServerKeyManagerFactory");
-        String expResult = "SunX509";
-        String result = this.testObj.getServerKeyManagerFactory();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerTrustManagerFactory method, of class ConfigController.
-     */
-    @Test
-    public void testGetServerTrustManagerFactory() {
-        System.out.println("getServerTrustManagerFactory");
-        String expResult = "SunX509";
-        String result = this.testObj.getServerTrustManagerFactory();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerKeyStore method, of class ConfigController.
-     */
-    @Test
-    public void testGetServerKeyStore() {
-        System.out.println("getServerKeyStore");
-        String expResult = "JKS";
-        String result = this.testObj.getServerKeyStore();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getServerCiphersSuites method, of class ConfigController.
-     */
-    @Test
-    public void testGetServerCiphersSuites() {
-        System.out.println("getServerCiphersSuites");
-        String expResult = "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA";
-        String result = this.testObj.getServerCiphersSuites();
+        String result = this.testObj.getServerKeyStorePassword();
         assertEquals(expResult, result);
     }
 
@@ -306,5 +238,71 @@ public class ConfigControllerTest {
         String expResult = "foobared";
         String result = testObj.getDbPassword();
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getServerKeyManagerPassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerKeyManagerPassword() {
+        System.out.println("getServerKeyManagerPassword");
+        String expResult = "123456";
+        String result = testObj.getServerKeyManagerPassword();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getDbIndex method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbIndex() {
+        System.out.println("getDbIndex");
+        int expResult = 3;
+        int result = testObj.getDbIndex();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getChkDbInterval method, of class ConfigController.
+     */
+    @Test
+    public void testGetChkDbInterval() {
+        System.out.println("getChkDbInterval");
+        int expResult = 1000;
+        int result = testObj.getChkDbInterval();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getChkUpdateInterval method, of class ConfigController.
+     */
+    @Test
+    public void testGetChkUpdateInterval() {
+        System.out.println("getChkUpdateInterval");
+        int expResult = 3600000;
+        int result = testObj.getChkUpdateInterval();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getIdleTimeout method, of class ConfigController.
+     */
+    @Test
+    public void testGetIdleTimeout() {
+        System.out.println("getIdleTimeout");
+        long expResult = 30000L;
+        long result = testObj.getIdleTimeout();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getServerIpWhiteList method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerIpWhiteList() {
+        System.out.println("getServerIpWhiteList");
+        String[] expResult = null;
+        String[] result = this.testObj.getServerIpWhiteList();
+        assertArrayEquals(expResult, result);
     }
 }

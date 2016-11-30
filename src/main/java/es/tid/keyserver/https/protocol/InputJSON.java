@@ -158,7 +158,7 @@ public class InputJSON {
                         readedHash = InputJSON.SHA_512;
                         break;
                     default:
-                        LOGGER.error("ECDHE not valid 'hash' field {}.", (String) inputData.get("hash"));
+                        LOGGER.error("ECDHE not valid 'hash' field {}.", inputData.get("hash"));
                         readedHash = null;
                         break;
                 }
@@ -196,7 +196,7 @@ public class InputJSON {
                     readedProtocol = InputJSON.DTLS_1_2;
                     break;
                 default:
-                    LOGGER.error("Not valid 'protocol' field {}.", (String) inputData.get("protocol"));
+                    LOGGER.error("Not valid 'protocol' field {}.", inputData.get("protocol"));
                     readedProtocol = null;
                     break;
             }
@@ -226,8 +226,7 @@ public class InputJSON {
         // Logger trace output
         LOGGER.trace("Method CheckJSON (fields): protocol='{}', method='{}', hash='{}', spki='{}', input='{}'",
                 protocol, method, hash, spki, input);
-        // Check if the JSON contains all fields "protocol", "method", "hash", 
-        //  "spki" and "input" fields.
+        // Check if the JSON contains all fields "protocol", "method", "hash", "spki" and "input" fields.
         if((protocol == null) || (method == null) || (spki == null) || (input == null)){
             LOGGER.debug("Input JSON: Some required fields are not present.");
             return ErrorJSON.ERR_MALFORMED_REQUEST;
