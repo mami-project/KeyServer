@@ -212,8 +212,7 @@ logs/
 config/
 
 # KeyServer Tools #
-!tools/pk-provider.jar
-tools/certs/
+!tools/ks_client/ksClient.jar
 
 # Others #
 *.~vsdx

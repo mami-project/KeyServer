@@ -6,6 +6,9 @@ Features:
   - Improved HTTPs service and security using Jetty.
   - New KeyServer folder structure.
   - Improved logs and security register.
+  - Swagger API file for client code generation.
+  - OpenSource KeyServer Client tool.
+  - New menu option for Jetty server statistics.
 
 Bug fixes:
   - Solved #13 out of memory error.
