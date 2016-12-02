@@ -1,5 +1,15 @@
 # KeyServer Change Log
 
+v0.4.1
+-------------------------------------------------------------------------------- 
+Features:
+  - HTTPs statistics page more descriptive.
+  - Updated dependencies (and remove unused).
+
+Bug fixes:
+  - 
+
+
 v0.4.0
 -------------------------------------------------------------------------------- 
 Features:

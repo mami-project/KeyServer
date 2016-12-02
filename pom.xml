@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.4.0</version>
+    <version>v0.4.1</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>
@@ -23,14 +23,9 @@
             <version>1.1.1</version>
         </dependency>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.20</version>
+            <version>1.7.21</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -42,13 +37,6 @@
             <artifactId>logback-core</artifactId>
             <version>1.1.7</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-        <!--<dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.0-b01</version>
-        </dependency>-->
-    
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
