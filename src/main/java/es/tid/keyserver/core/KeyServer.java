@@ -60,10 +60,13 @@ public class KeyServer {
         // Print KeyServer start box.
         LOGGER.debug("Starting {} tool {}", appName, appVersion);
         System.out.println("+------------------------------------------------------------------------+");
-        System.out.println("|                          " +    appName   + "                          |");
-        System.out.println("|                          --------------------                          |");
-        System.out.println("+------------------------------------------------------------------------+");
-        System.out.println(printVersionLine(appVersion));
+        System.out.println("|              _  __          ____                                       |");
+        System.out.println("|            | |/ /___ _   _/ ___|  ___ _ ____   _____ _ __              |");
+        System.out.println("|            | ' // _ \\ | | \\___ \\ / _ \\ '__\\ \\ / / _ \\ '__|             |");
+        System.out.println("|            | . \\  __/ |_| |___) |  __/ |   \\ V /  __/ |                |");
+        System.out.println("|            |_|\\_\\___|\\__, |____/ \\___|_|    \\_/ \\___|_|                |");
+        System.out.println("|                     |___/" +printVersionLine(appVersion)+ "|");
+        System.out.println("+------------------------------------------------------------------------+\n");
         
         checkObj(softwareConfig, "Configuration file correctly loaded.",
                 "Can't load configuration file. Please check if the file exists and can be read.");
@@ -212,7 +215,7 @@ public class KeyServer {
     private static String printVersionLine(String version) {
         String versionLine = "";
         // Length of line 74 characters
-        for(int i=0; i< (74 - (version.length() + 1)); i++){
+        for(int i=0; i< (46 - (version.length() + 1)); i++){
             versionLine += " ";
         }
         versionLine += version + " ";
