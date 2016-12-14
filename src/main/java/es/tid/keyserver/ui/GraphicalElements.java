@@ -65,7 +65,14 @@ public class GraphicalElements {
                 "+------------------------------------------------------------------------+\n";
     }
     
-    
+    /**
+     * This method returns an string with the KeyServer application name.
+     * @return String with the KeyServer application name.
+     * @since v0.4.1
+     */
+    public String getAppName(){
+        return this.appName;
+    }
     
     
     /**
