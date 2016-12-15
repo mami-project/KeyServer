@@ -62,7 +62,8 @@ public class GraphicalElements {
                 "|            | . \\  __/ |_| |___) |  __/ |   \\ V /  __/ |                |\n" +
                 "|            |_|\\_\\___|\\__, |____/ \\___|_|    \\_/ \\___|_|                |\n" +
                 "|                     |___/" + printVersionLine(appVersion) + "|\n" + 
-                "+------------------------------------------------------------------------+\n";
+                "+------------------------------------------------------------------------+\n"+
+                " https://github.com/mami-project/KeyServer \n";
     }
     
     /**
@@ -73,8 +74,7 @@ public class GraphicalElements {
     public String getAppName(){
         return this.appName;
     }
-    
-    
+       
     /**
      * This method is used to represent the application version string correctly
      *     according to the version string length.

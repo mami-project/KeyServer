@@ -40,7 +40,7 @@ public class KsJettyErrors extends ErrorHandler {
      * @param baseRequest This is the base request.
      * @param request Request from the client.
      * @param response Response to the client.
-     * @throws IOException 
+     * @throws IOException Problem during input/output operation.
      * @since v0.4.0
      */
     @Override
