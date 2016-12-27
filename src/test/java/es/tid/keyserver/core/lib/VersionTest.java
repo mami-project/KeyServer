@@ -24,12 +24,33 @@ import static org.junit.Assert.*;
  * @since v0.4.1
  */
 public class VersionTest {
+    /**
+     * Version test object 1.
+     */
     private Version obj1;
+    /**
+     * Version test object 2.
+     */
     private Version obj2;
+    /**
+     * Version test object 3.
+     */
     private Version obj3;
+    /**
+     * Version test object 4.
+     */
     private Version obj4;
+    /**
+     * Version test object 5.
+     */
     private Version obj5;
+    /**
+     * Version test object 6.
+     */
     private Version obj6;
+    /**
+     * Version test object 7.
+     */
     private Version obj7;
     
     /**

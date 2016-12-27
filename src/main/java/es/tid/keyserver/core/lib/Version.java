@@ -24,38 +24,72 @@ package es.tid.keyserver.core.lib;
  * @since v0.4.1
  */
 public class Version {
+    /**
+     * Major version field vXX.xx.xx
+     */
     private int major;
+    /**
+     * Minor version field vxx.XX.xx
+     */
     private int minor;
+    /**
+     * Patch version field vxx.xx.XX
+     */
     private int patch;
     
     /**
      * Class constructor.
      * @param strVer String with the version numbers. Example: v0.1.0
+     * @since v0.4.1
      */
     public Version(String strVer){
-        if(strVer.startsWith("v")){
-            strVer = strVer.substring(1);
+        String tmp=strVer;
+        if(tmp.startsWith("v")){
+            tmp = tmp.substring(1);
         }
         /* The period / dot is a special character in regex, you have to escape 
             it either with a double backlash \\.     */
-        String [] values = strVer.split("\\.");
+        String [] values = tmp.split("\\.");
         major = Integer.valueOf(values[0]);
         minor = Integer.valueOf(values[1]);
         patch = Integer.valueOf(values[2]);
     }
     
+    /**
+     * This method returns the major version field.
+     * @return  Major version field as integer.
+     * @since v0.4.1
+     */
     public int getMajor(){
         return this.major;
     }
     
+    /**
+     * This method returns the minor version field.
+     * @return Minor version field as integer.
+     * @since v0.4.1
+     */
     public int getMinor(){
         return this.minor;
     }
     
+    /**
+     * This method returns the patch version field.
+     * @return Patch version field.
+     * @since v0.4.1
+     */
     public int getPatch(){
         return this.patch;
     }
     
+    /**
+     * This method is used to compare if two Version objects are equals
+     *     (contains the same version fields).
+     * @param extVer External Version object to be compared with the current 
+     *     version object.
+     * @return True if are equals.
+     * @since v0.4.1
+     */
     public boolean equalsTo(Version extVer){
         return ((extVer.getMajor() == this.major) && 
                 (extVer.getMinor() == this.minor) && 
