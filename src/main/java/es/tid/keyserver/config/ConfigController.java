@@ -335,7 +335,7 @@ public class ConfigController implements CheckObject{
             return time;
         } else {
             // Warning level.
-            LOGGER.warn("DB connection check interval value is not valid.");
+            LOGGER.warn("KeyServer updates check interval value is not valid.");
             return -1;
         }
     }

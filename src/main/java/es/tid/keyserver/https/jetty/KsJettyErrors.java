@@ -20,7 +20,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.4.0
  */
-public class KsJettyErrors extends ErrorPageErrorHandler {
+public class KsJettyErrors extends ErrorHandler {
     /**
      * Security logger object
      */
@@ -40,7 +40,7 @@ public class KsJettyErrors extends ErrorPageErrorHandler {
      * @param baseRequest This is the base request.
      * @param request Request from the client.
      * @param response Response to the client.
-     * @throws IOException 
+     * @throws IOException Problem during input/output operation.
      * @since v0.4.0
      */
     @Override

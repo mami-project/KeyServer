@@ -136,7 +136,8 @@ public class KsMonitor {
                 }
             }
         });
-        // Timer 2: Checks KeyServer updates and certificate status every 12hours.
+        // Timer 2: Checks KeyServer updates and certificate status. Value
+        //          specified by the user in milliseconds.
         t2 = new Timer(updTime, new ActionListener() {
             /**
              * Check every 12 hours the following objects.

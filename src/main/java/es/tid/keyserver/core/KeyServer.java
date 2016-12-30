@@ -21,6 +21,7 @@ import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.status.KsMonitor;
 import es.tid.keyserver.https.HttpsServerController;
 import es.tid.keyserver.https.certificate.HttpsCert;
+import es.tid.keyserver.ui.GraphicalElements;
 import es.tid.keyserver.ui.UserInterfaceController;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -54,17 +55,9 @@ public class KeyServer {
         String [] configFields = getRequiredFields();
         // KeyServer Configuration Object
         ConfigController softwareConfig = new ConfigController("/application.properties", configFile, configFields);
-        // Java Project properties (from MAVEN application properties).
-        String appName = softwareConfig.getAppName();
-        String appVersion = softwareConfig.getVersion();
-        // Print KeyServer start box.
-        LOGGER.debug("Starting {} tool {}", appName, appVersion);
-        System.out.println("+------------------------------------------------------------------------+");
-        System.out.println("|                          " +    appName   + "                          |");
-        System.out.println("|                          --------------------                          |");
-        System.out.println("+------------------------------------------------------------------------+");
-        System.out.println(printVersionLine(appVersion));
-        
+        // KeyServer Title
+        GraphicalElements graphicalElements = new GraphicalElements(softwareConfig);
+        System.out.println(graphicalElements.ksTitle());
         checkObj(softwareConfig, "Configuration file correctly loaded.",
                 "Can't load configuration file. Please check if the file exists and can be read.");
         
@@ -200,23 +193,6 @@ public class KeyServer {
                 uiController.userInputDigest(option.trim());
             }
         }
-    }
-    
-    /**
-     * This method is used to represent the application version string correctly
-     *     according to the version string length.
-     * @param version String with the tool version info.
-     * @return String to be printed on screen with correct position for the 
-     *         version string.
-     */
-    private static String printVersionLine(String version) {
-        String versionLine = "";
-        // Length of line 74 characters
-        for(int i=0; i< (74 - (version.length() + 1)); i++){
-            versionLine += " ";
-        }
-        versionLine += version + " ";
-        return versionLine;
     }
 
     /**

@@ -90,7 +90,9 @@ public class LastVersionAvailable implements CheckObject{
      * @since v0.3.0
      */
     public boolean isUpdated(String appVersion){
-        return lastVersion.equalsIgnoreCase(appVersion);
+        Version currentVersion = new Version(appVersion);
+        Version lastAvailableVersion = new Version(lastVersion);
+        return !lastAvailableVersion.greaterThan(currentVersion);
     }
 
     /**

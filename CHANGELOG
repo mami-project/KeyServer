@@ -1,5 +1,18 @@
 # KeyServer Change Log
 
+v0.4.1
+-------------------------------------------------------------------------------- 
+Features:
+  - HTTPs statistics page more descriptive.
+  - Updated dependencies (and remove unused).
+  - Simplified dependencies maintenance.
+  - Improved output logs tree.
+
+Bug fixes:
+  - Improved version check system if there are new versions available.
+  - Fixed Javadoc errors.
+
+
 v0.4.0
 -------------------------------------------------------------------------------- 
 Features:
