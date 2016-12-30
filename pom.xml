@@ -59,7 +59,7 @@
         <json-simple-version>1.1.1</json-simple-version>
         <logback-core-version>1.1.8</logback-core-version>
         <logback-classic-version>1.1.8</logback-classic-version>
-        <slf4j-api-version>1.7.21</slf4j-api-version>
+        <slf4j-api-version>1.7.22</slf4j-api-version>
     </properties>    
     
     <!-- Build Settings -->
