@@ -205,7 +205,11 @@ public class ConfigController implements CheckObject{
         String tmp = this.keyserverConfig.getServerIpWhiteList();
         if (tmp.contains("&")){
             // Contains multiples IPs.
-            return tmp.split("&");
+            String [] output = tmp.split("&");
+            for(int i = 0; i < output.length; i++){
+                output[i]=output[i].trim();     // Remove white spaces.
+            }
+            return output;
         } else {
             // Only contains a IP.
             String [] value = {tmp};
@@ -305,17 +309,6 @@ public class ConfigController implements CheckObject{
                     + "Must be greather than 100ms.");
             return -1;
         }
-    }
-    
-    /**
-     * This method is used to get the IP 'white list' file name for KeyServer 
-     *     access control.
-     * @return String with the 'white list' file name. If the field is not present,
-     *     returns 'null'.
-     * @since v0.3.0
-     */
-    public String getWhiteList(){
-        return this.keyserverConfig.getWhiteList();
     }
     
     /**

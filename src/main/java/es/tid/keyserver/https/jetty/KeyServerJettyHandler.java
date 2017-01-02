@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Telefonica.
+ * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package es.tid.keyserver.https.jetty;
 
 import es.tid.keyserver.controllers.db.DataBase;
+import es.tid.keyserver.https.jetty.exceptions.KeyServerException;
 import es.tid.keyserver.https.keyprocess.Ecdhe;
 import es.tid.keyserver.https.keyprocess.Rsa;
 import es.tid.keyserver.https.protocol.ErrorJSON;
@@ -160,27 +161,35 @@ public class KeyServerJettyHandler extends AbstractHandler{
         LOGGER.trace("IncomingJSON Processor: Input JSON valid.");
         // If JSON is valid, process response.
         String responseString;
-        switch (jsonObj.getMethod()){
-            case InputJSON.ECDHE: // ECDHE Mode
-                LOGGER.debug("Response from KeyServer for ECDH.");
-                responseString = modeECDH(jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
-                break;
-            case InputJSON.RSA: // RSA Mode
-                LOGGER.debug("Response from KeyServer for RSA.");
-                responseString = modeRSA(jsonObj.getSpki(), jsonObj.getInput());
-                if(responseString == null){
-                    responseString = ErrorJSON.ERR_UNSPECIFIED;
-                }
-                break;
-            default:
-                // Not valid method.
-                LOGGER.error("HTTP Incoming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
-                responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
-                break;
+        PrivateKey privKey;
+        try {
+            privKey = this.getPrivKey(jsonObj.getSpki());
+            switch (jsonObj.getMethod()){
+                case InputJSON.ECDHE: // ECDHE Mode
+                    LOGGER.debug("Response from KeyServer for ECDH.");
+                    responseString = modeECDH(jsonObj.getHash(), jsonObj.getInput(), privKey);
+                    break;
+                case InputJSON.RSA: // RSA Mode
+                    LOGGER.debug("Response from KeyServer for RSA.");
+                    responseString = modeRSA(jsonObj.getInput(), privKey);
+                    if(responseString == null){
+                        responseString = ErrorJSON.ERR_UNSPECIFIED;
+                    }
+                    break;
+                default:
+                    // Not valid method.
+                    LOGGER.error("HTTP Incoming Request Processor: Not valid 'method' value={}.", jsonObj.getMethod());
+                    responseString = ErrorJSON.ERR_MALFORMED_REQUEST;
+                    break;
+            }
+            // Debug logger info:
+            LOGGER.debug("HTTP Incoming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
+            jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
+        } catch (KeyServerException e) {
+            // If something goes wrong during Private Key extraction from Redis DB.
+            responseString = e.getMessage();
+            LOGGER.debug("KeyServer custom exception message: ", responseString);
         }
-        // Debug logger info:
-        LOGGER.debug("HTTP Incoming Request Processor: Valid={}, Method={}, Hash={}, Spki={}, Input={}",
-        jsonObj.checkValidJSON(), jsonObj.getMethod(), jsonObj.getHash(), jsonObj.getSpki(), jsonObj.getInput());
         // Check if responseString is an error and returns the correct object as JSON string.
         if(responseString.equalsIgnoreCase(ErrorJSON.ERR_MALFORMED_REQUEST) || 
                 responseString.equalsIgnoreCase(ErrorJSON.ERR_NOT_FOUND) ||
@@ -195,39 +204,11 @@ public class KeyServerJettyHandler extends AbstractHandler{
     /**
      * This method is used to sing the 'input' data.
      * @param hash Hash algorithm used for sign data.
-     * @param spki SHA1 hash of the private certificate.
      * @param input Data to be signed.
+     * @param privKey Private key object.
      * @return String with the data signed and encoded using base64.
      */
-    private String modeECDH(String hash, String spki, String input) {
-        // Execute REDIS query trying to found private key for the incoming SKI.
-        byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
-        if(encodePrivateKey == null){
-            return ErrorJSON.ERR_NOT_FOUND;
-        }
-        // Generate Private Key object.
-        PrivateKey privKey = null;
-        try {
-            privKey = loadPrivateKey(encodePrivateKey);
-        } catch (NoSuchAlgorithmException ex) {
-            // Error level.
-            LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
-            // Debug level.
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            LOGGER.debug(errors.toString());
-        } catch (InvalidKeySpecException ex) {
-            // Error level.
-            LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
-            // Debug level.
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            LOGGER.debug(errors.toString());
-        }
-        // Check if privKey is valid.
-        if(privKey == null){
-            return ErrorJSON.ERR_UNSPECIFIED;
-        }
+    private String modeECDH(String hash, String input, PrivateKey privKey) {
         try {
             // Sign data
             return Ecdhe.calcOutput(input, privKey, hash);
@@ -266,40 +247,11 @@ public class KeyServerJettyHandler extends AbstractHandler{
     /**
      * This method provide an easy way to decode a PreMaster secret codified
      *     using RSA.
-     * @param spki SHA1 of the certificate to find the PrivateKey.
      * @param input Codified PremasterSecret with public key on base64.
+     * @param privKey Private key object.
      * @return PremasterSecret decoded using private key and encoded using base64.
      */
-    private String modeRSA(String spki, String input) {
-        // Execute REDIS query trying to found private key for the incoming SKI.
-        byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
-        if(encodePrivateKey == null){
-            return ErrorJSON.ERR_NOT_FOUND;
-        }
-        // Generate Private Key object.
-        PrivateKey privKey = null;
-        try {
-            privKey = loadPrivateKey(encodePrivateKey);
-        } catch (NoSuchAlgorithmException ex) {
-            // Error level.
-            LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
-            // Debug level.
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            LOGGER.debug(errors.toString());
-        } catch (InvalidKeySpecException ex) {
-            // Error level.
-            LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
-            // Debug level.
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            LOGGER.debug(errors.toString());
-        }
-        // Check if privKey is valid.
-        if(privKey == null){
-            return ErrorJSON.ERR_UNSPECIFIED;
-        }
-        // RSA decode and return result
+    private String modeRSA(String input, PrivateKey privKey) {
         try {
             return Rsa.calcDecodedOutput(input, privKey);
         } catch (NoSuchAlgorithmException ex) {
@@ -340,7 +292,46 @@ public class KeyServerJettyHandler extends AbstractHandler{
         }
         return ErrorJSON.ERR_UNSPECIFIED;
     }
-    
+
+    /**
+     * Get private key from Redis DB and check if it's valid.
+     * @param spki Certificate hash to find the private key inside Redis DB.
+     * @return Private key object.
+     * @since v0.4.2
+     * @throws KeyServerException Exception with the error message generated.
+     */
+    private PrivateKey getPrivKey(String spki) throws KeyServerException {
+        // Execute REDIS query trying to found private key for the incoming SKI.
+        byte[] encodePrivateKey = this.keyServerDB.getPrivateForHash(spki);
+        if(encodePrivateKey == null){
+            throw new KeyServerException(ErrorJSON.ERR_NOT_FOUND);
+        }
+        // Generate Private Key object.
+        PrivateKey privKey = null;
+        try {
+            privKey = loadPrivateKey(encodePrivateKey);
+        } catch (NoSuchAlgorithmException ex) {
+            // Error level.
+            LOGGER.error("RSA Invalid Algorithm exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
+        } catch (InvalidKeySpecException ex) {
+            // Error level.
+            LOGGER.error("RSA Invalid Key exception: {}",ex.getMessage());
+            // Debug level.
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOGGER.debug(errors.toString());
+        }
+        // Check if privKey is valid.
+        if(privKey == null){
+            throw new KeyServerException(ErrorJSON.ERR_UNSPECIFIED);
+        }
+        return privKey;
+    }
+
     /**
      * Load private key from byte array.
      * @param encodePrivateKey Array with private key values.
