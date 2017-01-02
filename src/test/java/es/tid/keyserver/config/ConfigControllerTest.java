@@ -15,14 +15,7 @@
  */
 package es.tid.keyserver.config;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Properties;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -42,7 +35,6 @@ public class ConfigControllerTest {
      * This class contains the fields necessaries for the tests.
      */
     public ConfigControllerTest() {
-        String testFileRoute = "target/test-classes/configtest.properties";
         String [] requiredFields = {
             "ksCheckUpdates",
             "serverAddress",
@@ -51,61 +43,16 @@ public class ConfigControllerTest {
             "serverKeyStorePassword",
             "serverKeyManagerPassword",
             "serverIdleTimeout",
+            "serverIpWhiteList",
             "dbAddress",
             "dbPort",
             "dbPassword",
             "dbIndex",
             "dbCheckInterval",
-            "whiteList"
         };
-        this.testObj = new ConfigController("/applicationtest.properties", testFileRoute, requiredFields);
-    }
-    
-    /**
-     * JUnit test step.
-     */
-    @BeforeClass
-    public static void setUpClass() {
-        String testFileRoute = "target/test-classes/configtest.properties";
-        Properties configFile = new Properties();
-        // Default parammeters:
-        configFile.setProperty("ksCheckUpdates", "3600000");
-        configFile.setProperty("serverAddress", "192.168.1.2");
-        configFile.setProperty("serverPort", "1443");
-        configFile.setProperty("serverKeyStoreFile", "ksserverkey.jks");
-        configFile.setProperty("serverKeyStorePassword", "123456");
-        configFile.setProperty("serverKeyManagerPassword", "123456");
-        configFile.setProperty("serverIdleTimeout","30000");
-        configFile.setProperty("dbAddress", "192.168.11.180");
-        configFile.setProperty("dbPort", "6379");
-        configFile.setProperty("dbPassword", "foobared");
-        configFile.setProperty("dbIndex", "3");
-        configFile.setProperty("dbCheckInterval", "1000");
-        configFile.setProperty("whiteList", "IP_whitelist.txt");
-        try{
-            FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
-            // Save parameters on file
-            configFile.store(newConfigFile, null);
-            // Close config file.
-            newConfigFile.close();
-            System.out.println("[ INFO ] Test file created: " + testFileRoute);
-        } catch (FileNotFoundException ex) {
-            System.err.println("[ ERROR ] Test file not found exception.");
-        } catch (IOException ex) {
-            System.err.println("[ ERROR ] Test file IO exception.");
-        }
-    }
-    
-    /**
-     * JUnit test step.
-     */
-    @AfterClass
-    public static void tearDownClass() {
-        // Delete test file.
-        String testFileRoute = "target/test-classes/configtest.properties";
-        File file = new File(testFileRoute);
-        file.delete();
-        System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
+        this.testObj = new ConfigController("/applicationtest.properties",
+               "target/test-classes/config.properties",
+               requiredFields);
     }
 
     /**
@@ -147,7 +94,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetServerAddress() {
         System.out.println("getServerAddress");
-        String expResult = "192.168.1.2";
+        String expResult = "0.0.0.0";
         InetAddress result = this.testObj.getServerAddress();
         assertEquals(expResult, result.getHostAddress());
     }
@@ -169,7 +116,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetServerKeyStoreFile() {
         System.out.println("getServerKeyStoreFile");
-        String expResult = "ksserverkey.jks";
+        String expResult = "config/ksserverkey.jks";
         String result = this.testObj.getServerKeyStoreFile();
         assertEquals(expResult, result);
     }
@@ -191,7 +138,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetDbAddress() {
         System.out.println("getDbAddress");
-        String expResult = "192.168.11.180";
+        String expResult = "192.168.158.136";
         InetAddress result = this.testObj.getDbAddress();
         assertEquals(expResult, result.getHostAddress());
     }
@@ -204,17 +151,6 @@ public class ConfigControllerTest {
         System.out.println("getDbPort");
         int expResult = 6379;
         int result = this.testObj.getDbPort();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getWhiteList method, of class ConfigController.
-     */
-    @Test
-    public void testGetWhiteList() {
-        System.out.println("getWhiteList");
-        String expResult = "IP_whitelist.txt";
-        String result = this.testObj.getWhiteList();
         assertEquals(expResult, result);
     }
 
@@ -257,7 +193,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetDbIndex() {
         System.out.println("getDbIndex");
-        int expResult = 3;
+        int expResult = 0;
         int result = testObj.getDbIndex();
         assertEquals(expResult, result);
     }
@@ -279,7 +215,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetChkUpdateInterval() {
         System.out.println("getChkUpdateInterval");
-        int expResult = 3600000;
+        int expResult = 100000;
         int result = testObj.getChkUpdateInterval();
         assertEquals(expResult, result);
     }
@@ -301,7 +237,7 @@ public class ConfigControllerTest {
     @Test
     public void testGetServerIpWhiteList() {
         System.out.println("getServerIpWhiteList");
-        String[] expResult = null;
+        String[] expResult = {"192.168.2.3","127.0.0.2"};
         String[] result = this.testObj.getServerIpWhiteList();
         assertArrayEquals(expResult, result);
     }
