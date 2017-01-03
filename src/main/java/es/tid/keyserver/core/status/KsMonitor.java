@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.core.status;
 
 import es.tid.keyserver.controllers.db.DataBase;

@@ -30,10 +30,12 @@ public class InputJSON {
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InputJSON.class);
+
     /**
      * Contains the string for sign JSON incoming SIGN method.
      */
     public final static String ECDHE = "ECDHE";
+
     /**
      * Contains the string for sign JSON incoming DECRYPT method.
      */
@@ -43,18 +45,22 @@ public class InputJSON {
      * TLS 1.0 - Definition of PROTOCOL field values.
      */
     public final static String TLS_1_0 = "TLS 1.0";
+
     /**
      * TLS 1.1 - Definition of PROTOCOL field values.
      */
     public final static String TLS_1_1 = "TLS 1.1";
+
     /**
      * TLS 1.2 - Definition of PROTOCOL field values.
      */
     public final static String TLS_1_2 = "TLS 1.2";
+
     /**
      * DTLS 1.0 - Definition of PROTOCOL field values.
      */
     public final static String DTLS_1_0 = "DTLS 1.0";
+
     /**
      * DTLS 1.2 - Definition of PROTOCOL field values.
      */
@@ -64,18 +70,22 @@ public class InputJSON {
      * SHA1 - Definition of HASH field right values.
      */
     public final static String SHA1 = "SHA1";
+
     /**
      * SHA-224 - Definition of HASH field right values.
      */
     public final static String SHA_224 = "SHA-224";
+
     /**
      * SHA-256 - Definition of HASH field right values.
      */
     public final static String SHA_256 = "SHA-256";
+
     /**
      * SHA-384 - Definition of HASH field right values.
      */
     public final static String SHA_384 = "SHA-384";
+
     /**
      * SHA-512 - Definition of HASH field right values.
      */

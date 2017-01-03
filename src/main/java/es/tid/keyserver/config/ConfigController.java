@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,10 +35,12 @@ public class ConfigController implements CheckObject{
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ConfigController.class);
+
     /**
      * Maven project data object.
      */
     private final Maven mavenData;
+
     /**
      * KeyServer configuration data object.
      */

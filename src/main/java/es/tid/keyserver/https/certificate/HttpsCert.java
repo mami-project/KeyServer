@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.https.certificate;
 
 import es.tid.keyserver.core.lib.CheckObject;
@@ -40,14 +41,17 @@ public class HttpsCert implements CheckObject{
      * Certificate object.
      */
     private KeyStore keystore;
+
     /**
      * Certificate expiration date object.
      */
     private Date expDate;
+
     /**
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsCert.class);
+
     /**
      * Flag for check if the object is correctly initialized.
      */

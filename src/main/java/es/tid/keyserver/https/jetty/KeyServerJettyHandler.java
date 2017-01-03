@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.https.jetty;
 
 import es.tid.keyserver.controllers.db.DataBase;
@@ -52,14 +53,17 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KeyServerJettyHandler.class);
+
     /**
      * Security logger object
      */
     private static final org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
+
     /**
      * Redis database object.
      */
     private DataBase keyServerDB;
+
     /**
      * Jetty handler class constructor.
      * @param objDB Redis database object.
@@ -128,6 +132,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
         }
         return data;
     }
+
     /**
      * This method provides the main functionality to send to the client the
      *     request data.

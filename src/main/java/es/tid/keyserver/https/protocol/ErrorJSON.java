@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.https.protocol;
 
 import org.slf4j.LoggerFactory;
@@ -26,18 +27,22 @@ public class ErrorJSON extends ResponseJSON {
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ErrorJSON.class);
+
     /**
      * Ericsson error code definition for request denied.
      */
     public static final String ERR_REQUEST_DENIED = "request denied";
+
     /**
      * Ericsson error code definition for SPKI certificate not found.
      */
     public static final String ERR_NOT_FOUND = "spki not found";
+
     /**
      * Ericsson error code definition for malformed request received.
      */
     public static final String ERR_MALFORMED_REQUEST = "malformed request";
+
     /**
      * Ericsson error code definition for unspecified error.
      */
