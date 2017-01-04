@@ -25,7 +25,7 @@ import java.util.Properties;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class for the Telefónica KeyServer Maven properties management.
+ * Class for the OpenSource KeyServer Maven properties management.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.1.2
  */
@@ -52,12 +52,10 @@ public class Maven implements CheckObject{
      * @since v0.3.0
      */
     public Maven(String fileName){
-        InputStream resourceAsStream = this.getClass().getResourceAsStream(fileName);
-        prop = new Properties();
-        try {
+        try (InputStream resourceAsStream = this.getClass().getResourceAsStream(fileName)) {
+            prop = new Properties();
             prop.load( resourceAsStream );
-            resourceAsStream.close();
-        } catch (IOException ex) {
+        } catch (NullPointerException | IOException ex) {
             initStatus = false;
             // Error level.
             LOGGER.error("The current config file: " + fileName + " can't be loaded correctly.");
