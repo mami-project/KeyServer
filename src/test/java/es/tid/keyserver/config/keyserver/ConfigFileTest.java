@@ -31,11 +31,9 @@ public class ConfigFileTest {
     private final ConfigFile testObj;
     
     /**
-     * Method with the required fields for the current tests.
+     * Required fields array
      */
-    public ConfigFileTest() {
-        String testFileRoute = "target/test-classes/config.properties";
-        String [] requiredFields = {
+    String [] requiredFields = {
             "ksCheckUpdates",
             "serverAddress",
             "serverPort",
@@ -50,6 +48,12 @@ public class ConfigFileTest {
             "dbIndex",
             "dbCheckInterval",
         };
+    
+    /**
+     * Method with the required fields for the current tests.
+     */
+    public ConfigFileTest() {
+        String testFileRoute = "target/test-classes/config.properties";
         testObj = new ConfigFile(testFileRoute, requiredFields);
     }
 
@@ -57,10 +61,36 @@ public class ConfigFileTest {
      * Test of isCorrectlyInitialized method, of class ConfigFile.
      */
     @Test
-    public void testIsCorrectlyInitialized() {
-        System.out.println("isCorrectlyInitialized");
+    public void testIsCorrectlyInitialized1() {
+        System.out.println("isCorrectlyInitialized1");
         boolean expResult = true;
         boolean result = testObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized2() {
+        System.out.println("isCorrectlyInitialized2");
+        String testFileRoute = "target/test-classes/uncompleted.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized3() {
+        System.out.println("isCorrectlyInitialized2");
+        String testFileRoute = "target/test-classes/ghostfield.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
 
@@ -226,6 +256,17 @@ public class ConfigFileTest {
         System.out.println("getServerIpWhiteList");
         String expResult = "192.168.2.3 & 127.0.0.2";
         String result = this.testObj.getServerIpWhiteList();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getServerIdleTimeout method, of class ConfigFile.
+     */
+    @Test
+    public void testGetServerIdleTimeout() {
+        System.out.println("getServerIdleTimeout");
+        String expResult = "30000";
+        String result = this.testObj.getServerIdleTimeout();
         assertEquals(expResult, result);
     }
 }

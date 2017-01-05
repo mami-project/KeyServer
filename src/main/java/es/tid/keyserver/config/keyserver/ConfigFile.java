@@ -61,8 +61,8 @@ public class ConfigFile implements CheckObject{
         } else {
             LOGGER.warn("Can't access to the specified config file or "
                     + "doesn't exists: {}", fileRoute);
-            LOGGER.info("New config file on default location...");
-            fileLocation = "general.properties";
+            LOGGER.info("New config file on default location: {}", fileRoute);
+            fileLocation = fileRoute;
             if(!newDefaultProperties(fileLocation)){
                 // If the default properties file can't be created correctly,
                 //  enable error flag and exit from the class constructor.
@@ -242,6 +242,9 @@ public class ConfigFile implements CheckObject{
      */
     private boolean newDefaultProperties(String fileLocation) {
         try {
+            File file = new File(fileLocation);
+            file.getParentFile().mkdir();
+            file.createNewFile();
             FileOutputStream newConfigFile = new FileOutputStream(fileLocation);
             Properties defaultParameters = new Properties();
             // Check updates interval:
