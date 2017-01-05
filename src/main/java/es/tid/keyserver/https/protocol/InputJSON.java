@@ -97,6 +97,31 @@ public class InputJSON {
     private JSONObject inputData;
     
     /**
+     * Protocol JSON field value.
+     */
+    private String protocol = null;
+    
+    /**
+     * SPKI JSON field value.
+     */
+    private String spki = null;
+    
+    /**
+     * Method JSON field value.
+     */
+    private String method = null;
+    
+    /**
+     * Hash JSON field value.
+     */
+    private String hash = null;
+    
+    /**
+     * Input JSON field value.
+     */
+    private String input = null;
+    
+    /**
      * Constructor using a String with the JSON definition.
      * @param stringData Contains the JSON as String.
      */
@@ -105,9 +130,10 @@ public class InputJSON {
         try {
             JSONParser parser = new JSONParser();
             inputData = (JSONObject) parser.parse(stringData);
+            readFields();
         } catch (ParseException ex) {
             LOGGER.debug("Not valid input JSON: {}.", ex.toString());
-        }    
+        }
     }
     
     /**
@@ -115,27 +141,16 @@ public class InputJSON {
      * @return Method string ECDHE or RSA. Null is returned if is not defined.
      */
     public String getMethod(){
-        String readedMethod;
-        switch ((String) inputData.get("method")){
-            case InputJSON.ECDHE:
-                readedMethod = InputJSON.ECDHE;
-                break;
-            case InputJSON.RSA:
-                readedMethod = InputJSON.RSA;
-                break;
-            default:
-                readedMethod = null;
-                break;
-        }
-        return readedMethod;
+        return this.method;
     }
     
     /**
      * Get "spki" field from an input JSON message HEX encoded.
-     * @return Spki field value with HEX encoding.
+     * @return Spki field value with HEX encoding. Returns null if the field is
+     *     not present.
      */
     public String getSpki(){
-        return (String) inputData.get("spki");
+        return this.spki;
     }
     
     /**
@@ -148,35 +163,7 @@ public class InputJSON {
      *     valid, this method returns null value.
      */
     public String getHash(){
-        String readedHash = null;
-        if(this.getMethod().equalsIgnoreCase(ECDHE)){
-            if(inputData.containsKey("hash")){
-                switch ((String) inputData.get("hash")){
-                    case InputJSON.SHA1:
-                        readedHash = InputJSON.SHA1;
-                        break;
-                    case InputJSON.SHA_224:
-                        readedHash = InputJSON.SHA_224;
-                        break;
-                    case InputJSON.SHA_256:
-                        readedHash = InputJSON.SHA_256;
-                        break;
-                    case InputJSON.SHA_384:
-                        readedHash = InputJSON.SHA_384;
-                        break;
-                    case InputJSON.SHA_512:
-                        readedHash = InputJSON.SHA_512;
-                        break;
-                    default:
-                        LOGGER.error("ECDHE not valid 'hash' field {}.", inputData.get("hash"));
-                        readedHash = null;
-                        break;
-                }
-            } else {
-                readedHash = SHA1;
-            }
-        }
-        return readedHash;
+        return this.hash;
     }
     
     /**
@@ -187,31 +174,7 @@ public class InputJSON {
      *     valid, this method returns 'null' value.
      */
     public String getProtocol(){
-        String readedProtocol = null;
-        if(inputData.containsKey("protocol")){
-            switch ((String) inputData.get("protocol")){
-                case InputJSON.TLS_1_0:
-                    readedProtocol = InputJSON.TLS_1_0;
-                    break;
-                case InputJSON.TLS_1_1:
-                    readedProtocol = InputJSON.TLS_1_1;
-                    break;
-                case InputJSON.TLS_1_2:
-                    readedProtocol = InputJSON.TLS_1_2;
-                    break;
-                case InputJSON.DTLS_1_0:
-                    readedProtocol = InputJSON.DTLS_1_0;
-                    break;
-                case InputJSON.DTLS_1_2:
-                    readedProtocol = InputJSON.DTLS_1_2;
-                    break;
-                default:
-                    LOGGER.error("Not valid 'protocol' field {}.", inputData.get("protocol"));
-                    readedProtocol = null;
-                    break;
-            }
-        }
-        return readedProtocol;
+        return this.protocol;
     }
     
     /**
@@ -219,20 +182,15 @@ public class InputJSON {
      * @return String with the data content.
      */
     public String getInput(){
-        return (String) inputData.get("input");
+        return this.input;
     }
     
     /**
      * This method is used to verify the integrity of the JSON
-     * @return Null if all fields are correct, Otherwise this method returns the error name.
+     * @return Null if all fields are correct, Otherwise this method returns the
+     *     error name.
      */
     public String checkValidJSON(){
-        // Extracting JSON fields
-        String protocol = this.getProtocol();
-        String method = this.getMethod();
-        String hash = this.getHash();
-        String spki = this.getSpki();
-        String input = this.getInput();
         // Logger trace output
         LOGGER.trace("Method CheckJSON (fields): protocol='{}', method='{}', hash='{}', spki='{}', input='{}'",
                 protocol, method, hash, spki, input);
@@ -270,6 +228,139 @@ public class InputJSON {
             default:
                 LOGGER.debug("Input JSON: Not valid 'method' field for this input JSON ('{}').", method);
                 return ErrorJSON.ERR_MALFORMED_REQUEST;
+        }
+        return null;
+    }
+
+    /**
+     * This method is used for extract information included inside JSON.
+     * @since v0.4.2
+     */
+    private void readFields() {
+        this.protocol = readProtocolField();
+        this.spki = readSpkiField();
+        this.method = readMethodField();
+        this.hash = readHashField();
+        this.input = readInputField();
+        this.inputData=null;    // Clean JSON variable.
+    }
+
+    /**
+     * Method used for read JSON "protocol" field.
+     * @return Protocol field value or null if it's not present.
+     * @since v0.4.2
+     */
+    private String readProtocolField() {
+        String readedProtocol = null;
+        if(inputData.containsKey("protocol")){
+            switch ((String) inputData.get("protocol")){
+                case InputJSON.TLS_1_0:
+                    readedProtocol = InputJSON.TLS_1_0;
+                    break;
+                case InputJSON.TLS_1_1:
+                    readedProtocol = InputJSON.TLS_1_1;
+                    break;
+                case InputJSON.TLS_1_2:
+                    readedProtocol = InputJSON.TLS_1_2;
+                    break;
+                case InputJSON.DTLS_1_0:
+                    readedProtocol = InputJSON.DTLS_1_0;
+                    break;
+                case InputJSON.DTLS_1_2:
+                    readedProtocol = InputJSON.DTLS_1_2;
+                    break;
+                default:
+                    LOGGER.error("Not valid 'protocol' field {}.", inputData.get("protocol"));
+                    readedProtocol = null;
+                    break;
+            }
+        }
+        return readedProtocol;
+    }
+
+    /**
+     * Method used for read JSON "spki" field.
+     * @return Spki field value or null if it's not present.
+     * @since v0.4.2
+     */
+    private String readSpkiField() {
+        if(inputData.containsKey("spki")){
+            return (String) inputData.get("spki");
+        }
+        return null;
+    }
+
+    /**
+     * Method used for read JSON "method" field.
+     * @return Method field value or null if it's not present.
+     * @since v0.4.2
+     */
+    private String readMethodField() {
+        String readedMethod = null;
+        if(inputData.containsKey("method")){
+            switch ((String) inputData.get("method")){
+                case InputJSON.ECDHE:
+                    readedMethod = InputJSON.ECDHE;
+                    break;
+                case InputJSON.RSA:
+                    readedMethod = InputJSON.RSA;
+                    break;
+                default:
+                    readedMethod = null;
+                    break;
+            }
+        }
+        return readedMethod;
+    }
+
+    /**
+     * Method used for read JSON "hash" field.
+     * @return Hash field value or null if it's not present.
+     * @since v0.4.2
+     */
+    private String readHashField() {
+        if(this.method==null){
+            return null;
+        }
+        String readedHash = null;
+        if(this.getMethod().equalsIgnoreCase(ECDHE)){
+            if(inputData.containsKey("hash")){
+                switch ((String) inputData.get("hash")){
+                    case InputJSON.SHA1:
+                        readedHash = InputJSON.SHA1;
+                        break;
+                    case InputJSON.SHA_224:
+                        readedHash = InputJSON.SHA_224;
+                        break;
+                    case InputJSON.SHA_256:
+                        readedHash = InputJSON.SHA_256;
+                        break;
+                    case InputJSON.SHA_384:
+                        readedHash = InputJSON.SHA_384;
+                        break;
+                    case InputJSON.SHA_512:
+                        readedHash = InputJSON.SHA_512;
+                        break;
+                    default:
+                        LOGGER.error("ECDHE not valid 'hash' field {}.", inputData.get("hash"));
+                        readedHash = null;
+                        break;
+                }
+            } else {
+                readedHash = SHA1;
+            }
+        }
+        return readedHash;
+    }
+
+    /**
+     * Method used for read JSON "input" field.
+     * @return Input field value or null if it's not present.
+     * @since v0.4.2
+     */
+    private String readInputField() {
+        if(inputData.containsKey("input")){
+            return (String) inputData.get("input");
         }
         return null;
     }
