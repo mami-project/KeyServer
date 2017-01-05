@@ -33,7 +33,7 @@ public class ConfigFileTest {
     /**
      * Required fields array
      */
-    String [] requiredFields = {
+    private final String [] requiredFields = {
             "ksCheckUpdates",
             "serverAddress",
             "serverPort",
