@@ -269,4 +269,15 @@ public class ConfigFileTest {
         String result = this.testObj.getServerIdleTimeout();
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized() {
+        System.out.println("isCorrectlyInitialized");
+        boolean expResult = true;
+        boolean result = this.testObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
 }

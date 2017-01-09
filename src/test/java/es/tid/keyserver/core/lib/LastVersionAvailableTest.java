@@ -35,13 +35,27 @@ public class LastVersionAvailableTest {
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.
      */
     @Test
-    public void testGetLastVersionAvailable() {
-        System.out.println("getLastVersionAvailable");
+    public void testGetLastVersionAvailable1() {
+        System.out.println("getLastVersionAvailable1");
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
-        String expResult = "releases";
-        String result = instance.getLastVersionAvailable();
-        System.out.println("[ TEST ] Last version available: " + result);
-        Assert.assertTrue((result.equalsIgnoreCase(expResult))||(!result.isEmpty()));
+        Version appVer = new Version(instance.getLastVersionAvailable());
+        Assert.assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
+                (appVer.getMajor() >= 0) &&
+                (appVer.getMinor() >= 0) &&
+                (appVer.getPatch() >= 0));
+    }
+    
+    /**
+     * Test of getLastVersionAvailable method, of class LastVersionAvailable.
+     */
+    @Test
+    public void testGetLastVersionAvailable2() {
+        System.out.println("getLastVersionAvailable2");
+        String notValidURL = "@notvalid";
+        LastVersionAvailable instance = new LastVersionAvailable(notValidURL);
+        boolean expResult = false;
+        boolean result = instance.isCorrectlyInitialized();
+        assertEquals(expResult, result);
     }
 
     /**
@@ -50,22 +64,35 @@ public class LastVersionAvailableTest {
     @Test
     public void testIsUpdated() {
         System.out.println("isUpdated");
-        String appVersion = "v0.1.2";
+        String appVersion = "v99999.99.99";
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         boolean result = instance.isUpdated(appVersion);
         System.out.println("[ TEST ]: Is the current version up to date? " + result);
-        Assert.assertFalse(result);
+        Assert.assertTrue(result);
     }
 
     /**
      * Test of refreshRepoStatus method, of class LastVersionAvailable.
      */
     @Test
-    public void testRefreshRepoStatus() {
-        System.out.println("refreshRepoStatus");
+    public void testRefreshRepoStatus1() {
+        System.out.println("refreshRepoStatus1");
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         instance.refreshRepoStatus();
         boolean expResult = true;
+        boolean result = instance.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of refreshRepoStatus method, of class LastVersionAvailable.
+     */
+    @Test
+    public void testRefreshRepoStatus2() {
+        System.out.println("refreshRepoStatus2");
+        LastVersionAvailable instance = new LastVersionAvailable("@notvalid");
+        instance.refreshRepoStatus();
+        boolean expResult = false;
         boolean result = instance.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
