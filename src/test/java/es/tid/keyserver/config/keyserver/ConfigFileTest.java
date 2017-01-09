@@ -86,8 +86,34 @@ public class ConfigFileTest {
      */
     @Test
     public void testIsCorrectlyInitialized3() {
-        System.out.println("isCorrectlyInitialized2");
+        System.out.println("isCorrectlyInitialized3");
+        String testFileRoute = "target/test-classes/void.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized4() {
+        System.out.println("isCorrectlyInitialized4");
         String testFileRoute = "target/test-classes/ghostfield.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized5() {
+        System.out.println("isCorrectlyInitialized5");
+        String testFileRoute = "target/test-classes//.//ghostfield.properties";
         ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
         boolean expResult = false;
         boolean result = notValidObj.isCorrectlyInitialized();

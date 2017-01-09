@@ -3,10 +3,12 @@
 v0.4.2
 -------------------------------------------------------------------------------- 
 Features:
-  - 
+  - Code more robust.
+  - More unitary tests.
+  - Code coverage report.
 
 Bug fixes:
-  - 
+  - Fixed code quality errors.
 
 
 v0.4.1
