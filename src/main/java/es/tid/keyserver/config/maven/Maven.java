@@ -55,6 +55,8 @@ public class Maven implements CheckObject{
         try (InputStream resourceAsStream = this.getClass().getResourceAsStream(fileName)) {
             prop = new Properties();
             prop.load( resourceAsStream );
+            LOGGER.debug("Maven config file: " + fileName + " correctly loaded.");
+            initStatus = true;
         } catch (NullPointerException | IOException ex) {
             initStatus = false;
             // Error level.
@@ -64,8 +66,6 @@ public class Maven implements CheckObject{
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace(errors.toString());
         }
-        LOGGER.debug("Maven config file: " + fileName + " correctly loaded.");
-        initStatus = true;
     }
     
     /**
