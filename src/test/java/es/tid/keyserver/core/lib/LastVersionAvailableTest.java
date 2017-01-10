@@ -18,6 +18,7 @@ package es.tid.keyserver.core.lib;
 
 import junit.framework.Assert;
 import org.junit.Test;
+
 import static junit.framework.Assert.assertEquals;
 
 /**

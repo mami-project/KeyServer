@@ -16,6 +16,8 @@
 
 package es.tid.keyserver.core.lib;
 
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -23,7 +25,6 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to check if the current application version is the last

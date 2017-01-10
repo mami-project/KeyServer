@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.4.2</version>
+    <version>v0.4.3</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>
@@ -72,6 +72,9 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
+                    <excludes>
+                        <exclude>**/logback-test.xml</exclude>
+                    </excludes>
                     <archive>
                         <manifest>
                             <mainClass>es/tid/keyserver/core/KeyServer</mainClass>
@@ -114,9 +117,6 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <excludes>
-                    <exclude>logback-test.xml</exclude>
-                </excludes>
             </resource>            
         </resources>
     </build>
@@ -141,6 +141,7 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
+                    <check></check>
                 </configuration>
             </plugin>
         </plugins>

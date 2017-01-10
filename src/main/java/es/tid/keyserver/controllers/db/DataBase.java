@@ -16,13 +16,7 @@
 
 package es.tid.keyserver.controllers.db;
 
-import java.util.Base64;
 import es.tid.keyserver.core.lib.CheckObject;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.InetAddress;
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +25,13 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.InetAddress;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Database class manipulation.

@@ -20,12 +20,13 @@ import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.lib.LastVersionAvailable;
 import es.tid.keyserver.https.HttpsServerController;
 import es.tid.keyserver.https.certificate.HttpsCert;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
-import javax.swing.Timer;
-import org.eclipse.jetty.server.handler.StatisticsHandler;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class analyze the status of the main services from the KeyServer tool.

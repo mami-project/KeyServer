@@ -17,12 +17,13 @@
 package es.tid.keyserver.config.maven;
 
 import es.tid.keyserver.core.lib.CheckObject;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for the OpenSource KeyServer Maven properties management.

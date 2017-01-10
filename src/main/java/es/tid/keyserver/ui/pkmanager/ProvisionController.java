@@ -16,6 +16,9 @@
 package es.tid.keyserver.ui.pkmanager;
 
 import es.tid.keyserver.controllers.db.DataBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -23,8 +26,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to provide and manager private keys on the KeyServer.

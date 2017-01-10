@@ -15,8 +15,10 @@
  */
 package es.tid.keyserver.config;
 
-import java.net.InetAddress;
 import org.junit.Test;
+
+import java.net.InetAddress;
+
 import static org.junit.Assert.*;
 
 /**

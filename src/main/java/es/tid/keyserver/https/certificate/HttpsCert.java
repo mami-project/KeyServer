@@ -17,6 +17,8 @@
 package es.tid.keyserver.https.certificate;
 
 import es.tid.keyserver.core.lib.CheckObject;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,7 +31,6 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to load and manager the HTTPs server certificate.

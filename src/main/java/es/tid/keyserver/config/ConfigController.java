@@ -18,11 +18,12 @@ package es.tid.keyserver.config;
 import es.tid.keyserver.config.keyserver.ConfigFile;
 import es.tid.keyserver.config.maven.Maven;
 import es.tid.keyserver.core.lib.CheckObject;
+import org.slf4j.LoggerFactory;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class contains all necessary to extract all KeyServer configuration 
@@ -326,7 +327,7 @@ public class ConfigController implements CheckObject{
         } else {
             // Warning level.
             LOGGER.warn("DB connection check interval value is not valid. "
-                    + "Must be greather than 100ms.");
+                    + "Must be greater than 100ms.");
             return -1;
         }
     }

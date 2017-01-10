@@ -1,5 +1,15 @@
 # KeyServer Change Log
 
+v0.4.3
+-------------------------------------------------------------------------------- 
+Features:
+  - Code imports improvements using IntellyJ IDEA.
+
+Bug fixes:
+  - Fixed maven error with "logback-test.xml".
+  - Fixed spell errors.
+
+  
 v0.4.2
 -------------------------------------------------------------------------------- 
 Features:

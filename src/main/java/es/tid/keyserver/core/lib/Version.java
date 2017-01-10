@@ -112,13 +112,10 @@ public class Version {
         if(this.major > extVer.getMajor()){
             return true;
         } else if(this.major == extVer.getMajor()){
-            if(this.minor > extVer.getMinor()){
+            if (this.minor > extVer.getMinor()) {
                 return true;
-            } else if(this.minor == extVer.getMinor()){
-                return this.patch > extVer.getPatch();
-            } else{
-                return false;
-            }
+            } else
+                return this.minor == extVer.getMinor() && this.patch > extVer.getPatch();
         } else {
             return false;
         }
@@ -137,13 +134,10 @@ public class Version {
         if(this.major < extVer.getMajor()){
             return true;
         } else if(this.major == extVer.getMajor()){
-            if(this.minor < extVer.getMinor()){
+            if (this.minor < extVer.getMinor()) {
                 return true;
-            } else if(this.minor == extVer.getMinor()){
-                return this.patch < extVer.getPatch();
-            } else{
-                return false;
-            }
+            } else
+                return this.minor == extVer.getMinor() && this.patch < extVer.getPatch();
         } else {
             return false;
         }

@@ -17,15 +17,11 @@
 package es.tid.keyserver.https.keyprocess;
 
 import es.tid.keyserver.https.protocol.InputJSON;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.security.SignatureException;
+import org.slf4j.LoggerFactory;
+
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for sign ECDHE (ECDH) Key Exchange.
@@ -81,7 +77,7 @@ public class Ecdhe {
      * @param hash String with the HASH tag.
      * @see <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Signature">Java Standard Names: Signature Algorithms</a>
      * @return Signature object or null if the specified signature algorithm is not specified.
-     * @throws NoSuchAlgorithmException 
+     * @throws NoSuchAlgorithmException If the hash value is not valid, the method throw this exception.
      */
     private static Signature getSignature(String hash) throws NoSuchAlgorithmException {
         // If JSON "hash" field is not present.

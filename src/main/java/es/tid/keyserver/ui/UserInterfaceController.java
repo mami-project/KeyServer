@@ -19,8 +19,9 @@ import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.status.KsMonitor;
 import es.tid.keyserver.ui.controls.StatusController;
 import es.tid.keyserver.ui.pkmanager.ProvisionController;
-import java.util.Scanner;
 import org.slf4j.LoggerFactory;
+
+import java.util.Scanner;
 
 /**
  * This class is used to manage the interactions between the KeyServer tool and 

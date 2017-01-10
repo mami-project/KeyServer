@@ -15,10 +15,13 @@
  */
 package es.tid.keyserver.https.certificate;
 
+import org.junit.Test;
+
 import java.security.KeyStore;
 import java.util.Date;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for https certificate class controller.
@@ -56,7 +59,7 @@ public class HttpsCertTest {
     public void testCertExpirDate() {
         System.out.println("certExpirDate");
         Date result = instance.certExpirDate();
-        System.out.println("[ TEST ] Certificate expration date: " + result);
+        System.out.println("[ TEST ] Certificate expiration date: " + result);
         assertNotNull(result);
     }
 

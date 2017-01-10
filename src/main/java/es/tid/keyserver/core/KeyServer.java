@@ -17,17 +17,18 @@
 package es.tid.keyserver.core;
 
 import es.tid.keyserver.config.ConfigController;
-import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.controllers.db.DataBase;
+import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.core.status.KsMonitor;
 import es.tid.keyserver.https.HttpsServerController;
 import es.tid.keyserver.https.certificate.HttpsCert;
 import es.tid.keyserver.ui.GraphicalElements;
 import es.tid.keyserver.ui.UserInterfaceController;
-import java.util.Arrays;
-import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * Main Class for the KeyServer.

@@ -16,7 +16,9 @@
 package es.tid.keyserver.config.maven;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Test class for "Maven" properties management class.

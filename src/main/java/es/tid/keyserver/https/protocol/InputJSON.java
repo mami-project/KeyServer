@@ -15,11 +15,12 @@
  */
 package es.tid.keyserver.https.protocol;
 
-import java.util.Base64;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.LoggerFactory;
+
+import java.util.Base64;
 
 /**
  * InputJSON Secure Key Server API for input data from Proxy server.

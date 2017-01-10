@@ -16,8 +16,9 @@
 
 package es.tid.keyserver.config.keyserver;
 
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * KeyServer configuration manager class test.

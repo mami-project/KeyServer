@@ -16,16 +16,11 @@
 
 package es.tid.keyserver.config.keyserver;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Properties;
 import es.tid.keyserver.core.lib.CheckObject;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.Properties;
 
 /**
  * Class for KeyServer external configuration files.

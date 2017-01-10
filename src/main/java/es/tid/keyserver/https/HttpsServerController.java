@@ -19,10 +19,11 @@ import es.tid.keyserver.config.ConfigController;
 import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.https.jetty.KsJetty;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.slf4j.LoggerFactory;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Class for HTTP Server.
