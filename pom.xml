@@ -114,6 +114,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>logback-test.xml</exclude>
+                </excludes>
             </resource>            
         </resources>
     </build>
