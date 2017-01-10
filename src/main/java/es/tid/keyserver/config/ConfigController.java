@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,10 +35,12 @@ public class ConfigController implements CheckObject{
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ConfigController.class);
+
     /**
      * Maven project data object.
      */
     private final Maven mavenData;
+
     /**
      * KeyServer configuration data object.
      */
@@ -110,7 +112,11 @@ public class ConfigController implements CheckObject{
     public InetAddress getServerAddress(){
         String address = this.keyserverConfig.getServerAddress();
         try {
-            return InetAddress.getByName(address);
+            if((address!= null) && (!address.isEmpty())){
+                return InetAddress.getByName(address);
+            } else {
+                throw(new UnknownHostException("Empty Address."));
+            }
         } catch (UnknownHostException ex) {
             // Error level.
             LOGGER.error("Unknown Host Exception with the server IP addres: {}", address);
@@ -130,7 +136,7 @@ public class ConfigController implements CheckObject{
      */
     public int getServerPort(){
         String port = this.keyserverConfig.getServerPort();
-        if(port != null){
+        if((port != null) && (!port.isEmpty() && (Integer.parseInt(port) > 0))){
             return Integer.parseInt(port);
         } else {
             // Error level.
@@ -157,7 +163,14 @@ public class ConfigController implements CheckObject{
      * @since v0.3.0
      */
     public String getServerKeyStorePassword(){
-        return this.keyserverConfig.getKeyStorePassword();
+        String password = this.keyserverConfig.getKeyStorePassword();
+        if((password != null) && (!password.isEmpty())){
+            return password;
+        } else {
+            // Error level.
+            LOGGER.error("Not valid password specified for the KS Key Store Password: {}", password);
+            return null;
+        }
     }
     
     /**
@@ -168,7 +181,14 @@ public class ConfigController implements CheckObject{
      * @since v0.4.0
      */
     public String getServerKeyManagerPassword(){
-        return this.keyserverConfig.getKeyManagerPassword();
+        String password = this.keyserverConfig.getKeyManagerPassword();
+        if((password != null) && (!password.isEmpty())){
+            return password;
+        } else {
+            // Error level.
+            LOGGER.error("Not valid password specified for the KS Key Manager Password: {}", password);
+            return null;
+        }
     }
     
     /**
@@ -177,12 +197,10 @@ public class ConfigController implements CheckObject{
      * @return The value in milliseconds or -1 if the value is not valid.
      */
     public long getIdleTimeout() {
-        if(this.keyserverConfig.getServerIdleTimeout().isEmpty()){
-            return -1;
-        }
-        int time = Integer.valueOf(this.keyserverConfig.getServerIdleTimeout());
-        if(time > 0){
-            return time;
+        if((this.keyserverConfig.getServerIdleTimeout() != null) &&
+                (!this.keyserverConfig.getServerIdleTimeout().isEmpty()) && 
+                (Integer.valueOf(this.keyserverConfig.getServerIdleTimeout()) > 0)){
+            return Integer.valueOf(this.keyserverConfig.getServerIdleTimeout());
         } else {
             // Warning level.
             LOGGER.warn("Jetty connection Idle Timeout value is not valid.");
@@ -198,16 +216,20 @@ public class ConfigController implements CheckObject{
      * @since v0.4.0
      */
     public String[] getServerIpWhiteList() {
-        if(this.keyserverConfig.getServerIpWhiteList()==null){
+        if((this.keyserverConfig.getServerIpWhiteList()==null) || this.keyserverConfig.getServerIpWhiteList().isEmpty()){
             // Not defined.
             return null;
         }
         String tmp = this.keyserverConfig.getServerIpWhiteList();
         if (tmp.contains("&")){
             // Contains multiples IPs.
-            return tmp.split("&");
+            String [] output = tmp.split("&");
+            for(int i = 0; i < output.length; i++){
+                output[i]=output[i].trim();     // Remove white spaces.
+            }
+            return output;
         } else {
-            // Only contains a IP.
+            // Only contains an IP.
             String [] value = {tmp};
             return value;
         }
@@ -222,6 +244,9 @@ public class ConfigController implements CheckObject{
     public InetAddress getDbAddress(){
         String address = this.keyserverConfig.getDbAddress();
         try {
+            if(address == null){
+                throw(new UnknownHostException("Address null."));
+            }
             return InetAddress.getByName(address);
         } catch (UnknownHostException ex) {
             // Error level.
@@ -242,7 +267,7 @@ public class ConfigController implements CheckObject{
      */
     public int getDbPort(){
         String port = this.keyserverConfig.getDbPort();
-        if(port != null){
+        if((port != null) && (!port.isEmpty()) && (Integer.parseInt(port) > 0)){
             return Integer.parseInt(port);
         } else {
             // Error level.
@@ -259,7 +284,7 @@ public class ConfigController implements CheckObject{
      */
     public String getDbPassword(){
         String password = this.keyserverConfig.getDbPassword();
-        if(password != null){
+        if((password != null) && (!password.isEmpty())){
             return password;
         } else {
             // Error level.
@@ -276,7 +301,7 @@ public class ConfigController implements CheckObject{
      */
     public int getDbIndex(){
         String index = this.keyserverConfig.getDbIndex();
-        if(index != null){
+        if((index != null) && (!index.isEmpty())&&(Integer.valueOf(index) > 0)){
             return Integer.valueOf(index);
         } else {
             // Warning level.
@@ -289,33 +314,21 @@ public class ConfigController implements CheckObject{
      * This method is used to get the DB time interval when the PING will be 
      * send. The Redis DB connection status is monitored periodically in a 
      * parallel thread.
-     * @return Integer with the time in milliseconds.
+     * @return Integer with the time in milliseconds. If the field is not 
+     *     present or invalid (lower than 100ms), returns -1.
      * @since v0.3.3
      */
     public int getChkDbInterval(){
-        if(this.keyserverConfig.getChkDbInterval().isEmpty()){
-            return -1;
-        }
-        int time = Integer.valueOf(this.keyserverConfig.getChkDbInterval());
-        if(time >= 100){
-            return time;
+        if((this.keyserverConfig.getChkDbInterval()!= null) && 
+                (!this.keyserverConfig.getChkDbInterval().isEmpty()) &&
+                (Integer.valueOf(this.keyserverConfig.getChkDbInterval()) >= 100)){
+            return Integer.valueOf(this.keyserverConfig.getChkDbInterval());
         } else {
             // Warning level.
             LOGGER.warn("DB connection check interval value is not valid. "
                     + "Must be greather than 100ms.");
             return -1;
         }
-    }
-    
-    /**
-     * This method is used to get the IP 'white list' file name for KeyServer 
-     *     access control.
-     * @return String with the 'white list' file name. If the field is not present,
-     *     returns 'null'.
-     * @since v0.3.0
-     */
-    public String getWhiteList(){
-        return this.keyserverConfig.getWhiteList();
     }
     
     /**
@@ -327,15 +340,13 @@ public class ConfigController implements CheckObject{
      * @since v0.3.3
      */
     public int getChkUpdateInterval(){
-        if(this.keyserverConfig.getChkUpdateInterval().isEmpty()){
-            return -1;
-        }
-        int time = Integer.valueOf(this.keyserverConfig.getChkUpdateInterval());
-        if(time >= 60000){
-            return time;
+        if((this.keyserverConfig.getChkUpdateInterval() != null) &&
+                (!this.keyserverConfig.getChkUpdateInterval().isEmpty()) && 
+                (Integer.valueOf(this.keyserverConfig.getChkUpdateInterval()) >= 60000)){
+            return Integer.valueOf(this.keyserverConfig.getChkUpdateInterval());
         } else {
             // Warning level.
-            LOGGER.warn("KeyServer updates check interval value is not valid.");
+            LOGGER.warn("KeyServer updates check interval value is not valid (must be greater than 60000).");
             return -1;
         }
     }

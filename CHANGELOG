@@ -1,5 +1,16 @@
 # KeyServer Change Log
 
+v0.4.2
+-------------------------------------------------------------------------------- 
+Features:
+  - Code improvements for an execution more robust.
+  - More unitary tests.
+  - Code coverage report.
+
+Bug fixes:
+  - Fixed code quality errors.
+
+
 v0.4.1
 -------------------------------------------------------------------------------- 
 Features:

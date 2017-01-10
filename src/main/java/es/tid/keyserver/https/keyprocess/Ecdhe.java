@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.https.keyprocess;
 
 import es.tid.keyserver.https.protocol.InputJSON;
@@ -35,6 +36,7 @@ public class Ecdhe {
      * Logging object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Ecdhe.class);
+
     /**
      * This method provide a Sign to an incoming string data.
      * @param incomingData Data to sign codified as base64.
@@ -110,5 +112,4 @@ public class Ecdhe {
         } 
         return dsa;
     }
-    
 }

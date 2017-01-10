@@ -1,5 +1,5 @@
-/**
- * Copyright 2016.
+/*
+ * Copyright 2017.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package es.tid.keyserver.https.protocol;
 
-package es.tid.keyserver.core.lib;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * Interface used to test if a object is correctly created and initialized.
+ * Test class for output JSON messages.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
- * @since v0.1.0
+ * @since v0.4.2
  */
-public interface CheckObject {
+public class OutputJSONTest {
     /**
-     * Return true if the object is correctly initialized or false if not.
-     * @return Object initialization flag status.
-     * @since v0.1.0
+     * Test of toString method, of class OutputJSON.
+     * @since v0.4.2
      */
-    boolean isCorrectlyInitialized();
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        OutputJSON instance = new OutputJSON("OUTPUT_FIELD");
+        String expResult = "{\"output\":\"OUTPUT_FIELD\"}";
+        String result = instance.toString();
+        assertEquals(expResult, result);
+    }
 }

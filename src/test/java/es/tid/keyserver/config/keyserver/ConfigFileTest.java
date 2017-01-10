@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.config.keyserver;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -29,18 +25,15 @@ import static org.junit.Assert.*;
  * @since v0.3.0
  */
 public class ConfigFileTest { 
-	/**
-	 * Configuration file test object.
-	 */
+    /**
+     * Configuration file test object.
+     */
     private final ConfigFile testObj;
     
     /**
-     * Method with the required fields for the current tests.
+     * Required fields array
      */
-    public ConfigFileTest() {
-        String testFileRoute = "target/test-classes/configtest.properties";
-        
-        String [] requiredFields = {
+    private final String [] requiredFields = {
             "ksCheckUpdates",
             "serverAddress",
             "serverPort",
@@ -54,67 +47,76 @@ public class ConfigFileTest {
             "dbPassword",
             "dbIndex",
             "dbCheckInterval",
-            "whiteList"
         };
+    
+    /**
+     * Method with the required fields for the current tests.
+     */
+    public ConfigFileTest() {
+        String testFileRoute = "target/test-classes/config.properties";
         testObj = new ConfigFile(testFileRoute, requiredFields);
-    }
-    
-    /**
-     * JUnit test step.
-     */
-    @BeforeClass
-    public static void setUpClass() {
-        String testFileRoute = "target/test-classes/configtest.properties";
-        Properties configFile = new Properties();
-        // Default parammeters:
-        configFile.setProperty("ksCheckUpdates", "3600000");
-        configFile.setProperty("serverAddress", "192.168.1.2");
-        configFile.setProperty("serverPort", "1443");
-        configFile.setProperty("serverKeyStoreFile", "ksserverkey.jks");
-        configFile.setProperty("serverKeyStorePassword", "123456");
-        configFile.setProperty("serverKeyManagerPassword", "123456");
-        configFile.setProperty("serverIdleTimeout", "30000");
-        configFile.setProperty("serverIpWhiteList", "127.0.0.1");
-        configFile.setProperty("dbAddress", "192.168.11.180");
-        configFile.setProperty("dbPort", "6379");
-        configFile.setProperty("dbPassword", "foobared");
-        configFile.setProperty("dbIndex", "3");
-        configFile.setProperty("dbCheckInterval", "1000");
-        configFile.setProperty("whiteList", "IP_whitelist.txt");
-        try{
-            FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
-            // Save parameters on file
-            configFile.store(newConfigFile, null);
-            // Close config file.
-            newConfigFile.close();
-            System.out.println("[ INFO ] Test file created: " + testFileRoute);
-        } catch (FileNotFoundException ex) {
-            System.err.println("[ ERROR ] Test file not found exception.");
-        } catch (IOException ex) {
-            System.err.println("[ ERROR ] Test file IO exception.");
-        }
-    }
-    
-    /**
-     * JUnit test step.
-     */
-    @AfterClass
-    public static void tearDownClass() {
-        // Delete test file.
-        String testFileRoute = "target/test-classes/configtest.properties";
-        File file = new File(testFileRoute);
-        file.delete();
-        System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
     }
 
     /**
      * Test of isCorrectlyInitialized method, of class ConfigFile.
      */
     @Test
-    public void testIsCorrectlyInitialized() {
-        System.out.println("isCorrectlyInitialized");
+    public void testIsCorrectlyInitialized1() {
+        System.out.println("isCorrectlyInitialized1");
         boolean expResult = true;
         boolean result = testObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized2() {
+        System.out.println("isCorrectlyInitialized2");
+        String testFileRoute = "target/test-classes/uncompleted.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized3() {
+        System.out.println("isCorrectlyInitialized3");
+        String testFileRoute = "target/test-classes/void.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized4() {
+        System.out.println("isCorrectlyInitialized4");
+        String testFileRoute = "target/test-classes/ghostfield.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized5() {
+        System.out.println("isCorrectlyInitialized5");
+        String testFileRoute = "target/test-classes//.//ghostfield.properties";
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
+        boolean expResult = false;
+        boolean result = notValidObj.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
 
@@ -124,7 +126,7 @@ public class ConfigFileTest {
     @Test
     public void testGetServerAddress() {
         System.out.println("getServerAddress");
-        String expResult = "192.168.1.2";
+        String expResult = "0.0.0.0";
         String result = testObj.getServerAddress();
         assertEquals(expResult, result);
     }
@@ -146,7 +148,7 @@ public class ConfigFileTest {
     @Test
     public void testGetServerKeyFile() {
         System.out.println("getServerKeyFile");
-        String expResult = "ksserverkey.jks";
+        String expResult = "config/ksserverkey.jks";
         String result = testObj.getServerKeyStoreFile();
         assertEquals(expResult, result);
     }
@@ -168,7 +170,7 @@ public class ConfigFileTest {
     @Test
     public void testGetDbAddress() {
         System.out.println("getDbAddress");
-        String expResult = "192.168.11.180";
+        String expResult = "192.168.158.136";
         String result = testObj.getDbAddress();
         assertEquals(expResult, result);
     }
@@ -182,18 +184,7 @@ public class ConfigFileTest {
         String expResult = "6379";
         String result = testObj.getDbPort();
         assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getWhiteList method, of class ConfigFile.
-     */
-    @Test
-    public void testGetWhiteList() {
-        System.out.println("getWhiteList");
-        String expResult = "IP_whitelist.txt";
-        String result = testObj.getWhiteList();
-        assertEquals(expResult, result);
-    }   
+    } 
 
     /**
      * Test of getDbPassword method, of class ConfigFile.
@@ -212,7 +203,7 @@ public class ConfigFileTest {
     @Test
     public void testGetServerKeyStoreFile() {
         System.out.println("getServerKeyStoreFile");
-        String expResult = "ksserverkey.jks";
+        String expResult = "config/ksserverkey.jks";
         String result = testObj.getServerKeyStoreFile();
         assertEquals(expResult, result);
     }
@@ -245,7 +236,7 @@ public class ConfigFileTest {
     @Test
     public void testGetDbIndex() {
         System.out.println("getDbIndex");
-        String expResult = "3";
+        String expResult = "0";
         String result = testObj.getDbIndex();
         assertEquals(expResult, result);
     }
@@ -267,7 +258,7 @@ public class ConfigFileTest {
     @Test
     public void testGetChkUpdateInterval() {
         System.out.println("getChkUpdateInterval");
-        String expResult = "3600000";
+        String expResult = "100000";
         String result = testObj.getChkUpdateInterval();
         assertEquals(expResult, result);
     }
@@ -289,8 +280,30 @@ public class ConfigFileTest {
     @Test
     public void testGetServerIpWhiteList() {
         System.out.println("getServerIpWhiteList");
-        String expResult = "127.0.0.1";
+        String expResult = "192.168.2.3 & 127.0.0.2";
         String result = this.testObj.getServerIpWhiteList();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getServerIdleTimeout method, of class ConfigFile.
+     */
+    @Test
+    public void testGetServerIdleTimeout() {
+        System.out.println("getServerIdleTimeout");
+        String expResult = "30000";
+        String result = this.testObj.getServerIdleTimeout();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigFile.
+     */
+    @Test
+    public void testIsCorrectlyInitialized() {
+        System.out.println("isCorrectlyInitialized");
+        boolean expResult = true;
+        boolean result = this.testObj.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
 }

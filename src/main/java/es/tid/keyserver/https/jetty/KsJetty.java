@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.https.jetty;
 
 import es.tid.keyserver.config.ConfigController;
@@ -41,18 +42,22 @@ public class KsJetty implements Runnable{
      * Jetty Server Object.
      */
     private Server server;
+
     /**
      * Statistics object.
      */
     private StatisticsHandler stats;
+
     /**
      * Jetty initialization flag
      */
     private boolean ready = false;
+
     /**
      * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsJetty.class);
+
     /**
      * Class constructor.
      * @param parameters Jetty HTTPS service configuration object.

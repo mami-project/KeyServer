@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.core.lib;
 
 import java.io.IOException;
@@ -31,7 +32,6 @@ import org.slf4j.LoggerFactory;
  * @since v0.3.0
  */
 public class LastVersionAvailable implements CheckObject{
-	
     /**
      * Current application URL repository.
      */
@@ -48,6 +48,11 @@ public class LastVersionAvailable implements CheckObject{
     private boolean initStatus;
     
     /**
+     * First time class code execution flag.
+     */
+    private boolean initFlag;
+    
+    /**
      * Contains the last version available on repository for the current application.
      */
     private String lastVersion;
@@ -57,8 +62,11 @@ public class LastVersionAvailable implements CheckObject{
      * @param url Contains the string for the URL repository.
      */
     public LastVersionAvailable(String url){
+        initFlag = false;
         try {
             this.url = new URL(url);
+            this.refreshRepoStatus();            
+            this.initStatus = true;
         } catch (MalformedURLException ex) {
             initStatus = false;
             // Error level.
@@ -68,8 +76,7 @@ public class LastVersionAvailable implements CheckObject{
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace(errors.toString());
         }
-        this.refreshRepoStatus();
-        this.initStatus = true;
+        initFlag=true;
     }
     
     /**
@@ -105,6 +112,9 @@ public class LastVersionAvailable implements CheckObject{
     public final void refreshRepoStatus(){
         String versionUrl;
         try {
+            if(initFlag && !this.isCorrectlyInitialized()){
+                throw(new IOException("Check Last Version Object not correctly initialized."));
+            }
             // Connect to the initial GitHub repository URL.
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.connect();

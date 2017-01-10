@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.config.keyserver;
 
 import java.io.File;
@@ -60,8 +61,8 @@ public class ConfigFile implements CheckObject{
         } else {
             LOGGER.warn("Can't access to the specified config file or "
                     + "doesn't exists: {}", fileRoute);
-            LOGGER.info("New config file on default location...");
-            fileLocation = "general.properties";
+            LOGGER.info("New config file on default location: {}", fileRoute);
+            fileLocation = fileRoute;
             if(!newDefaultProperties(fileLocation)){
                 // If the default properties file can't be created correctly,
                 //  enable error flag and exit from the class constructor.
@@ -189,17 +190,6 @@ public class ConfigFile implements CheckObject{
     }
     
     /**
-     * This method is used to get the IP whitelist file name for KeyServer 
-     *     access control.
-     * @return String with the whitelist file name. If the field is not present,
-     *     returns 'null'.
-     * @since v0.3.0
-     */
-    public String getWhiteList(){
-        return this.getParameter("whiteList");
-    }
-    
-    /**
      * This method is used to get the DB time interval when the PING will be 
      * send. The Redis DB connection status is monitored periodically in a 
      * parallel thread.
@@ -252,6 +242,9 @@ public class ConfigFile implements CheckObject{
      */
     private boolean newDefaultProperties(String fileLocation) {
         try {
+            File file = new File(fileLocation);
+            file.getParentFile().mkdir();
+            file.createNewFile();
             FileOutputStream newConfigFile = new FileOutputStream(fileLocation);
             Properties defaultParameters = new Properties();
             // Check updates interval:

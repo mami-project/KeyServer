@@ -1,5 +1,5 @@
 /**
- * Copyright 2016.
+ * Copyright 2017.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package es.tid.keyserver.core.lib;
+package es.tid.keyserver.https.jetty.exceptions;
 
 /**
- * Interface used to test if a object is correctly created and initialized.
+ * Class for custom KeyServer exception.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
- * @since v0.1.0
+ * @since v0.4.2
  */
-public interface CheckObject {
+public class KeyServerException extends Exception{
     /**
-     * Return true if the object is correctly initialized or false if not.
-     * @return Object initialization flag status.
-     * @since v0.1.0
+     * KeyServer Exception constructor.
+     * @param msg Error message. 
+     *     This errors has been defined inside:
+     *     es.tid.keyserver.https.protocol.ErrorJSON.java
+     * @since v0.4.2
      */
-    boolean isCorrectlyInitialized();
+    public KeyServerException(String msg) {
+        super(msg);
+    }
 }

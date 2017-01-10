@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package es.tid.keyserver.core.lib;
 
 import org.junit.Test;
@@ -28,26 +29,32 @@ public class VersionTest {
      * Version test object 1.
      */
     private Version obj1;
+
     /**
      * Version test object 2.
      */
     private Version obj2;
+
     /**
      * Version test object 3.
      */
     private Version obj3;
+
     /**
      * Version test object 4.
      */
     private Version obj4;
+
     /**
      * Version test object 5.
      */
     private Version obj5;
+
     /**
      * Version test object 6.
      */
     private Version obj6;
+
     /**
      * Version test object 7.
      */

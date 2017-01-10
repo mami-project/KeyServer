@@ -37,6 +37,20 @@ public class MavenTest {
     }
 
     /**
+     * Fail loading file
+     * @since v0.4.2
+     */
+    @Test
+    public void failLoadingFile(){
+        System.out.println("getVersion");
+        try{
+            Maven testFail = new Maven("/filenotfound.properties");
+            testFail.isCorrectlyInitialized();
+        }catch(Exception e){
+            fail("'Loading not valid file' test failed. ");
+        }
+    }
+    /**
      * Test of getVersion method, of class Maven.
      * @since v0.3.0
      */

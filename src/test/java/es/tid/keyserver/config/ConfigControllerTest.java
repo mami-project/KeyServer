@@ -15,14 +15,7 @@
  */
 package es.tid.keyserver.config;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Properties;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -32,17 +25,40 @@ import static org.junit.Assert.*;
  * @since v0.3.0
  */
 public class ConfigControllerTest {
+    /**
+     * Configuration test object 1.
+     */
+    private final ConfigController testObj1;
     
     /**
-     * Configuration test object.
+     * Configuration test object 2 (empty fields content).
      */
-    private final ConfigController testObj;
+    private final ConfigController testObj2;
+    
+    /**
+     * Configuration test object 3 (out of range fields).
+     */
+    private final ConfigController testObj3;
+    
+    /**
+     * Configuration test object 4 (single IP whitelist IP value).
+     */
+    private final ConfigController testObj4;
+    
+    /**
+     * Configuration test object 5 (uncompleted config file).
+     */
+    private final ConfigController testObj5;
+    
+    /**
+     * Configuration test object 6 (void properties file).
+     */
+    private final ConfigController testObj6;
     
     /**
      * This class contains the fields necessaries for the tests.
      */
     public ConfigControllerTest() {
-        String testFileRoute = "target/test-classes/configtest.properties";
         String [] requiredFields = {
             "ksCheckUpdates",
             "serverAddress",
@@ -51,71 +67,69 @@ public class ConfigControllerTest {
             "serverKeyStorePassword",
             "serverKeyManagerPassword",
             "serverIdleTimeout",
+            "serverIpWhiteList",
             "dbAddress",
             "dbPort",
             "dbPassword",
             "dbIndex",
             "dbCheckInterval",
-            "whiteList"
         };
-        this.testObj = new ConfigController("/applicationtest.properties", testFileRoute, requiredFields);
-    }
-    
-    /**
-     * JUnit test step.
-     */
-    @BeforeClass
-    public static void setUpClass() {
-        String testFileRoute = "target/test-classes/configtest.properties";
-        Properties configFile = new Properties();
-        // Default parammeters:
-        configFile.setProperty("ksCheckUpdates", "3600000");
-        configFile.setProperty("serverAddress", "192.168.1.2");
-        configFile.setProperty("serverPort", "1443");
-        configFile.setProperty("serverKeyStoreFile", "ksserverkey.jks");
-        configFile.setProperty("serverKeyStorePassword", "123456");
-        configFile.setProperty("serverKeyManagerPassword", "123456");
-        configFile.setProperty("serverIdleTimeout","30000");
-        configFile.setProperty("dbAddress", "192.168.11.180");
-        configFile.setProperty("dbPort", "6379");
-        configFile.setProperty("dbPassword", "foobared");
-        configFile.setProperty("dbIndex", "3");
-        configFile.setProperty("dbCheckInterval", "1000");
-        configFile.setProperty("whiteList", "IP_whitelist.txt");
-        try{
-            FileOutputStream newConfigFile = new FileOutputStream(testFileRoute);
-            // Save parameters on file
-            configFile.store(newConfigFile, null);
-            // Close config file.
-            newConfigFile.close();
-            System.out.println("[ INFO ] Test file created: " + testFileRoute);
-        } catch (FileNotFoundException ex) {
-            System.err.println("[ ERROR ] Test file not found exception.");
-        } catch (IOException ex) {
-            System.err.println("[ ERROR ] Test file IO exception.");
-        }
-    }
-    
-    /**
-     * JUnit test step.
-     */
-    @AfterClass
-    public static void tearDownClass() {
-        // Delete test file.
-        String testFileRoute = "target/test-classes/configtest.properties";
-        File file = new File(testFileRoute);
-        file.delete();
-        System.out.println("[ INFO ] Test file deleted: " + testFileRoute);
+        this.testObj1 = new ConfigController("/applicationtest.properties",
+               "target/test-classes/config.properties",
+               requiredFields);
+        this.testObj2 = new ConfigController("/applicationtest.properties",
+               "target/test-classes/emptyconf.properties",
+               requiredFields);
+        this.testObj3 = new ConfigController("/applicationtest.properties",
+               "target/test-classes/outofrangeconfig.properties",
+               requiredFields);
+        this.testObj4 = new ConfigController("/applicationtest.properties",
+               "target/test-classes/config2.properties",
+               requiredFields);
+        this.testObj5 = new ConfigController("/applicationtest.properties",
+               "target/test-classes/uncompleted.properties",
+               requiredFields);
+        this.testObj6 = new ConfigController("/applicationtest.properties",
+               "target/test-classes/void.properties", new String[0]);
     }
 
     /**
      * Test of isCorrectlyInitialized method, of class ConfigController.
      */
     @Test
-    public void testIsCorrectlyInitialized() {
-        System.out.println("isCorrectlyInitialized");
+    public void testIsCorrectlyInitialized1() {
+        System.out.println("isCorrectlyInitialized1");
         boolean expResult = true;
-        boolean result = this.testObj.isCorrectlyInitialized();
+        boolean result = this.testObj1.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigController.
+     */
+    @Test
+    public void testIsCorrectlyInitialized2() {
+        System.out.println("isCorrectlyInitialized2");
+        String [] requiredFields = {
+            "ksCheckUpdates"
+        };
+        ConfigController testFailObj = new ConfigController("/undefinedapptest.properties",
+               "target/test-classes/config.properties",
+               requiredFields);
+        
+        boolean expResult = false;
+        boolean result = testFailObj.isCorrectlyInitialized();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isCorrectlyInitialized method, of class ConfigController.
+     */
+    @Test
+    public void testIsCorrectlyInitialized3() {
+        System.out.println("isCorrectlyInitialized3");      
+        boolean expResult = false;
+        boolean result = this.testObj5.isCorrectlyInitialized();
         assertEquals(expResult, result);
     }
 
@@ -126,7 +140,7 @@ public class ConfigControllerTest {
     public void testGetVersion() {
         System.out.println("getVersion");
         String expResult = "v1.0.1.test";
-        String result = this.testObj.getVersion();
+        String result = this.testObj1.getVersion();
         assertEquals(expResult, result);
     }
 
@@ -137,7 +151,7 @@ public class ConfigControllerTest {
     public void testGetAppName() {
         System.out.println("getAppName");
         String expResult = "Test App Name";
-        String result = this.testObj.getAppName();
+        String result = this.testObj1.getAppName();
         assertEquals(expResult, result);
     }
 
@@ -145,21 +159,74 @@ public class ConfigControllerTest {
      * Test of getServerAddress method, of class ConfigController.
      */
     @Test
-    public void testGetServerAddress() {
-        System.out.println("getServerAddress");
-        String expResult = "192.168.1.2";
-        InetAddress result = this.testObj.getServerAddress();
+    public void testGetServerAddress1() {
+        System.out.println("getServerAddress1");
+        String expResult = "0.0.0.0";
+        InetAddress result = this.testObj1.getServerAddress();
         assertEquals(expResult, result.getHostAddress());
+    }
+    
+    /**
+     * Test of getServerAddress method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerAddress2() {
+        System.out.println("getServerAddress2");
+        InetAddress result = this.testObj3.getServerAddress();
+        assertNull(result);
+    }
+    
+    /**
+     * Test of getServerAddress method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerAddress3() {
+        System.out.println("getServerAddress3");
+        InetAddress result = this.testObj6.getServerAddress();
+        assertNull(result);
     }
 
     /**
      * Test of getServerPort method, of class ConfigController.
      */
     @Test
-    public void testGetServerPort() {
-        System.out.println("getServerPort");
+    public void testGetServerPort1() {
+        System.out.println("getServerPort1");
         int expResult = 1443;
-        int result = this.testObj.getServerPort();
+        int result = this.testObj1.getServerPort();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerPort method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerPort2() {
+        System.out.println("getServerPort2");
+        int expResult = -1;
+        int result = this.testObj2.getServerPort();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerPort method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerPort3() {
+        System.out.println("getServerPort3");
+        int expResult = -1;
+        int result = this.testObj3.getServerPort();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerPort method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerPort4() {
+        System.out.println("getServerPort4");
+        int expResult = -1;
+        int result = this.testObj6.getServerPort();
         assertEquals(expResult, result);
     }
 
@@ -167,54 +234,128 @@ public class ConfigControllerTest {
      * Test of getServerKeyStoreFile method, of class ConfigController.
      */
     @Test
-    public void testGetServerKeyStoreFile() {
-        System.out.println("getServerKeyStoreFile");
-        String expResult = "ksserverkey.jks";
-        String result = this.testObj.getServerKeyStoreFile();
+    public void testGetServerKeyStoreFile1() {
+        System.out.println("getServerKeyStoreFile1");
+        String expResult = "config/ksserverkey.jks";
+        String result = this.testObj1.getServerKeyStoreFile();
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerKeyStoreFile method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerKeyStoreFile2() {
+        System.out.println("getServerKeyStoreFile2");
+        String result = this.testObj6.getServerKeyStoreFile();
+        assertNull(result);
     }
 
     /**
      * Test of getServerKeyStorePassword method, of class ConfigController.
      */
     @Test
-    public void testGetServerKeyStorePassword() {
-        System.out.println("getServerKeyPass");
+    public void testGetServerKeyStorePassword1() {
+        System.out.println("getServerKeyPass1");
         String expResult = "123456";
-        String result = this.testObj.getServerKeyStorePassword();
+        String result = this.testObj1.getServerKeyStorePassword();
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerKeyStorePassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerKeyStorePassword2() {
+        System.out.println("getServerKeyPass2");
+        String result = this.testObj3.getServerKeyStorePassword();
+        assertNull(result);
+    }
+    
+    
+    /**
+     * Test of getServerKeyStorePassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerKeyStorePassword3() {
+        System.out.println("getServerKeyPass3");
+        String result = this.testObj6.getServerKeyStorePassword();
+        assertNull(result);
     }
 
     /**
      * Test of getDbAddress method, of class ConfigController.
      */
     @Test
-    public void testGetDbAddress() {
-        System.out.println("getDbAddress");
-        String expResult = "192.168.11.180";
-        InetAddress result = this.testObj.getDbAddress();
+    public void testGetDbAddress1() {
+        System.out.println("getDbAddress1");
+        String expResult = "192.168.158.136";
+        InetAddress result = this.testObj1.getDbAddress();
         assertEquals(expResult, result.getHostAddress());
+    }
+    
+    /**
+     * Test of getDbAddress method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbAddress2() {
+        System.out.println("getDbAddress2");
+        InetAddress result = this.testObj3.getDbAddress();
+        assertNull(result);
+    }
+    
+    /**
+     * Test of getDbAddress method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbAddress3() {
+        System.out.println("getDbAddress3");
+        InetAddress result = this.testObj6.getDbAddress();
+        assertNull(result);
     }
 
     /**
      * Test of getDbPort method, of class ConfigController.
      */
     @Test
-    public void testGetDbPort() {
-        System.out.println("getDbPort");
+    public void testGetDbPort1() {
+        System.out.println("getDbPort1");
         int expResult = 6379;
-        int result = this.testObj.getDbPort();
+        int result = this.testObj1.getDbPort();
         assertEquals(expResult, result);
     }
-
+    
     /**
-     * Test of getWhiteList method, of class ConfigController.
+     * Test of getDbPort method, of class ConfigController.
      */
     @Test
-    public void testGetWhiteList() {
-        System.out.println("getWhiteList");
-        String expResult = "IP_whitelist.txt";
-        String result = this.testObj.getWhiteList();
+    public void testGetDbPort2() {
+        System.out.println("getDbPort2");
+        int expResult = -1;
+        int result = this.testObj2.getDbPort();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getDbPort method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbPort3() {
+        System.out.println("getDbPort3");
+        int expResult = -1;
+        int result = this.testObj3.getDbPort();
+        assertEquals(expResult, result);
+    }
+    
+        
+    /**
+     * Test of getDbPort method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbPort4() {
+        System.out.println("getDbPort4");
+        int expResult = -1;
+        int result = this.testObj6.getDbPort();
         assertEquals(expResult, result);
     }
 
@@ -225,7 +366,7 @@ public class ConfigControllerTest {
     public void testGetProjectPublicUrl() {
         System.out.println("getProjectPublicUrl");
         String expResult = "https://github.com/mami-project/KeyServer";
-        String result = testObj.getProjectPublicUrl();
+        String result = testObj1.getProjectPublicUrl();
         assertEquals(expResult, result);
     }
 
@@ -236,29 +377,103 @@ public class ConfigControllerTest {
     public void testGetDbPassword() {
         System.out.println("getDbPassword");
         String expResult = "foobared";
-        String result = testObj.getDbPassword();
+        String result = testObj1.getDbPassword();
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of getDbPassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbPassword2() {
+        System.out.println("getDbPassword2");
+        String result = testObj2.getDbPassword();
+        assertNull(result);
+    }
 
+        
+    /**
+     * Test of getDbPassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbPassword3() {
+        System.out.println("getDbPassword3");
+        String result = testObj6.getDbPassword();
+        assertNull(result);
+    }
+    
     /**
      * Test of getServerKeyManagerPassword method, of class ConfigController.
      */
     @Test
-    public void testGetServerKeyManagerPassword() {
-        System.out.println("getServerKeyManagerPassword");
+    public void testGetServerKeyManagerPassword1() {
+        System.out.println("getServerKeyManagerPassword1");
         String expResult = "123456";
-        String result = testObj.getServerKeyManagerPassword();
+        String result = testObj1.getServerKeyManagerPassword();
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerKeyManagerPassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerKeyManagerPassword2() {
+        System.out.println("getServerKeyManagerPassword2");
+        String result = testObj3.getServerKeyManagerPassword();
+        assertNull(result);
+    }
+    
+    /**
+     * Test of getServerKeyManagerPassword method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerKeyManagerPassword3() {
+        System.out.println("getServerKeyManagerPassword3");
+        String result = testObj6.getServerKeyManagerPassword();
+        assertNull(result);
     }
 
     /**
      * Test of getDbIndex method, of class ConfigController.
      */
     @Test
+    public void testGetDbIndex1() {
+        System.out.println("getDbIndex1");
+        int expResult = 0;
+        int result = testObj1.getDbIndex();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getDbIndex method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbIndex2() {
+        System.out.println("getDbIndex2");
+        int expResult = 0;
+        int result = testObj2.getDbIndex();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getDbIndex method, of class ConfigController.
+     */
+    @Test
     public void testGetDbIndex() {
         System.out.println("getDbIndex");
-        int expResult = 3;
-        int result = testObj.getDbIndex();
+        int expResult = 2;
+        int result = testObj4.getDbIndex();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getDbIndex method, of class ConfigController.
+     */
+    @Test
+    public void testGetDbIndex4() {
+        System.out.println("getDbIndex4");
+        int expResult = 0;
+        int result = testObj6.getDbIndex();
         assertEquals(expResult, result);
     }
 
@@ -266,10 +481,44 @@ public class ConfigControllerTest {
      * Test of getChkDbInterval method, of class ConfigController.
      */
     @Test
-    public void testGetChkDbInterval() {
-        System.out.println("getChkDbInterval");
+    public void testGetChkDbInterval1() {
+        System.out.println("getChkDbInterval1");
         int expResult = 1000;
-        int result = testObj.getChkDbInterval();
+        int result = testObj1.getChkDbInterval();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getChkDbInterval method, of class ConfigController.
+     */
+    @Test
+    public void testGetChkDbInterval2() {
+        System.out.println("getChkDbInterval2");
+        int expResult = -1;
+        int result = testObj2.getChkDbInterval();
+        assertEquals(expResult, result);
+    }
+    /**
+     * Test of getChkDbInterval method, of class ConfigController.
+     */
+    
+    @Test
+    public void testGetChkDbInterval3() {
+        System.out.println("getChkDbInterval3");
+        int expResult = -1;
+        int result = testObj3.getChkDbInterval();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getChkDbInterval method, of class ConfigController.
+     */
+    
+    @Test
+    public void testGetChkDbInterval4() {
+        System.out.println("getChkDbInterval4");
+        int expResult = -1;
+        int result = testObj6.getChkDbInterval();
         assertEquals(expResult, result);
     }
 
@@ -279,8 +528,41 @@ public class ConfigControllerTest {
     @Test
     public void testGetChkUpdateInterval() {
         System.out.println("getChkUpdateInterval");
-        int expResult = 3600000;
-        int result = testObj.getChkUpdateInterval();
+        int expResult = 100000;
+        int result = testObj1.getChkUpdateInterval();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getChkUpdateInterval method, of class ConfigController.
+     */
+    @Test
+    public void testGetChkUpdateInterval2() {
+        System.out.println("getChkUpdateInterval2");
+        int expResult = -1;
+        int result = testObj2.getChkUpdateInterval();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getChkUpdateInterval method, of class ConfigController.
+     */
+    @Test
+    public void testGetChkUpdateInterval3() {
+        System.out.println("getChkUpdateInterval3");
+        int expResult = -1;
+        int result = testObj3.getChkUpdateInterval();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getChkUpdateInterval method, of class ConfigController.
+     */
+    @Test
+    public void testGetChkUpdateInterval4() {
+        System.out.println("getChkUpdateInterval4");
+        int expResult = -1;
+        int result = testObj6.getChkUpdateInterval();
         assertEquals(expResult, result);
     }
 
@@ -288,21 +570,75 @@ public class ConfigControllerTest {
      * Test of getIdleTimeout method, of class ConfigController.
      */
     @Test
-    public void testGetIdleTimeout() {
-        System.out.println("getIdleTimeout");
+    public void testGetIdleTimeout1() {
+        System.out.println("getIdleTimeout1");
         long expResult = 30000L;
-        long result = testObj.getIdleTimeout();
+        long result = testObj1.getIdleTimeout();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getIdleTimeout method, of class ConfigController.
+     */
+    @Test
+    public void testGetIdleTimeout2() {
+        System.out.println("getIdleTimeout2");
+        long expResult = -1L;
+        long result = testObj2.getIdleTimeout();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getIdleTimeout method, of class ConfigController.
+     */
+    @Test
+    public void testGetIdleTimeout3() {
+        System.out.println("getIdleTimeout3");
+        long expResult = -1L;
+        long result = testObj3.getIdleTimeout();
         assertEquals(expResult, result);
     }
 
+        /**
+     * Test of getIdleTimeout method, of class ConfigController.
+     */
+    @Test
+    public void testGetIdleTimeout4() {
+        System.out.println("getIdleTimeout4");
+        long expResult = -1L;
+        long result = testObj6.getIdleTimeout();
+        assertEquals(expResult, result);
+    }
+    
     /**
      * Test of getServerIpWhiteList method, of class ConfigController.
      */
     @Test
-    public void testGetServerIpWhiteList() {
-        System.out.println("getServerIpWhiteList");
-        String[] expResult = null;
-        String[] result = this.testObj.getServerIpWhiteList();
+    public void testGetServerIpWhiteList1() {
+        System.out.println("getServerIpWhiteList1");
+        String[] expResult = {"192.168.2.3","127.0.0.2"};
+        String[] result = this.testObj1.getServerIpWhiteList();
         assertArrayEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerIpWhiteList method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerIpWhiteList2() {
+        System.out.println("getServerIpWhiteList2");
+        String[] expResult = {"192.168.2.3"};
+        String[] result = this.testObj4.getServerIpWhiteList();
+        assertArrayEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getServerIpWhiteList method, of class ConfigController.
+     */
+    @Test
+    public void testGetServerIpWhiteList3() {
+        System.out.println("getServerIpWhiteList3");
+        String[] result = this.testObj6.getServerIpWhiteList();
+        assertNull(result);
     }
 }
