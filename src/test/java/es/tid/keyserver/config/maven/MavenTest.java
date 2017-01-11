@@ -35,7 +35,7 @@ public class MavenTest {
      * Test class constructor.
      */
     public MavenTest() {
-        testObj = new Maven("/applicationtest.properties");
+        testObj = new Maven("/properties/applicationtest.properties");
     }
 
     /**
@@ -46,7 +46,7 @@ public class MavenTest {
     public void failLoadingFile(){
         System.out.println("getVersion");
         try{
-            Maven testFail = new Maven("/filenotfound.properties");
+            Maven testFail = new Maven("/properties/filenotfound.properties");
             testFail.isCorrectlyInitialized();
         }catch(Exception e){
             fail("'Loading not valid file' test failed. ");

@@ -38,7 +38,7 @@ public class HttpsCertTest {
      * Class constructor object.
      */
     public HttpsCertTest() {
-        instance = new HttpsCert("target/test-classes/ksserverkey.jks", "123456");
+        instance = new HttpsCert("target/test-classes/cert/ksserverkey.jks", "123456");
     }
 
     /**

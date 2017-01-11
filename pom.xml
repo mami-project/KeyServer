@@ -110,7 +110,7 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>            
+            </plugin>
         </plugins>
 
         <resources>
@@ -146,7 +146,7 @@
             </plugin>
         </plugins>
     </reporting>
-    
+
     <!-- More Project Information -->
     <name>OpenSource KeyServer</name>
     <description>This tool is a Key Server software that implements the collaborative Solution API. It is intended to run in the Content Provider network. It is used to storage private keys from the Content Provider and reply to queries from the MSP Collaborative API.</description>

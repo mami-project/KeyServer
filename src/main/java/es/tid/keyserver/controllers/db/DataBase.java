@@ -81,6 +81,11 @@ public class DataBase implements CheckObject{
     private boolean connecting;
     
     /**
+     * Flag used to control when the Redis connection will be terminated.
+     */
+    private boolean stopFlag = false;
+    
+    /**
      * Logging object.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DataBase.class);
@@ -118,7 +123,9 @@ public class DataBase implements CheckObject{
      * @since v0.1.0
      */
     public void stop(){
+        stopFlag = true;
         dataBaseObj.close();
+        monitorDbObj.close();
         pool.close();
         pool.destroy();
     }
@@ -131,7 +138,7 @@ public class DataBase implements CheckObject{
      * @since v0.1.0
      */
     public synchronized byte[] getPrivateForHash(String certHash){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             String response = dataBaseObj.get(certHash);
             LOGGER.debug("REDIS query: {} | REDIS response: {}", certHash, response);
             if (response!=null){
@@ -148,6 +155,10 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public boolean isConnected(){
+        if(stopFlag){
+            // If the stop Redis flag has been enabled.
+            return false;
+        }
         try{
             monitorDbObj.ping();
             return true;
@@ -169,7 +180,7 @@ public class DataBase implements CheckObject{
     }
     
     /**
-     * This class provides a basic mode to get an string with the Private
+     * This class provides a basic mode to get a string with the Private
      *     key codified on base64 associated with the input hash (SHA1) certificate 
      *     value.
      * @param certHash Contains the SHA1 hash of the certificate used to get 
@@ -179,7 +190,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public String getPrivateKey(String certHash){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             return dataBaseObj.get(certHash);
         }
         return null;
@@ -193,7 +204,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public boolean setPrivateKey(String certHash, String privKey){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             dataBaseObj.set(certHash, privKey);
             String test = this.getPrivateKey(certHash);
             return test.equalsIgnoreCase(privKey);
@@ -210,7 +221,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.1
      */
     public boolean setExpPK(String certHash, long date){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             dataBaseObj.expireAt(certHash, date);
             return true;
         }
@@ -244,7 +255,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public Set<String> getHashList(String pattern){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             return dataBaseObj.keys(pattern);
         }
         return new HashSet<String>();

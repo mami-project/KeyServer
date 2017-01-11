@@ -51,8 +51,8 @@ public class GraphicalElementsTest {
             "dbIndex",
             "dbCheckInterval",
         };
-        confCtrl= new ConfigController("/applicationtest.properties",
-               "target/test-classes/config.properties",
+        confCtrl= new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/config.properties",
                requiredFields);
     }
 

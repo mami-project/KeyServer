@@ -76,23 +76,23 @@ public class ConfigControllerTest {
             "dbIndex",
             "dbCheckInterval",
         };
-        this.testObj1 = new ConfigController("/applicationtest.properties",
-               "target/test-classes/config.properties",
+        this.testObj1 = new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/config.properties",
                requiredFields);
-        this.testObj2 = new ConfigController("/applicationtest.properties",
-               "target/test-classes/emptyconf.properties",
+        this.testObj2 = new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/emptyconf.properties",
                requiredFields);
-        this.testObj3 = new ConfigController("/applicationtest.properties",
-               "target/test-classes/outofrangeconfig.properties",
+        this.testObj3 = new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/outofrangeconfig.properties",
                requiredFields);
-        this.testObj4 = new ConfigController("/applicationtest.properties",
-               "target/test-classes/config2.properties",
+        this.testObj4 = new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/config2.properties",
                requiredFields);
-        this.testObj5 = new ConfigController("/applicationtest.properties",
-               "target/test-classes/uncompleted.properties",
+        this.testObj5 = new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/uncompleted.properties",
                requiredFields);
-        this.testObj6 = new ConfigController("/applicationtest.properties",
-               "target/test-classes/void.properties", new String[0]);
+        this.testObj6 = new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/void.properties", new String[0]);
     }
 
     /**
@@ -115,8 +115,8 @@ public class ConfigControllerTest {
         String [] requiredFields = {
             "ksCheckUpdates"
         };
-        ConfigController testFailObj = new ConfigController("/undefinedapptest.properties",
-               "target/test-classes/config.properties",
+        ConfigController testFailObj = new ConfigController("/properties/undefinedapptest.properties",
+               "target/test-classes/properties/config.properties",
                requiredFields);
         
         boolean expResult = false;

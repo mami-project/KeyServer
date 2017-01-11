@@ -16,9 +16,24 @@
 
 package es.tid.keyserver.config.keyserver;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * KeyServer configuration manager class test.
@@ -54,7 +69,7 @@ public class ConfigFileTest {
      * Method with the required fields for the current tests.
      */
     public ConfigFileTest() {
-        String testFileRoute = "target/test-classes/config.properties";
+        String testFileRoute = "target/test-classes/properties/config.properties";
         testObj = new ConfigFile(testFileRoute, requiredFields);
     }
 
@@ -75,7 +90,7 @@ public class ConfigFileTest {
     @Test
     public void testIsCorrectlyInitialized2() {
         System.out.println("isCorrectlyInitialized2");
-        String testFileRoute = "target/test-classes/uncompleted.properties";
+        String testFileRoute = "target/test-classes/properties/uncompleted.properties";
         ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
         boolean expResult = false;
         boolean result = notValidObj.isCorrectlyInitialized();
@@ -88,7 +103,7 @@ public class ConfigFileTest {
     @Test
     public void testIsCorrectlyInitialized3() {
         System.out.println("isCorrectlyInitialized3");
-        String testFileRoute = "target/test-classes/void.properties";
+        String testFileRoute = "target/test-classes/properties/void.properties";
         ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
         boolean expResult = false;
         boolean result = notValidObj.isCorrectlyInitialized();
@@ -101,11 +116,25 @@ public class ConfigFileTest {
     @Test
     public void testIsCorrectlyInitialized4() {
         System.out.println("isCorrectlyInitialized4");
-        String testFileRoute = "target/test-classes/ghostfield.properties";
-        ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
-        boolean expResult = false;
+        // Remove temporal file if exists (previous tests).
+        String testFileRoute = "target/test-classes/properties/ghostfield.properties";
+        Path fileToDeletePath = Paths.get(testFileRoute);
+        if(fileToDeletePath.toFile().exists()){
+            if(fileToDeletePath.toFile().delete()){
+                System.out.println("[ INFO ] Found temporal test files. Has been deleted!");
+            }else{
+                fail("[ ERROR ] There is a test file from previous executions, but can't be removed.");
+            }
+        }
+        // Test code
+        ConfigFile notValidObj = new ConfigFile(testFileRoute, new String[]{});
         boolean result = notValidObj.isCorrectlyInitialized();
-        assertEquals(expResult, result);
+        //Check if file exists
+        Path externalFile = Paths.get(testFileRoute);
+        if(!externalFile.toFile().exists()){
+            result = false;
+        }
+        assertTrue(result);
     }
     
     /**
@@ -114,7 +143,7 @@ public class ConfigFileTest {
     @Test
     public void testIsCorrectlyInitialized5() {
         System.out.println("isCorrectlyInitialized5");
-        String testFileRoute = "target/test-classes//.//ghostfield.properties";
+        String testFileRoute = "target/test-classes/properties/  /@/ghostfield.properties";
         ConfigFile notValidObj = new ConfigFile(testFileRoute, requiredFields);
         boolean expResult = false;
         boolean result = notValidObj.isCorrectlyInitialized();
