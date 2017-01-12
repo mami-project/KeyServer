@@ -213,6 +213,7 @@ config/
 
 # KeyServer Tools #
 !tools/ks_client/ksClient.jar
+!tools/Redis/pk-provider.jar
 
 # Others #
 *.~vsdx

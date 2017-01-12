@@ -421,7 +421,6 @@ public class DataBaseTest {
         while(it.hasNext()){
             valid = false;
             System.out.println("[ ERROR ] Should be an empty list. Received: " + it.next());
-            break;
         }
         // Clean Redis DB.
         for(int i = 0; i < 10; i++){
