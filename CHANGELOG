@@ -3,11 +3,13 @@
 v0.4.3
 -------------------------------------------------------------------------------- 
 Features:
-  - Code imports improvements using IntellyJ IDEA.
+  - Code quality improvements.
+  - Unitary and integration tests for Redis.
 
 Bug fixes:
-  - Fixed maven error with "logback-test.xml".
+  - Maven error with "logback-test.xml".
   - Fixed spell errors.
+  - Error when is used a bad Redis password.
 
   
 v0.4.2
