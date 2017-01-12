@@ -31,30 +31,36 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 
 /**
- *
- * @author gusanoj
+ * Database test class.
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @since v0.1.0
  */
 public class DataBaseTest {
     /**
      * Redis test server object.
      */
     private Jedis dataBaseObj;
+    
     /**
      * Redis test server address (localhost).
      */
     private InetAddress dbAddress;
+    
     /**
      * Redis test server port.
      */
     private int dbPort;
+    
     /**
      * Redis test server password.
      */
     private String dbPassword;
+    
     /**
      * Redis test server DB index.
      */
     private int dbIndex;
+    
     /**
      * Flag DB available.
      */
@@ -62,6 +68,7 @@ public class DataBaseTest {
     
     /**
      * Test class constructor.
+     * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
      * @since v0.4.3
      */
     public DataBaseTest(){
@@ -150,6 +157,23 @@ public class DataBaseTest {
         this.dataBaseObj.del(certHash);
         assertArrayEquals(expResult, result);
     }
+    
+    /**
+     * Test of getPrivateForHash method, of class DataBase.
+     */
+    @Test
+    public void testGetPrivateForHash3() {
+        System.out.println("getPrivateForHash3");
+        // If the Redis DB is not available, skip the test.
+        org.junit.Assume.assumeTrue(this.dbAvailable);
+        // Test code.
+        String certHash = "TestHashKey1";
+        DataBase instance =new DataBase(dbAddress, dbPort, dbPassword, dbIndex);
+        instance.stop();
+        byte[] expResult = null;
+        byte[] result = instance.getPrivateForHash(certHash);
+        assertArrayEquals(expResult, result);
+    }
 
     /**
      * Test of isConnected method, of class DataBase.
@@ -164,7 +188,7 @@ public class DataBaseTest {
         assertEquals(expResult, result);
     }
     
-        /**
+    /**
      * Test of isConnected method, of class DataBase.
      */
     @Test
@@ -172,6 +196,20 @@ public class DataBaseTest {
         System.out.println("isConnected2");
         org.junit.Assume.assumeTrue(this.dbAvailable);
         DataBase instance = new DataBase(dbAddress, dbPort, dbPassword, dbIndex);
+        instance.stop();
+        boolean expResult = false;
+        boolean result = instance.isConnected();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isConnected method, of class DataBase.
+     */
+    @Test
+    public void testIsConnected3() {
+        System.out.println("isConnected3");
+        org.junit.Assume.assumeTrue(this.dbAvailable);
+        DataBase instance = new DataBase(dbAddress, dbPort, "badpassword", dbIndex);
         instance.stop();
         boolean expResult = false;
         boolean result = instance.isConnected();
