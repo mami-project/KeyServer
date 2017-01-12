@@ -1,6 +1,10 @@
 language: java
 jdk:
   - oraclejdk8
+before_install:
+  - pwd
+  - ls -lh
+  - sudo redis-server ./tools/Redis/test/redis.conf
 script:
   - mvn verify -X -f ./pom.xml
   - mvn package
