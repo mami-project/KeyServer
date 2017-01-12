@@ -1,6 +1,15 @@
 language: java
 jdk:
   - oraclejdk8
+before_install:
+  # Download & execute last Redis version.
+  - wget -P target/test-classes/ http://download.redis.io/releases/redis-stable.tar.gz
+  - tar -xvf  target/test-classes/redis-stable.tar.gz -C target/test-classes/
+  - rm target/test-classes/redis-stable.tar.gz
+  - cd target/test-classes/redis-stable
+  - make
+  - cd ../../../
+  - nohup target/test-classes/redis-stable/src/redis-server ./tools/Redis/test/redis.conf &
 script:
   - mvn verify -X -f ./pom.xml
   - mvn package

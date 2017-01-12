@@ -106,7 +106,9 @@ public class DataBase implements CheckObject{
         // Try to connect to Redis database.
         try{
             isConnected = connectDb();
+            dataBaseObj.select(dbIndex);
         } catch (JedisConnectionException ex){
+            isConnected = false;
             // If the KeyServer can't connect to the Redis database.
             // Error level.
             LOGGER.error("Database initialization failed.");
@@ -115,7 +117,7 @@ public class DataBase implements CheckObject{
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace(errors.toString());
         }
-        dataBaseObj.select(dbIndex);
+        
     }
     
     /**
@@ -155,7 +157,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public boolean isConnected(){
-        if(stopFlag){
+        if((monitorDbObj==null) | stopFlag){
             // If the stop Redis flag has been enabled.
             return false;
         }
