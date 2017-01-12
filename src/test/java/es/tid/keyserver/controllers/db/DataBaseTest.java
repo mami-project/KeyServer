@@ -210,7 +210,6 @@ public class DataBaseTest {
         System.out.println("isConnected3");
         org.junit.Assume.assumeTrue(this.dbAvailable);
         DataBase instance = new DataBase(dbAddress, dbPort, "badpassword", dbIndex);
-        instance.stop();
         boolean expResult = false;
         boolean result = instance.isConnected();
         assertEquals(expResult, result);
