@@ -1,11 +1,16 @@
-# Open Source KeyServer [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mami-project/KeyServer&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&utm_medium=referral&utm_content=jgm1986/KeyServer&utm_campaign=Badge_Coverage)
+# Open Source KeyServer 
 
-Repository branch status:
+* Download last version available:  [ ![Download](https://api.bintray.com/packages/jgm1986/KeyServer/KeyServer/images/download.svg) ](https://bintray.com/jgm1986/KeyServer/KeyServer/_latestVersion)
+
+Repository status:
 
 | | **Master**  | **Develop**   |
 |:--- |:---:|:---:|
 | **Build status** | [![Build Status](https://travis-ci.org/mami-project/KeyServer.svg?branch=master)](https://travis-ci.org/mami-project/KeyServer) | [![Build Status](https://travis-ci.org/mami-project/KeyServer.svg?branch=develop)](https://travis-ci.org/mami-project/KeyServer) |
 | **Dependencies status** | [![Dependency Status](https://www.versioneye.com/user/projects/58457b180356f100336d0341/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58457b180356f100336d0341) | [![Dependency Status](https://www.versioneye.com/user/projects/58457b1603d153004d8ec98b/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58457b1603d153004d8ec98b) |
+| **Code quality**|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mami-project/KeyServer&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&utm_medium=referral&utm_content=jgm1986/KeyServer&utm_campaign=Badge_Coverage)| *`Not Available`* |
+
+# Description
 
 This software is a Key Server that implements the TLS Session Key Interface (SKI) defined in  [draft-cairns-tls-session-key-interface-01](https://tools.ietf.org/html/draft-cairns-tls-session-key-interface-01 "Session Key Interface (SKI) for TLS and DTLS").
 

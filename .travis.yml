@@ -2,7 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
-  # Download & execute last Redis version.
+    # Download & execute last Redis version.
   - wget -P target/test-classes/ http://download.redis.io/releases/redis-stable.tar.gz
   - tar -xvf  target/test-classes/redis-stable.tar.gz -C target/test-classes/
   - rm target/test-classes/redis-stable.tar.gz
@@ -18,3 +18,6 @@ script:
   - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/cobertura/coverage.xml -DprojectToken=$CODACY_PROJECT_TOKEN -DapiToken=$CODACY_PROJECT_TOKEN 
   - mvn versions:display-dependency-updates
   - mvn versions:display-plugin-updates
+after_success:
+  - sudo chmod +x ./travis-ci/bintray/upload.sh
+  - ./travis-ci/bintray/upload.sh
