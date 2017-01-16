@@ -32,7 +32,7 @@ public class HttpsCertTest {
 	/**
 	 * HTTPs certificate object.
 	 */
-    private HttpsCert instance;
+    private final HttpsCert instance;
     
     /**
      * Class constructor object.

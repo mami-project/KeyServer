@@ -46,12 +46,9 @@ nbactions.xml
 
 
 ### Eclipse ###
-
 .metadata
 bin/
 tmp/
-*.tmp
-*.bak
 *.swp
 *~.nib
 local.properties

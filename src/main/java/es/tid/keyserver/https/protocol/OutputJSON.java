@@ -27,13 +27,4 @@ public class OutputJSON extends ResponseJSON{
     public OutputJSON(String data){
         super(ResponseJSON.OUTPUT, data);
     }
-    
-    /**
-     * This method returns an JSON as String.
-     * @return JSON as string.
-     */
-    @Override
-    public String toString(){
-        return super.toString();
-    }
 }

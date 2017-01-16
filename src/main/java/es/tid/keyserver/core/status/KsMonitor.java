@@ -57,11 +57,6 @@ public class KsMonitor implements CheckObject{
     private final String repoUrl;
     
     /**
-     * KeyServer Project GitHub API URL to check last version available.
-     */
-    private final String apiRepoUrl;
-    
-    /**
      * REDIS Database Connection Object
      */
     private DataBase dataBaseObj;
@@ -121,11 +116,11 @@ public class KsMonitor implements CheckObject{
         dataBaseObj = db;
         this.curVer = softwareConfig.getVersion();
         this.repoUrl = softwareConfig.getProjectPublicUrl();
-        this.apiRepoUrl = softwareConfig.getGitHubReleaseUrl();
         this.httpsServer = httpsServer;
         this.certStatus = sCert;
         // KeyServer updates object controller
-        updates =  new LastVersionAvailable(this.apiRepoUrl);
+        String apiRepoUrl = softwareConfig.getGitHubReleaseUrl();
+        updates =  new LastVersionAvailable(apiRepoUrl);
         // Timer 1: Checks the object status every second.
         t1 = new Timer(softwareConfig.getChkDbInterval(), new ActionListener() {
             /**
@@ -211,15 +206,6 @@ public class KsMonitor implements CheckObject{
      */
     public String httpsServerStatus(){
         return this.httpsServer.getStatus();
-    }
-    
-    /**
-     * This method is used to check if the current HTTPs certificate is valid.
-     * @return True if the HTTPs certificate hast not overhead its expiration date.
-     * @since v0.3.0
-     */
-    public boolean isHttpsCertificateValid(){
-        return this.certStatus.isValid();
     }
     
     /**

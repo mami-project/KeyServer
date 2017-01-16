@@ -28,17 +28,17 @@ public class Version {
     /**
      * Major version field vXX.xx.xx
      */
-    private int major;
+    private final int major;
 
     /**
      * Minor version field vxx.XX.xx
      */
-    private int minor;
+    private final int minor;
 
     /**
      * Patch version field vxx.xx.XX
      */
-    private int patch;
+    private final int patch;
     
     /**
      * Class constructor.
@@ -111,11 +111,8 @@ public class Version {
     public boolean greaterThan(Version extVer){
         if(this.major > extVer.getMajor()){
             return true;
-        } else if(this.major == extVer.getMajor()){
-            if (this.minor > extVer.getMinor()) {
-                return true;
-            } else
-                return this.minor == extVer.getMinor() && this.patch > extVer.getPatch();
+        } else if(this.major == extVer.getMajor()) {
+            return this.minor > extVer.getMinor() || this.minor == extVer.getMinor() && this.patch > extVer.getPatch();
         } else {
             return false;
         }
@@ -133,11 +130,8 @@ public class Version {
     public boolean lowerThan(Version extVer){
         if(this.major < extVer.getMajor()){
             return true;
-        } else if(this.major == extVer.getMajor()){
-            if (this.minor < extVer.getMinor()) {
-                return true;
-            } else
-                return this.minor == extVer.getMinor() && this.patch < extVer.getPatch();
+        } else if(this.major == extVer.getMajor()) {
+            return this.minor < extVer.getMinor() || this.minor == extVer.getMinor() && this.patch < extVer.getPatch();
         } else {
             return false;
         }

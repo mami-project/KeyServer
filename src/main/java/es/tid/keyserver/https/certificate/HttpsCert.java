@@ -153,11 +153,14 @@ public class HttpsCert implements CheckObject{
      * @return True if the certificate is valid, false if not.
      * @since v0.3.0
      */
-    public boolean isValid(){
-        if(expDate != null){
-            return (expDate.getTime() - new Date().getTime()) >= 0;
-        } else {
-            return false;
-        }
+    public boolean isValid() {
+        /** Equivalent code:
+            if(expDate != null){
+                return (expDate.getTime() - new Date().getTime()) >= 0;
+            } else {
+                return false;
+            }
+         */
+        return expDate != null && (expDate.getTime() - new Date().getTime()) >= 0;
     }
 }

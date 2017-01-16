@@ -49,17 +49,17 @@ public class DataBaseTest {
     /**
      * Redis test server port.
      */
-    private int dbPort;
+    private final int dbPort;
     
     /**
      * Redis test server password.
      */
-    private String dbPassword;
+    private final String dbPassword;
     
     /**
      * Redis test server DB index.
      */
-    private int dbIndex;
+    private final int dbIndex;
     
     /**
      * Flag DB available.
