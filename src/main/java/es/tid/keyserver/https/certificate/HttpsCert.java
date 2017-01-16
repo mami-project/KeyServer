@@ -17,8 +17,6 @@
 package es.tid.keyserver.https.certificate;
 
 import es.tid.keyserver.core.lib.CheckObject;
-import org.slf4j.LoggerFactory;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,6 +29,7 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to load and manager the HTTPs server certificate.
@@ -86,7 +85,7 @@ public class HttpsCert implements CheckObject{
         } catch (IOException ex) {
             initStatus = false;
             // Error level.
-            LOGGER.error("IOException when try to load the HTTPs certificate.");
+            LOGGER.error("Can't access to the HTTPs server certificate. Please check if exists at this route: {}", fileRoute);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -155,6 +154,10 @@ public class HttpsCert implements CheckObject{
      * @since v0.3.0
      */
     public boolean isValid(){
-        return (expDate.getTime() - new Date().getTime()) >= 0;
+        if(expDate != null){
+            return (expDate.getTime() - new Date().getTime()) >= 0;
+        } else {
+            return false;
+        }
     }
 }

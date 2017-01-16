@@ -16,24 +16,25 @@
 
 package es.tid.keyserver.core.status;
 
+import es.tid.keyserver.config.ConfigController;
 import es.tid.keyserver.controllers.db.DataBase;
+import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.core.lib.LastVersionAvailable;
 import es.tid.keyserver.https.HttpsServerController;
 import es.tid.keyserver.https.certificate.HttpsCert;
-import org.eclipse.jetty.server.handler.StatisticsHandler;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import javax.swing.Timer;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class analyze the status of the main services from the KeyServer tool.
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since 0.3.0
  */
-public class KsMonitor {
+public class KsMonitor implements CheckObject{
 	
     /**
      * Logging object.
@@ -54,6 +55,11 @@ public class KsMonitor {
      * KeyServer Project GitHub URL
      */
     private final String repoUrl;
+    
+    /**
+     * KeyServer Project GitHub API URL to check last version available.
+     */
+    private final String apiRepoUrl;
     
     /**
      * REDIS Database Connection Object
@@ -96,29 +102,32 @@ public class KsMonitor {
     private HttpsCert certStatus;
     
     /**
+     * Flag for check if the object is correctly initialized.
+     */
+    private boolean isInitializated = false;
+    
+    /**
      * Class constructor.
      * @param db Data base controller object.
      * @param httpsServer HTTPs server object.
      * @param sCert HTTPs certificate controller object.
-     * @param publicUrl KeyServer public repository URL.
-     * @param curVer Current KeyServer version.
-     * @param dbTime Time for Redis DB ping.
-     * @param updTime Time for Update check and HTTPS certificate expiration date.
+     * @param softwareConfig KeyServer configuration object.
      * @since v0.3.0
      */
-    public KsMonitor(DataBase db, HttpsServerController httpsServer, HttpsCert sCert, String publicUrl, String curVer, int dbTime, int updTime){
+    public KsMonitor(DataBase db, HttpsServerController httpsServer, HttpsCert sCert, ConfigController softwareConfig){ 
         // Get de current date when the KeyServer has started.
         startDate = new Date();
         // Set external object to class fields
         dataBaseObj = db;
-        this.curVer = curVer;
-        this.repoUrl = publicUrl;
+        this.curVer = softwareConfig.getVersion();
+        this.repoUrl = softwareConfig.getProjectPublicUrl();
+        this.apiRepoUrl = softwareConfig.getGitHubReleaseUrl();
         this.httpsServer = httpsServer;
         this.certStatus = sCert;
         // KeyServer updates object controller
-        updates =  new LastVersionAvailable(this.repoUrl + "/releases/latest");
+        updates =  new LastVersionAvailable(this.apiRepoUrl);
         // Timer 1: Checks the object status every second.
-        t1 = new Timer(dbTime, new ActionListener() {
+        t1 = new Timer(softwareConfig.getChkDbInterval(), new ActionListener() {
             /**
              * Check every second the following objects.
              * @param ae Action event object (not used)
@@ -140,7 +149,7 @@ public class KsMonitor {
         });
         // Timer 2: Checks KeyServer updates and certificate status. Value
         //          specified by the user in milliseconds.
-        t2 = new Timer(updTime, new ActionListener() {
+        t2 = new Timer(softwareConfig.getChkUpdateInterval(), new ActionListener() {
             /**
              * Check every 12 hours the following objects.
              * @param ae Action event object (not used)
@@ -160,7 +169,7 @@ public class KsMonitor {
                 if(!updates.isUpdated(curVer)){
                     // If the keyserver is not updated.
                     LOGGER.warn("There are a new version of KeyServer tool: {} Please update!\n\t"
-                            + "KeyServer GitHub project URL: {}",
+                            + "KeyServer GitHub project download URL: {}",
                             updates.getLastVersionAvailable(), repoUrl);
                 }
             }
@@ -168,7 +177,8 @@ public class KsMonitor {
         // Start timers.
         t1.start();
         t2.start();
-        LOGGER.trace("The KeyServer Monitor object has started.");
+        isInitializated = true;
+        LOGGER.trace("The KeyServer Monitor object has been started.");
     }
     
     /**
@@ -280,5 +290,16 @@ public class KsMonitor {
      */
     public StatisticsHandler getStatistics(){
         return this.httpsServer.getStatistics();
+    }
+
+    /**
+     * Object initialization status.
+     * @return Returns true if the object is correctly initialized or false if 
+     *     not.
+     * @since v0.4.3
+     */
+    @Override
+    public boolean isCorrectlyInitialized() {
+        return isInitializated;
     }
 }

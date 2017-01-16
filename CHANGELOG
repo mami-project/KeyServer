@@ -5,6 +5,8 @@ v0.4.3
 Features:
   - Code quality improvements.
   - Unitary and integration tests for Redis.
+  - Integrated GitHub API for check last KeyServer version available request.
+  - Automatic generation of JAR file and upload to Bintray.
 
 Bug fixes:
   - Maven error with "logback-test.xml".

@@ -18,12 +18,11 @@ package es.tid.keyserver.config;
 import es.tid.keyserver.config.keyserver.ConfigFile;
 import es.tid.keyserver.config.maven.Maven;
 import es.tid.keyserver.core.lib.CheckObject;
-import org.slf4j.LoggerFactory;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains all necessary to extract all KeyServer configuration 
@@ -102,6 +101,16 @@ public class ConfigController implements CheckObject{
      */
     public String getProjectPublicUrl(){
         return this.mavenData.getProjectPublicUrl();
+    }
+    
+    /**
+     * This method is used to receive the GitHub API last release method.
+     * @return String with the GitHub release URL API.
+     * @see <a href="http://google.com">https://developer.github.com/v3/repos/releases/#get-the-latest-release</a>
+     * @since v0.4.3
+     */
+    public String getGitHubReleaseUrl(){
+        return this.mavenData.getGitHubReleaseUrl();
     }
     
     /**

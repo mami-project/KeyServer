@@ -18,7 +18,6 @@ package es.tid.keyserver.core.lib;
 
 import junit.framework.Assert;
 import org.junit.Test;
-
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -30,7 +29,7 @@ public class LastVersionAvailableTest {
     /**
      * Test repository URL string.
      */
-    private static final String REPOURL = "https://github.com/mami-project/KeyServer/releases/latest";
+    private static final String REPOURL = "https://api.github.com/repos/mami-project/KeyServer/releases/latest";
       
     /**
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.

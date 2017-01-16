@@ -19,11 +19,10 @@ import es.tid.keyserver.config.ConfigController;
 import es.tid.keyserver.controllers.db.DataBase;
 import es.tid.keyserver.core.lib.CheckObject;
 import es.tid.keyserver.https.jetty.KsJetty;
-import org.eclipse.jetty.server.handler.StatisticsHandler;
-import org.slf4j.LoggerFactory;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for HTTP Server.
@@ -35,14 +34,17 @@ public class HttpsServerController implements CheckObject{
      * Server Object.
      */
     private KsJetty jettyserver;
+    
     /**
      * Flag for check if the object is correctly initialized.
      */
     private boolean isInitializated = false;
+    
     /**
      * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsServerController.class);
+    
     /**
      * Main constructor for the HTTPS Server class.
      * @param parameters Object with program parameters.

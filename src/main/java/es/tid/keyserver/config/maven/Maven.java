@@ -17,13 +17,12 @@
 package es.tid.keyserver.config.maven;
 
 import es.tid.keyserver.core.lib.CheckObject;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for the OpenSource KeyServer Maven properties management.
@@ -105,5 +104,15 @@ public class Maven implements CheckObject{
     @Override
     public boolean isCorrectlyInitialized() {
         return this.initStatus;
+    }
+    
+    /**
+     * This method is used to receive the GitHub API last release method.
+     * @return String with the GitHub release URL API.
+     * @see <a href="http://google.com">https://developer.github.com/v3/repos/releases/#get-the-latest-release</a>
+     * @since v0.4.3
+     */
+    public String getGitHubReleaseUrl(){
+        return prop.getProperty("github.lastrelease");
     }
 }
