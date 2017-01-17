@@ -37,7 +37,7 @@ public class Ecdhe {
      * This method provide a Sign to an incoming string data.
      * @param incomingData Data to sign codified as base64.
      * @param key PrivateKey object with the private key used to sign incoming data.
-     * @param hash Hash type (SHA1, SHA224, SHA256, SHA512).
+     * @param hash Hash type (SHA1, SHA224, SHA256, SHA384, SHA512).
      * @return Signed data or null if hash incoming parameter is not defined.
      * @throws NoSuchAlgorithmException The specified algorithm is not valid.
      * @throws InvalidKeySpecException Key specification not valid
@@ -51,6 +51,9 @@ public class Ecdhe {
         LOGGER.debug("Key used to sign: {} | Hash: {} | Data Bytes to sign: {}", key.getAlgorithm(), hash, incomingData);
         Signature dsa = getSignature(hash);
         // Set the private key used to sing data
+        if((dsa == null) || (hash == null)){
+            return null;
+        }
         dsa.initSign(key);
         // Calculate MD5 if hash is SHA1
         if(hash.equalsIgnoreCase(InputJSON.SHA1)){
