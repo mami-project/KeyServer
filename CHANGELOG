@@ -5,6 +5,7 @@ v0.4.3
 Features:
   - Code quality improvements (develop process uses debug log mode by default).
   - Unitary and integration tests for Redis.
+  - Includes more unitary tests (Redis, Cryptography...).
   - Integrated GitHub API for check last KeyServer version available request.
   - Automatic generation of JAR file and upload to Bintray.
 

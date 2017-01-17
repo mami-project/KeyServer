@@ -17,30 +17,26 @@ package es.tid.keyserver.https.keyprocess;
 
 import es.tid.keyserver.https.protocol.InputJSON;
 import java.security.PrivateKey;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.slf4j.LoggerFactory;
 
 /**
  * Unitary test class for ECDH.
+ *
  * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
  * @since v0.4.3
  */
 public class EcdheTest {
+
     /**
      * Private key value base64 encoded.
      */
     private final String privKey;
-    
+
     /**
-     * Logging object.
+     * Unitary tests class constructor.
+     * @since v0.4.3
      */
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EcdheTest.class);
-    
     public EcdheTest() {
         privKey = "MIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQCjLGz782zGpCux4hCRgQBg2FHi"
                 + "PYLdmK79A8SINXWnUVSGoVM/fAFygtNILkT18Rv62WZUaK+cwN/s8F5o4jeODrNaVmlo3TG+mmF4"
@@ -85,7 +81,7 @@ public class EcdheTest {
                 + "EK7T5rRRltWFFFGwLfjMoYaA6nnubJkEFyUD1N05hLjc/jFgvOp+xE6+UKjBeH4f/18L0bcyNWfh"
                 + "KG+45wyAAkDXq6pkdFq1b1gBhOuVI4/C/mGHAJS4GOVtdPww3A==";
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
@@ -100,7 +96,7 @@ public class EcdheTest {
         String result = Ecdhe.calcOutput(incomingData, key, hash);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
@@ -115,7 +111,7 @@ public class EcdheTest {
         String result = Ecdhe.calcOutput(incomingData, key, hash);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
@@ -130,7 +126,7 @@ public class EcdheTest {
         String result = Ecdhe.calcOutput(incomingData, key, hash);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
@@ -145,7 +141,7 @@ public class EcdheTest {
         String result = Ecdhe.calcOutput(incomingData, key, hash);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
@@ -160,7 +156,7 @@ public class EcdheTest {
         String result = Ecdhe.calcOutput(incomingData, key, hash);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
@@ -175,7 +171,7 @@ public class EcdheTest {
         String result = Ecdhe.calcOutput(incomingData, key, hash);
         assertNull(expResult, result);
     }
-    
+
     /**
      * Test of calcOutput method, of class Ecdhe.
      * @throws java.lang.Exception If something goes wrong during the test.
