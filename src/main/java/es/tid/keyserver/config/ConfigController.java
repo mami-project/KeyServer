@@ -104,6 +104,16 @@ public class ConfigController implements CheckObject{
     }
     
     /**
+     * This method is used to receive the GitHub API last release method.
+     * @return String with the GitHub release URL API.
+     * @see <a href="http://google.com">https://developer.github.com/v3/repos/releases/#get-the-latest-release</a>
+     * @since v0.4.3
+     */
+    public String getGitHubReleaseUrl(){
+        return this.mavenData.getGitHubReleaseUrl();
+    }
+    
+    /**
      * This method is used to get the listener KeyServer IP address.
      * @return InetAddress object with the KeyServer IP address. If the field is not present,
      *     returns 'null'.
@@ -326,7 +336,7 @@ public class ConfigController implements CheckObject{
         } else {
             // Warning level.
             LOGGER.warn("DB connection check interval value is not valid. "
-                    + "Must be greather than 100ms.");
+                    + "Must be greater than 100ms.");
             return -1;
         }
     }

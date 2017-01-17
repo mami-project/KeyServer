@@ -16,13 +16,7 @@
 
 package es.tid.keyserver.controllers.db;
 
-import java.util.Base64;
 import es.tid.keyserver.core.lib.CheckObject;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.InetAddress;
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +25,13 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.InetAddress;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Database class manipulation.
@@ -80,6 +81,11 @@ public class DataBase implements CheckObject{
     private boolean connecting;
     
     /**
+     * Flag used to control when the Redis connection will be terminated.
+     */
+    private boolean stopFlag = false;
+    
+    /**
      * Logging object.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DataBase.class);
@@ -100,7 +106,9 @@ public class DataBase implements CheckObject{
         // Try to connect to Redis database.
         try{
             isConnected = connectDb();
+            dataBaseObj.select(dbIndex);
         } catch (JedisConnectionException ex){
+            isConnected = false;
             // If the KeyServer can't connect to the Redis database.
             // Error level.
             LOGGER.error("Database initialization failed.");
@@ -109,7 +117,7 @@ public class DataBase implements CheckObject{
             ex.printStackTrace(new PrintWriter(errors));
             LOGGER.trace(errors.toString());
         }
-        dataBaseObj.select(dbIndex);
+        
     }
     
     /**
@@ -117,7 +125,9 @@ public class DataBase implements CheckObject{
      * @since v0.1.0
      */
     public void stop(){
+        stopFlag = true;
         dataBaseObj.close();
+        monitorDbObj.close();
         pool.close();
         pool.destroy();
     }
@@ -130,7 +140,7 @@ public class DataBase implements CheckObject{
      * @since v0.1.0
      */
     public synchronized byte[] getPrivateForHash(String certHash){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             String response = dataBaseObj.get(certHash);
             LOGGER.debug("REDIS query: {} | REDIS response: {}", certHash, response);
             if (response!=null){
@@ -147,6 +157,10 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public boolean isConnected(){
+        if((monitorDbObj==null) | stopFlag){
+            // If the stop Redis flag has been enabled.
+            return false;
+        }
         try{
             monitorDbObj.ping();
             return true;
@@ -168,7 +182,7 @@ public class DataBase implements CheckObject{
     }
     
     /**
-     * This class provides a basic mode to get an string with the Private
+     * This class provides a basic mode to get a string with the Private
      *     key codified on base64 associated with the input hash (SHA1) certificate 
      *     value.
      * @param certHash Contains the SHA1 hash of the certificate used to get 
@@ -178,7 +192,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public String getPrivateKey(String certHash){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             return dataBaseObj.get(certHash);
         }
         return null;
@@ -192,7 +206,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public boolean setPrivateKey(String certHash, String privKey){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             dataBaseObj.set(certHash, privKey);
             String test = this.getPrivateKey(certHash);
             return test.equalsIgnoreCase(privKey);
@@ -209,7 +223,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.1
      */
     public boolean setExpPK(String certHash, long date){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             dataBaseObj.expireAt(certHash, date);
             return true;
         }
@@ -243,7 +257,7 @@ public class DataBase implements CheckObject{
      * @since v0.3.0
      */
     public Set<String> getHashList(String pattern){
-        if(this.isConnected){
+        if(this.isConnected && (!this.stopFlag)){
             return dataBaseObj.keys(pattern);
         }
         return new HashSet<String>();

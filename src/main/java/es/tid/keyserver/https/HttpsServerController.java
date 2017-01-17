@@ -34,14 +34,17 @@ public class HttpsServerController implements CheckObject{
      * Server Object.
      */
     private KsJetty jettyserver;
+    
     /**
      * Flag for check if the object is correctly initialized.
      */
     private boolean isInitializated = false;
+    
     /**
      * Logger object.
      */
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpsServerController.class);
+    
     /**
      * Main constructor for the HTTPS Server class.
      * @param parameters Object with program parameters.

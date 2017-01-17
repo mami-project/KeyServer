@@ -17,7 +17,8 @@ package es.tid.keyserver.ui;
 
 import es.tid.keyserver.config.ConfigController;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for KeyServer graphical elements.
@@ -50,8 +51,8 @@ public class GraphicalElementsTest {
             "dbIndex",
             "dbCheckInterval",
         };
-        confCtrl= new ConfigController("/applicationtest.properties",
-               "target/test-classes/config.properties",
+        confCtrl= new ConfigController("/properties/applicationtest.properties",
+               "target/test-classes/properties/config.properties",
                requiredFields);
     }
 

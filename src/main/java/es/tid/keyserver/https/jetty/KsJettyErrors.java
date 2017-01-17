@@ -17,12 +17,13 @@
 package es.tid.keyserver.https.jetty;
 
 import es.tid.keyserver.https.protocol.ErrorJSON;
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Class for custom management of Jetty server errors.
@@ -54,7 +55,7 @@ public class KsJettyErrors extends ErrorHandler {
             case 403:
                 // Unauthorized requests.
                 jsonOut = new ErrorJSON(ErrorJSON.ERR_REQUEST_DENIED).toString();
-                SECURITY.error("Incomming request for unauthorized IP: {} | Type: {} | Target: {}", 
+                SECURITY.error("Incoming request for unauthorized IP: {} | Type: {} | Target: {}",
                         request.getRemoteAddr(), 
                         request.getMethod(), 
                         target);

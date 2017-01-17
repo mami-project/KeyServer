@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.4.2</version>
+    <version>v0.4.3</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>
@@ -72,6 +72,9 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
+                    <excludes>
+                        <exclude>logback-test.xml</exclude>
+                    </excludes>
                     <archive>
                         <manifest>
                             <mainClass>es/tid/keyserver/core/KeyServer</mainClass>
@@ -107,20 +110,17 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>            
+            </plugin>
         </plugins>
 
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <excludes>
-                    <exclude>logback-test.xml</exclude>
-                </excludes>
-            </resource>            
+            </resource>        
         </resources>
     </build>
-	
+    
     <!-- Reporting -->
     <reporting>
         <plugins>
@@ -141,11 +141,12 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
+                    <check></check>
                 </configuration>
             </plugin>
         </plugins>
     </reporting>
-    
+
     <!-- More Project Information -->
     <name>OpenSource KeyServer</name>
     <description>This tool is a Key Server software that implements the collaborative Solution API. It is intended to run in the Content Provider network. It is used to storage private keys from the Content Provider and reply to queries from the MSP Collaborative API.</description>

@@ -85,7 +85,7 @@ public class HttpsCert implements CheckObject{
         } catch (IOException ex) {
             initStatus = false;
             // Error level.
-            LOGGER.error("IOException when try to load the HTTPs certificate.");
+            LOGGER.error("Can't access to the HTTPs server certificate. Please check if exists at this route: {}", fileRoute);
             // Trace level.
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
@@ -153,7 +153,14 @@ public class HttpsCert implements CheckObject{
      * @return True if the certificate is valid, false if not.
      * @since v0.3.0
      */
-    public boolean isValid(){
-        return (expDate.getTime() - new Date().getTime()) >= 0;
+    public boolean isValid() {
+        /** Equivalent code:
+            if(expDate != null){
+                return (expDate.getTime() - new Date().getTime()) >= 0;
+            } else {
+                return false;
+            }
+         */
+        return expDate != null && (expDate.getTime() - new Date().getTime()) >= 0;
     }
 }

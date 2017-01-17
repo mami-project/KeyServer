@@ -19,14 +19,7 @@ package es.tid.keyserver.https.jetty;
 import es.tid.keyserver.config.ConfigController;
 import es.tid.keyserver.controllers.db.DataBase;
 import org.eclipse.jetty.http.HttpVersion;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnectionStatistics;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.InetAccessHandler;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -100,7 +93,7 @@ public class KsJetty implements Runnable{
             server.setHandler(ksHandler);
             org.slf4j.Logger SECURITY = LoggerFactory.getLogger("security");
             org.slf4j.Logger LOGGER = LoggerFactory.getLogger(KsJetty.class);
-            String msg = "There is no whitelist field defined inside config file."
+            String msg = "There is no 'white list' field defined inside config file."
                     + "\n\t\tAllowing KeyServer access to all IPs!";
             SECURITY.warn(msg);
             LOGGER.warn(msg);

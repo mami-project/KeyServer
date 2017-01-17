@@ -74,13 +74,4 @@ public class ErrorJSON extends ResponseJSON {
                 errorCode.equalsIgnoreCase(ErrorJSON.ERR_REQUEST_DENIED) ||
                 errorCode.equalsIgnoreCase(ErrorJSON.ERR_UNSPECIFIED);
     }
-    
-    /**
-     * This method returns an JSON as String.
-     * @return JSON as string.
-     */
-    @Override
-    public String toString(){
-        return super.toString();
-    }
 }

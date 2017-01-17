@@ -15,11 +15,12 @@
  */
 package es.tid.keyserver.https.protocol;
 
-import java.util.Base64;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.LoggerFactory;
+
+import java.util.Base64;
 
 /**
  * InputJSON Secure Key Server API for input data from Proxy server.
@@ -270,7 +271,7 @@ public class InputJSON {
                     readedProtocol = InputJSON.DTLS_1_2;
                     break;
                 default:
-                    LOGGER.error("Not valid 'protocol' field {}.", inputData.get("protocol"));
+                    LOGGER.debug("Not valid 'protocol' field {}.", inputData.get("protocol"));
                     readedProtocol = null;
                     break;
             }
@@ -342,7 +343,7 @@ public class InputJSON {
                         readedHash = InputJSON.SHA_512;
                         break;
                     default:
-                        LOGGER.error("ECDHE not valid 'hash' field {}.", inputData.get("hash"));
+                        LOGGER.debug("ECDHE not valid 'hash' field {}.", inputData.get("hash"));
                         readedHash = null;
                         break;
                 }

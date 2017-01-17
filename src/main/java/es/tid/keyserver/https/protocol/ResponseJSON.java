@@ -61,7 +61,6 @@ class ResponseJSON {
      */
     @Override
     public String toString(){
-        String output = outputData.toJSONString();
-        return output.replaceAll("\\\\", "");
+        return outputData.toJSONString();
     }
 }

@@ -46,12 +46,9 @@ nbactions.xml
 
 
 ### Eclipse ###
-
 .metadata
 bin/
 tmp/
-*.tmp
-*.bak
 *.swp
 *~.nib
 local.properties
@@ -213,6 +210,7 @@ config/
 
 # KeyServer Tools #
 !tools/ks_client/ksClient.jar
+!tools/Redis/pk-provider.jar
 
 # Others #
 *.~vsdx

@@ -23,6 +23,16 @@ import es.tid.keyserver.https.keyprocess.Rsa;
 import es.tid.keyserver.https.protocol.ErrorJSON;
 import es.tid.keyserver.https.protocol.InputJSON;
 import es.tid.keyserver.https.protocol.OutputJSON;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,15 +43,6 @@ import java.security.PrivateKey;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for custom management of Jetty server requests.
@@ -96,7 +97,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
             // Creating JSON Object for incoming data.
             jsonData = new InputJSON(jsonString);
             // Process the JSON for the correct type
-            String responseString = processIncommingJson(jsonData);
+            String responseString = processIncomingJson(jsonData);
             LOGGER.trace("Response String: {}", responseString);
             // Send response to the client
             sendKeyServerResponse(baseRequest, response, responseString);
@@ -156,7 +157,7 @@ public class KeyServerJettyHandler extends AbstractHandler{
      * @param jsonObj JSON Object with the proxy data.
      * @return Returns a String with the response to the client.
      */
-    private String processIncommingJson(InputJSON jsonObj){
+    private String processIncomingJson(InputJSON jsonObj){
         // Check if JSON is valid.
         if(jsonObj.checkValidJSON()!=null){ // If not is valid
             // Generate JSON Output error object and return it as string.

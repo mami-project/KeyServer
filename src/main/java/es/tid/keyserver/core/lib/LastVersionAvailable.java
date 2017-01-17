@@ -16,13 +16,18 @@
 
 package es.tid.keyserver.core.lib;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -59,7 +64,8 @@ public class LastVersionAvailable implements CheckObject{
     
     /**
      * Default class constructor.
-     * @param url Contains the string for the URL repository.
+     * @param url Contains the string with the GitHub API address and get last
+     *     version method route for this project.
      */
     public LastVersionAvailable(String url){
         initFlag = false;
@@ -110,28 +116,36 @@ public class LastVersionAvailable implements CheckObject{
      * @since v0.3.0
      */
     public final void refreshRepoStatus(){
-        String versionUrl;
         try {
             if(initFlag && !this.isCorrectlyInitialized()){
                 throw(new IOException("Check Last Version Object not correctly initialized."));
             }
             // Connect to the initial GitHub repository URL.
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestProperty("User-Agent", "KeyServer");
             con.connect();
-            // Follow the HTTP redirection.
-            InputStream is = con.getInputStream();
-            // Get the redirected URL.
-            versionUrl = con.getURL().toString();
-            is.close();
-            // The last software version tag is at the end of the URL.
-            this.lastVersion = versionUrl.substring(versionUrl.lastIndexOf("/")+1);
-        } catch (IOException ex) {
-            // Error level.
-            LOGGER.error("Can't connect to the current URL: " + url + ".");
-            // Debug level.
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            LOGGER.trace(errors.toString());
+            // Read the HTTP response.
+            BufferedReader response = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String tmp;
+            String data = "";
+            while ((tmp = response.readLine()) != null) {
+                data += tmp;
+            }
+            LOGGER.trace("Received GitHub data: {}", data);
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(data);
+            if(json.containsKey("tag_name")){
+                this.lastVersion = (String)json.get("tag_name");
+                LOGGER.debug("Last KeyServer version available: {}", this.lastVersion);
+            }
+        }catch (IOException ex) {
+            LOGGER.error("Cannot connect to GitHub.");
+            LOGGER.debug(ex.getMessage());
+            LOGGER.trace(Arrays.toString(ex.getStackTrace()));
+        } catch (ParseException ex) {
+            LOGGER.error("Cannot read the received GitHub JSON. Malformed.");
+            LOGGER.debug(ex.getMessage());
+            LOGGER.trace(Arrays.toString(ex.getStackTrace()));
         }
     }
     

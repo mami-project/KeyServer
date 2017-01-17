@@ -56,7 +56,7 @@
     </logger>
     
     <!-- General Status logger -->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </root>

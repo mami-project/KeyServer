@@ -28,12 +28,12 @@ public class GraphicalElements {
     /**
      * Pom file application name field value.
      */
-    private String appName;
+    private final String appName;
 
     /**
      * Pom file application version value.
      */
-    private String appVersion;
+    private final String appVersion;
 
     /**
      * Logging object.

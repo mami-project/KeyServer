@@ -77,7 +77,7 @@ public class KeyServer {
                 softwareConfig.getServerKeyStoreFile(), 
                 softwareConfig.getServerKeyStorePassword());
         checkObj(ksCert,"HTTPs server certificate correctly loaded.", 
-                "Can't load the HTTPs server certificate..");
+                "HTTPs certificate loading process failed.");
         
         // HTTP Server.
         LOGGER.info("Starting HTTP server... ");
@@ -85,7 +85,7 @@ public class KeyServer {
                 softwareConfig, 
                 keyServerDB);
         keyServerHttp.start();
-        checkObj(keyServerHttp,"KeyServer now is ready...", 
+        checkObj(keyServerHttp,"KeyServer HTTPs server is listening.", 
                 "Can't create HTTP server.");
         
         // KeyServer Monitor object.
@@ -93,12 +93,9 @@ public class KeyServer {
                 keyServerDB, 
                 keyServerHttp, 
                 ksCert, 
-                softwareConfig.getProjectPublicUrl(),
-                softwareConfig.getVersion(),
-                softwareConfig.getChkDbInterval(),
-                softwareConfig.getChkUpdateInterval()
-        );
-        
+                softwareConfig);
+        checkObj(mon,"Monitoring KeyServer resources.", 
+                "Can't create the KeyServer monitor object.");
         // Wait until the user write q/Q to close the application.
         Scanner sc = new Scanner(System.in);
         UserInterfaceController uiController = new UserInterfaceController(

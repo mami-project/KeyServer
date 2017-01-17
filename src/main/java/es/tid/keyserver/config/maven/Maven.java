@@ -105,4 +105,14 @@ public class Maven implements CheckObject{
     public boolean isCorrectlyInitialized() {
         return this.initStatus;
     }
+    
+    /**
+     * This method is used to receive the GitHub API last release method.
+     * @return String with the GitHub release URL API.
+     * @see <a href="http://google.com">https://developer.github.com/v3/repos/releases/#get-the-latest-release</a>
+     * @since v0.4.3
+     */
+    public String getGitHubReleaseUrl(){
+        return prop.getProperty("github.lastrelease");
+    }
 }
