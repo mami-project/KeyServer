@@ -1,5 +1,14 @@
 # KeyServer Change Log
 
+v0.4.4
+-------------------------------------------------------------------------------- 
+Features:
+  - Included README files inside tools directory.
+
+Bug fixes:
+  - KeyServer update script.
+
+
 v0.4.3
 -------------------------------------------------------------------------------- 
 Features:
