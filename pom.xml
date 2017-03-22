@@ -59,9 +59,9 @@
         <jedis-version>2.9.0</jedis-version>
         <jetty-version> 9.4.2.v20170220</jetty-version>
         <json-simple-version>1.1.1</json-simple-version>
-        <logback-core-version>1.2.1</logback-core-version>
-        <logback-classic-version>1.2.1</logback-classic-version>
-        <slf4j-api-version>1.7.24</slf4j-api-version>
+        <logback-core-version>1.2.2</logback-core-version>
+        <logback-classic-version>1.2.2</logback-classic-version>
+        <slf4j-api-version>1.7.25</slf4j-api-version>
     </properties>    
     
     <!-- Build Settings -->
