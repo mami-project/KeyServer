@@ -16,9 +16,13 @@
 
 package es.tid.keyserver.core.lib;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import junit.framework.Assert;
 import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
+import org.junit.Assume;
 
 /**
  * Test class for the 'LastVersionAvailble' KeyServer class.
@@ -30,6 +34,29 @@ public class LastVersionAvailableTest {
      * Test repository URL string.
      */
     private static final String REPOURL = "https://api.github.com/repos/mami-project/KeyServer/releases/latest";
+    
+    /**
+     * Flag GitHub URL connection available.
+     */
+    private boolean urlConnectionAvailable;
+    
+    /**
+     * Test class constructor.
+     * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+     * @since v0.4.4
+     */
+    public LastVersionAvailableTest(){
+        try {
+            URL urlServer = new URL(REPOURL);
+            HttpURLConnection urlConn = (HttpURLConnection) urlServer.openConnection();
+            urlConn.setConnectTimeout(10000); // 10 Seconds Timeout 
+            urlConn.connect();
+            urlConnectionAvailable = urlConn.getResponseCode() == 200;
+        } catch (IOException e1) {
+            System.out.println("[ WARNING ] Connection to GitHub is not available. JUnit tests will be skipped.");
+            urlConnectionAvailable = false;
+        }
+    }
       
     /**
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.
@@ -37,6 +64,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testGetLastVersionAvailable1() {
         System.out.println("getLastVersionAvailable1");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         Version appVer = new Version(instance.getLastVersionAvailable());
         Assert.assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
@@ -51,6 +79,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testGetLastVersionAvailable2() {
         System.out.println("getLastVersionAvailable2");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         String notValidURL = "@notvalid";
         LastVersionAvailable instance = new LastVersionAvailable(notValidURL);
         boolean expResult = false;
@@ -64,6 +93,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testIsUpdated() {
         System.out.println("isUpdated");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         String appVersion = "v99999.99.99";
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         boolean result = instance.isUpdated(appVersion);
@@ -77,6 +107,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testRefreshRepoStatus1() {
         System.out.println("refreshRepoStatus1");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         instance.refreshRepoStatus();
         boolean expResult = true;
@@ -90,6 +121,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testRefreshRepoStatus2() {
         System.out.println("refreshRepoStatus2");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         LastVersionAvailable instance = new LastVersionAvailable("@notvalid");
         instance.refreshRepoStatus();
         boolean expResult = false;
@@ -103,6 +135,7 @@ public class LastVersionAvailableTest {
     @Test
     public void testIsCorrectlyInitialized() {
         System.out.println("isCorrectlyInitialized");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         boolean expResult = true;
         boolean result = instance.isCorrectlyInitialized();
