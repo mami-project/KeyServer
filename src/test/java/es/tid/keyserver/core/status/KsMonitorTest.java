@@ -74,22 +74,10 @@ public class KsMonitorTest {
      */
     private boolean urlConnectionAvailable;
     
+    /**
+     * Default KsMonitorTess class constructor.
+     */
     public KsMonitorTest(){
-        // Database test object
-        try {
-            dbObj = new DataBase(InetAddress.getLocalHost(), 6379, "foobared", 0);
-            
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(KsMonitorTest.class.getName()).log(Level.SEVERE, null, ex);
-            this.skipTest = false;
-            System.out.println("[ WARNING ] Can not get the 'localhost' address. JUnit tests will be skipped.");
-        }
-        if(!dbObj.isConnected()){
-            System.out.println("[ WARNING ] Connection to Redis Database is not available. JUnit tests will be skipped.");
-            this.skipTest = false;
-        }
-        // KeyServer Certificate test Object.
-        sCert = new HttpsCert("target/test-classes/cert/ksserverkey.jks", "123456");
         // KeyServer Configuration Object.
         String [] requiredFields = {
             "ksCheckUpdates",
@@ -109,6 +97,14 @@ public class KsMonitorTest {
         softwareConfig = new ConfigController("/properties/application.properties",
                "target/test-classes/properties/configksmon.properties",
                requiredFields);
+        // Database test object
+        dbObj = new DataBase(softwareConfig.getDbAddress(), softwareConfig.getDbPort(), softwareConfig.getDbPassword(), softwareConfig.getDbIndex());
+        if(!dbObj.isConnected()){
+            System.out.println("[ WARNING ] Connection to Redis Database is not available. JUnit tests will be skipped.");
+            this.skipTest = false;
+        }
+        // KeyServer Certificate test Object.
+        sCert = new HttpsCert("target/test-classes/cert/ksserverkey.jks", "123456");
         // Jetty Server Object
         httpsServer = new HttpsServerController(softwareConfig, dbObj);
         // KeyServer Monitor test object
@@ -147,9 +143,13 @@ public class KsMonitorTest {
     public void testIsRedisConnectionAvailable() {
         System.out.println("isRedisConnectionAvailable");
         Assume.assumeTrue(this.skipTest); // If connection is not available, skip the test.
-        boolean expResult = true;
+        try{
+            Thread.sleep(5000L);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(KsMonitorTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         boolean result = this.ksMonitor.isRedisConnectionAvailable();
-        assertEquals(expResult, result);
+        assertTrue(result);
     }
 
     /**
