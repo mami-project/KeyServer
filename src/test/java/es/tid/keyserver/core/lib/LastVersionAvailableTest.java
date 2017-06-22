@@ -66,6 +66,7 @@ public class LastVersionAvailableTest {
         System.out.println("getLastVersionAvailable1");
         Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
+        System.out.println("[ INFO ] Last version available: " + instance.getLastVersionAvailable());
         Version appVer = new Version(instance.getLastVersionAvailable());
         Assert.assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
                 (appVer.getMajor() >= 0) &&
