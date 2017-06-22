@@ -107,7 +107,7 @@ public class KsMonitorTest {
             "dbCheckInterval",
         };
         softwareConfig = new ConfigController("/properties/application.properties",
-               "target/test-classes/properties/config.properties",
+               "target/test-classes/properties/configksmon.properties",
                requiredFields);
         // Jetty Server Object
         httpsServer = new HttpsServerController(softwareConfig, dbObj);
