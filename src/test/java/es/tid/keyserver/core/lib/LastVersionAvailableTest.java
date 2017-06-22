@@ -129,7 +129,7 @@ public class LastVersionAvailableTest {
         Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         LastVersionAvailable invalidInstance = new LastVersionAvailable("@notvalid");
         invalidInstance.refreshRepoStatus();
-        boolean result = instance.isCorrectlyInitialized();
+        boolean result = invalidInstance.isCorrectlyInitialized();
         assertFalse(result);
     }
 
