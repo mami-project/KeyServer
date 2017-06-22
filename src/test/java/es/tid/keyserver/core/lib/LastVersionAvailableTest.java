@@ -33,7 +33,7 @@ public class LastVersionAvailableTest {
     /**
      * Test repository URL string.
      */
-    private static final String REPOURL = "https://api.github.com/repos/mami-project/KeyServer/releases/latest";
+    public static final String REPOURL = "https://api.github.com/repos/mami-project/KeyServer/releases/latest";
     
     /**
      * Flag GitHub URL connection available.
