@@ -21,6 +21,7 @@ import es.tid.keyserver.core.status.KsMonitor;
 import es.tid.keyserver.https.HttpsServerController;
 import es.tid.keyserver.https.certificate.HttpsCert;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -76,6 +77,7 @@ public class StatusControllerTest {
     public void testShowKeyServerHelp() {
         System.out.println("showKeyServerHelp");
         StatusController.showKeyServerHelp();
+        assertTrue(ksMonitor.isCorrectlyInitialized());
     }
 
     /**
@@ -86,6 +88,7 @@ public class StatusControllerTest {
     public void testShowKsStatusDetails() {
         System.out.println("showKsStatusDetails");
         StatusController.showKsStatusDetails(ksMonitor);
+        assertTrue(ksMonitor.isCorrectlyInitialized());
     }
 
     /**
@@ -97,5 +100,6 @@ public class StatusControllerTest {
         System.out.println("showKsStats");
         StatisticsHandler statistics = ksMonitor.getStatistics();
         StatusController.showKsStats(statistics);
+        assertTrue(ksMonitor.isCorrectlyInitialized());
     }
 }
