@@ -73,7 +73,7 @@ public class KsMonitorTest {
     private boolean urlConnectionAvailable;
     
     /**
-     * Default KsMonitorTess class constructor.
+     * Default KsMonitorTest class constructor.
      */
     public KsMonitorTest(){
         // KeyServer Configuration Object.
@@ -127,7 +127,6 @@ public class KsMonitorTest {
     @Test
     public void testStop() {
         System.out.println("stop");
-        // Assume.assumeTrue(this.skipTest); // If connection is not available, skip the test.
         KsMonitor instance = new KsMonitor(dbObj, httpsServer, sCert, softwareConfig);
         instance.stop();
         assertTrue(instance.isCorrectlyInitialized());
