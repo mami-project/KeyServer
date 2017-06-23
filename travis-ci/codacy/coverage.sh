@@ -11,6 +11,7 @@ fi
 if [ "$TRAVIS_BRANCH" == "develop" ]
 then
     echo "[ INFO ] Calculating code coverage for develop branch."
+	mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/cobertura/coverage.xml -DprojectToken=$CODACY_PROJECT_TOKEN -DapiToken=$CODACY_PROJECT_TOKEN
     mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/cobertura/coverage.xml -DprojectToken=$CODACY_DEVELOP_TOKEN -DapiToken=$CODACY_DEVELOP_TOKEN
 fi
 echo "[ INFO ] Done!"
