@@ -19,7 +19,6 @@ package es.tid.keyserver.core.lib;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import junit.framework.Assert;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -76,7 +75,7 @@ public class LastVersionAvailableTest {
         Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         System.out.println("[ INFO ] Last version available: " + instance.getLastVersionAvailable());
         Version appVer = new Version(instance.getLastVersionAvailable());
-        Assert.assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
+        assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
                 (appVer.getMajor() >= 0) &&
                 (appVer.getMinor() >= 0) &&
                 (appVer.getPatch() >= 0));
@@ -105,7 +104,7 @@ public class LastVersionAvailableTest {
         String appVersion = "v99999.99.99";
         boolean result = instance.isUpdated(appVersion);
         System.out.println("[ TEST ]: Is the current version up to date? " + result);
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     /**
