@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class for the OpenSource KeyServer Maven properties management.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.1.2
  */
 public class Maven implements CheckObject{

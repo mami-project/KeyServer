@@ -18,7 +18,7 @@ package es.tid.keyserver.https.jetty.exceptions;
 
 /**
  * Class for custom KeyServer exception.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.2
  */
 public class KeyServerException extends Exception{

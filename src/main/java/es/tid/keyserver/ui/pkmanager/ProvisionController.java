@@ -29,7 +29,7 @@ import java.util.Set;
 
 /**
  * This class is used to provide and manager private keys on the KeyServer.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class ProvisionController {

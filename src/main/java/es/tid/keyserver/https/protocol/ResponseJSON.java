@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 
 /**
  * Class for JSON manipulation.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  */
 class ResponseJSON {
     /**

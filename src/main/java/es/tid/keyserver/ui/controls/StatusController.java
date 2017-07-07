@@ -21,7 +21,7 @@ import org.eclipse.jetty.server.handler.StatisticsHandler;
 
 /**
  * This class contains the statics method for KeyServer status user interface.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class StatusController {

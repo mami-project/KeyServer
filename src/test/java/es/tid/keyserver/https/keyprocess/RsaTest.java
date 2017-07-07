@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Unitary test class for RSA decryption.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.3
  */
 public class RsaTest {

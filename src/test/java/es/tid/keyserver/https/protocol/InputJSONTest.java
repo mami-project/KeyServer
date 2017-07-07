@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * This class contains the Ericsson API Interface Description for it use on KeyServer.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.1.0
  */
 public class InputJSONTest {

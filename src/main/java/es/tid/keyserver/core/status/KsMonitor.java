@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class analyze the status of the main services from the KeyServer tool.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since 0.3.0
  */
 public class KsMonitor implements CheckObject{

@@ -24,7 +24,7 @@ import java.util.Base64;
 
 /**
  * InputJSON Secure Key Server API for input data from Proxy server.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  */
 public class InputJSON {
     /**

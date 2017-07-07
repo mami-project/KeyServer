@@ -26,7 +26,7 @@ import java.util.Scanner;
 /**
  * This class is used to manage the interactions between the KeyServer tool and 
  *     its administrator user.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class UserInterfaceController {

@@ -26,7 +26,7 @@ import org.junit.Assume;
 
 /**
  * Test class for the 'LastVersionAvailble' KeyServer class.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class LastVersionAvailableTest {
@@ -47,7 +47,7 @@ public class LastVersionAvailableTest {
     
     /**
      * Test class constructor.
-     * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+     * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
      * @since v0.4.4
      */
     public LastVersionAvailableTest(){
@@ -65,7 +65,7 @@ public class LastVersionAvailableTest {
             urlConnectionAvailable = false;
         }
     }
-      
+
     /**
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.
      */

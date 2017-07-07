@@ -18,7 +18,7 @@ package es.tid.keyserver.core.lib;
 
 /**
  * Interface used to test if a object is correctly created and initialized.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.1.0
  */
 public interface CheckObject {

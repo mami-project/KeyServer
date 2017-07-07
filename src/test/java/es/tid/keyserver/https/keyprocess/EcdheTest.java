@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 /**
  * Unitary test class for ECDH.
  *
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.3
  */
 public class EcdheTest {
