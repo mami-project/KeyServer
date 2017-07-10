@@ -40,4 +40,6 @@ KeyServer has been developed using Java SE 8 and Redis as database to store the 
 
 You can download the latest KeyServer JAR version from [releases](https://github.com/mami-project/KeyServer/releases) section. If you prefer generate your own JAR, remember that this project is distributed with [Apache Maven](https://maven.apache.org/). 
 
-Once the JAR file is downloaded/generated, move it to the desired folder. Configure the KeyServer using the [KeyServer Wiki](https://github.com/mami-project/KeyServer/wiki) steps before first execution. Otherwise, you'll get an error during the execution. 
+Once the JAR file is downloaded/generated, move it to the desired folder. Configure the KeyServer using the [KeyServer Wiki](https://github.com/mami-project/KeyServer/wiki) steps before first execution. Otherwise, you'll get an error during the execution.
+
+[![Watch the video](https://img.youtube.com/vi/yhIxLS-9NC0/0.jpg)](https://youtu.be/yhIxLS-9NC0)
