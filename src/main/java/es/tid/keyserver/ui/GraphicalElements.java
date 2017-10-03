@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * KeyServer graphical elements
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  */
 public class GraphicalElements {
     /**

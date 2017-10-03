@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 /**
  * Test class for ConfigController.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class ConfigControllerTest {

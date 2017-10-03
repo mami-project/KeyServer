@@ -8,7 +8,7 @@ Repository status:
 |:--- |:---:|:---:|
 | **Build status** | [![Build Status](https://travis-ci.org/mami-project/KeyServer.svg?branch=master)](https://travis-ci.org/mami-project/KeyServer) | [![Build Status](https://travis-ci.org/mami-project/KeyServer.svg?branch=develop)](https://travis-ci.org/mami-project/KeyServer) |
 | **Dependencies status** | [![Dependency Status](https://www.versioneye.com/user/projects/58457b180356f100336d0341/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58457b180356f100336d0341) | [![Dependency Status](https://www.versioneye.com/user/projects/58457b1603d153004d8ec98b/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58457b1603d153004d8ec98b) |
-| **Code quality**|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mami-project/KeyServer&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&utm_medium=referral&utm_content=jgm1986/KeyServer&utm_campaign=Badge_Coverage)| *`Not Available`* |
+| **Code quality**|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mami-project/KeyServer&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0ea08a24d820457fae1a921252965d3f)](https://www.codacy.com/app/jgm1986/KeyServer?utm_source=github.com&utm_medium=referral&utm_content=jgm1986/KeyServer&utm_campaign=Badge_Coverage)| [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ed272c47acd142e49c309d598e227b12)](https://www.codacy.com/app/jgm1986/KeyServer_Develop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mami-project/KeyServer&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/ed272c47acd142e49c309d598e227b12)](https://www.codacy.com/app/jgm1986/KeyServer_Develop?utm_source=github.com&utm_medium=referral&utm_content=mami-project/KeyServer&utm_campaign=Badge_Coverage)|
 
 # Description
 
@@ -40,4 +40,6 @@ KeyServer has been developed using Java SE 8 and Redis as database to store the 
 
 You can download the latest KeyServer JAR version from [releases](https://github.com/mami-project/KeyServer/releases) section. If you prefer generate your own JAR, remember that this project is distributed with [Apache Maven](https://maven.apache.org/). 
 
-Once the JAR file is downloaded/generated, move it to the desired folder. Configure the KeyServer using the [KeyServer Wiki](https://github.com/mami-project/KeyServer/wiki) steps before first execution. Otherwise, you'll get an error during the execution. 
+Once the JAR file is downloaded/generated, move it to the desired folder. Configure the KeyServer using the [KeyServer Wiki](https://github.com/mami-project/KeyServer/wiki) steps before first execution. Otherwise, you'll get an error during the execution.
+
+[![Watch the video](https://img.youtube.com/vi/yhIxLS-9NC0/0.jpg)](https://youtu.be/yhIxLS-9NC0)

@@ -46,7 +46,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 /**
  * Class for custom management of Jetty server requests.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.0
  */
 public class KeyServerJettyHandler extends AbstractHandler{

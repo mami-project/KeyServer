@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Jetty Server Class.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.0
  */
 public class KsJetty implements Runnable{

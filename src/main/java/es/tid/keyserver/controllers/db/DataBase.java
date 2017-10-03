@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * Database class manipulation.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.1.0
  */
 public class DataBase implements CheckObject{

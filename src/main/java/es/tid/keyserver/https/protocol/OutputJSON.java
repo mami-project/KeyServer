@@ -17,7 +17,7 @@ package es.tid.keyserver.https.protocol;
 
 /**
  * Class for JSON output data structure.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  */
 public class OutputJSON extends ResponseJSON{
     /**

@@ -1,4 +1,5 @@
 language: java
+sudo: required
 jdk:
   - oraclejdk8
 before_install:
@@ -15,7 +16,7 @@ script:
   - mvn package
   - mvn javadoc:javadoc
   - mvn clean site
-  - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/cobertura/coverage.xml -DprojectToken=$CODACY_PROJECT_TOKEN -DapiToken=$CODACY_PROJECT_TOKEN 
+  - ./travis-ci/codacy/coverage.sh
   - mvn versions:display-dependency-updates
   - mvn versions:display-plugin-updates
 after_success:

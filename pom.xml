@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>es.tid.keyserver</groupId>
     <artifactId>KeyServer</artifactId>
-    <version>v0.4.3</version>
+    <version>v0.4.4</version>
     <packaging>jar</packaging>
     <prerequisites>
         <maven>3.0</maven>
@@ -57,11 +57,11 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Dependencies versions -->
         <jedis-version>2.9.0</jedis-version>
-        <jetty-version>9.4.0.v20161208</jetty-version>
+        <jetty-version>9.4.7.v20170914</jetty-version>
         <json-simple-version>1.1.1</json-simple-version>
-        <logback-core-version>1.1.8</logback-core-version>
-        <logback-classic-version>1.1.8</logback-classic-version>
-        <slf4j-api-version>1.7.22</slf4j-api-version>
+        <logback-core-version>1.2.3</logback-core-version>
+        <logback-classic-version>1.2.3</logback-classic-version>
+        <slf4j-api-version>1.7.25</slf4j-api-version>
     </properties>    
     
     <!-- Build Settings -->
@@ -91,7 +91,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -166,8 +166,8 @@
     <developers>
         <developer>
             <id>jgm1986</id>
-            <name>Javier Gusano Martinez</name>
-            <email>javier.gusano@hpe.com</email>
+            <name>Javier Martinez Gusano</name>
+            <email>jgm1986@hotmail.com</email>
             <url>http://jgusmar.blogspot.com</url>
             <organization>Hewlett-Packard Enterprise</organization>
             <organizationUrl>https://www.hpe.com</organizationUrl>

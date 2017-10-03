@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to load and manager the HTTPs server certificate.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class HttpsCert implements CheckObject{

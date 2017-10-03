@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 
 /**
  * Test class for "Maven" properties management class.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class MavenTest {

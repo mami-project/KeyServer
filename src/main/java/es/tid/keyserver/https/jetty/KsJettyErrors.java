@@ -27,7 +27,7 @@ import java.io.IOException;
 
 /**
  * Class for custom management of Jetty server errors.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.0
  */
 public class KsJettyErrors extends ErrorHandler {

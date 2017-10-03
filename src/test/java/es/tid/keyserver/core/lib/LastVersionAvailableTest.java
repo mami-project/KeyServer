@@ -16,30 +16,66 @@
 
 package es.tid.keyserver.core.lib;
 
-import junit.framework.Assert;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import org.junit.Test;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Assume;
 
 /**
  * Test class for the 'LastVersionAvailble' KeyServer class.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class LastVersionAvailableTest {
     /**
      * Test repository URL string.
      */
-    private static final String REPOURL = "https://api.github.com/repos/mami-project/KeyServer/releases/latest";
-      
+    public static final String REPOURL = "https://api.github.com/repos/mami-project/KeyServer/releases/latest";
+    
+    /**
+     * Flag GitHub URL connection available.
+     */
+    private boolean urlConnectionAvailable;
+    
+    /**
+     * GitHub test object.
+     */
+    private LastVersionAvailable instance;
+    
+    /**
+     * Test class constructor.
+     * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
+     * @since v0.4.4
+     */
+    public LastVersionAvailableTest(){
+        try {
+            URL urlServer = new URL(REPOURL);
+            HttpURLConnection urlConn = (HttpURLConnection) urlServer.openConnection();
+            urlConn.setConnectTimeout(10000); // 10 Seconds Timeout 
+            urlConn.connect();
+            urlConnectionAvailable = urlConn.getResponseCode() == 200;
+            if(urlConnectionAvailable){
+                instance = new LastVersionAvailable(REPOURL);
+            }
+        } catch (IOException e1) {
+            System.out.println("[ WARNING ] Connection to GitHub is not available. JUnit tests will be skipped.");
+            urlConnectionAvailable = false;
+        }
+    }
+
     /**
      * Test of getLastVersionAvailable method, of class LastVersionAvailable.
      */
     @Test
     public void testGetLastVersionAvailable1() {
         System.out.println("getLastVersionAvailable1");
-        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
+        System.out.println("[ INFO ] Last version available: " + instance.getLastVersionAvailable());
         Version appVer = new Version(instance.getLastVersionAvailable());
-        Assert.assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
+        assertTrue((!instance.getLastVersionAvailable().isEmpty()) && 
                 (appVer.getMajor() >= 0) &&
                 (appVer.getMinor() >= 0) &&
                 (appVer.getPatch() >= 0));
@@ -51,11 +87,11 @@ public class LastVersionAvailableTest {
     @Test
     public void testGetLastVersionAvailable2() {
         System.out.println("getLastVersionAvailable2");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         String notValidURL = "@notvalid";
-        LastVersionAvailable instance = new LastVersionAvailable(notValidURL);
-        boolean expResult = false;
-        boolean result = instance.isCorrectlyInitialized();
-        assertEquals(expResult, result);
+        LastVersionAvailable invalidInstance = new LastVersionAvailable(notValidURL);
+        boolean result = invalidInstance.isCorrectlyInitialized();
+        assertFalse(result);
     }
 
     /**
@@ -64,11 +100,11 @@ public class LastVersionAvailableTest {
     @Test
     public void testIsUpdated() {
         System.out.println("isUpdated");
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         String appVersion = "v99999.99.99";
-        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
         boolean result = instance.isUpdated(appVersion);
         System.out.println("[ TEST ]: Is the current version up to date? " + result);
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     /**
@@ -77,11 +113,10 @@ public class LastVersionAvailableTest {
     @Test
     public void testRefreshRepoStatus1() {
         System.out.println("refreshRepoStatus1");
-        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         instance.refreshRepoStatus();
-        boolean expResult = true;
         boolean result = instance.isCorrectlyInitialized();
-        assertEquals(expResult, result);
+        assertTrue(result);
     }
     
     /**
@@ -90,11 +125,11 @@ public class LastVersionAvailableTest {
     @Test
     public void testRefreshRepoStatus2() {
         System.out.println("refreshRepoStatus2");
-        LastVersionAvailable instance = new LastVersionAvailable("@notvalid");
-        instance.refreshRepoStatus();
-        boolean expResult = false;
-        boolean result = instance.isCorrectlyInitialized();
-        assertEquals(expResult, result);
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
+        LastVersionAvailable invalidInstance = new LastVersionAvailable("@notvalid");
+        invalidInstance.refreshRepoStatus();
+        boolean result = invalidInstance.isCorrectlyInitialized();
+        assertFalse(result);
     }
 
     /**
@@ -103,9 +138,8 @@ public class LastVersionAvailableTest {
     @Test
     public void testIsCorrectlyInitialized() {
         System.out.println("isCorrectlyInitialized");
-        LastVersionAvailable instance = new LastVersionAvailable(REPOURL);
-        boolean expResult = true;
+        Assume.assumeTrue(this.urlConnectionAvailable); // If URL connection is not available, skip the test.
         boolean result = instance.isCorrectlyInitialized();
-        assertEquals(expResult, result);
+        assertTrue(result);
     }
 }

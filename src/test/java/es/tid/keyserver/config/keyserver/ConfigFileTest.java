@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 /**
  * KeyServer configuration manager class test.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.3.0
  */
 public class ConfigFileTest { 

@@ -21,7 +21,7 @@ package es.tid.keyserver.core.lib;
  *     This class provide an easy way for manipulate version strings or compare
  *     between them.
  * @see <a href="http://semver.org/">Semantic Version 2.0.0</a>
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.1
  */
 public class Version {

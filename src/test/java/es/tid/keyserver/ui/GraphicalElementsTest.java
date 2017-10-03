@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for KeyServer graphical elements.
- * @author <a href="mailto:jgm1986@hotmail.com">Javier Gusano Martinez</a>
+ * @author <a href="mailto:jgm1986@hotmail.com">Javier Martinez Gusano</a>
  * @since v0.4.2
  */
 public class GraphicalElementsTest {
